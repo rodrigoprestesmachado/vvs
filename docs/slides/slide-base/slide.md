@@ -1,14 +1,12 @@
 # Validação e Verificação de Sistemas
 
-Disciplina de Validação de Verificação de Sistemas
-
 Rodrigo Prestes Machado
 rodrigo.prestes@poa.ifrs.edu.br
 
-## External 1.1
+## Curso
 
-Sistemas para Internet
+Curso de Sistemas para Internet
 
-## External 1.2
+## IFRS
 
-IFRS Campus POA
+Campus Porto Alegre
