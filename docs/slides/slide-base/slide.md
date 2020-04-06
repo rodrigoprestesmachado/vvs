@@ -1,5 +1,8 @@
-A
+# Validação e Verificação de Sistemas
+
 
 ---
 
-B
+## Rodrigo Prestes Machado
+
+rodrigo.prestes at poa.ifrs.edu.br

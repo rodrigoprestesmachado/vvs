@@ -6,8 +6,8 @@
 * Instale o plugin do Selenium para Chrome ou Firefox
 * No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
 
-![Acesso ao Selenium IDE no Chrome](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/img/seleniumExtension.png)
- 
+![Acesso ao Selenium IDE no Chrome](img/seleniumExtension.png)
+
 Figura 1 - Acesso ao Selenium IDE no Chrome
 
 * Depois de acessar, escolha a opção “Record a new test in a new Project” para criar um caso de teste
@@ -48,11 +48,11 @@ Chrome: `sudo npm install -g chromedriver`
 
 Para rodar casos/suíte de teste do Selenium por intermédio do Junit, temos que primeiro exportar o teste da IDE, conforme ilustra os passos um e dois da imagem abaixo:
 
-![](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/img/SeleniumJunitExport.png)
+![](img/SeleniumJunitExport.png)
 
 Logo, escolha a linguagem “Junit” para poder obter um código em Java.
 
-![](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/img/SeleniumJunit.png)
+![](img/SeleniumJunit.png)
 
 Agora, temos que compilar a classe para que possamos executar o código. A classe que obtivemos da IDE possui duas dependências: (1) Junit 4 e (2) Selenium Java. O Junit 4 pode ser obtido no repositório do [Maven](https://mvnrepository.com) em [Junit 4](https://mvnrepository.com/artifact/junit/junit) e o [Selenium Java](https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java).
 
