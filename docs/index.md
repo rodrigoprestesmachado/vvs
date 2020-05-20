@@ -1,10 +1,10 @@
-# Disciplina de Validação e Verificação de Sistemas
+# VVS
 
-## Tutoriais 
+## Tutoriais
 
 [Junit](junit.md)
 
-[Selenium](selenium.md.md)
+[Selenium](selenium.md)
 
 # Slides
 
