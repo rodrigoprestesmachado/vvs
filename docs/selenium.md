@@ -25,7 +25,7 @@ O Selenium Side Runner é uma aplicação que permite chamar a execução de um 
 `sudo apt update`
 
 `sudo apt install nodejs`
- 
+
 ### Instalação do npm no Ubuntu
 `sudo apt install npm`
 
