@@ -1,17 +1,19 @@
 # VVS
 
+## Slides
+
+* [Introdução](slides/introducao/index.html)
+  
+* [Planejamento](slides/planejamento/index.html)
+
 ## Tutoriais
 
-[Junit](junit.md)
+* [Configuração do ambiente](tutoriais/ambiente.md)
 
-[Selenium](selenium.md)
+* [Junit](tutoriais/junit.mdjunit.md)
+
+* [Selenium](tutoriais/selenium.mdselenium.md)
 
 ## Moodle
 
 * Moodle da [disciplina](https://moodle.poa.ifrs.edu.br/course/view.php?id=5780)
-
-<!-- 
-# Slides
-
-[slide base](slides/slide-base/index.html)
--->
