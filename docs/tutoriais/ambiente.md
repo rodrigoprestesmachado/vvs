@@ -1,9 +1,3 @@
----
-layout: default
-title: Configurações do ambiente
-nav_order: 1
----
-
 # Configurações do ambiente
 
 ## Docker

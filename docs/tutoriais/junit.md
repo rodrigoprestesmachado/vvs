@@ -1,8 +1,3 @@
----
-layout: default
-title: Junit
-nav_order: 2
----
 # Junit
 
 ## Junit na linha de comando
