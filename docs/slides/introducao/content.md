@@ -1,9 +1,3 @@
----
-layout: default
-title: Instrodução
-nav_order: 4
----
-
 # Introdução
 
 rodrigo.prestes@poa.ifrs.edu.br

@@ -1,9 +1,3 @@
----
-layout: default
-title: Planejamento
-nav_order: 5
----
-
 # Planejamento para a verificação e validação
 
 
