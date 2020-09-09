@@ -1,3 +1,9 @@
+---
+layout: default
+title: Configurações do ambiente
+nav_order: 1
+---
+
 # Configurações do ambiente
 
 ## Docker
@@ -64,7 +70,7 @@ O git também necessita ser instalado no container uma vez que todos os exemplos
 
 Para assegurar que o git esteja instalado corretamente digite `git --version`.
 
-# Testando o ambiente 
+# Testando o ambiente
 
 Depois de instalar o git, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:
 

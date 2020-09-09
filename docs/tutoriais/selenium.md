@@ -1,3 +1,9 @@
+---
+layout: default
+title: Selenium
+nav_order: 3
+---
+
 # Selenium IDE e Side Runner
 
 ## Criação de testes com o Selenium IDE

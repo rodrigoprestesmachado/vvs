@@ -10,9 +10,9 @@
 
 * [Configuração do ambiente](tutoriais/ambiente.md)
 
-* [Junit](tutoriais/junit.mdjunit.md)
+* [Junit](tutoriais/junit.md)
 
-* [Selenium](tutoriais/selenium.mdselenium.md)
+* [Selenium](tutoriais/selenium.md)
 
 ## Moodle
 
