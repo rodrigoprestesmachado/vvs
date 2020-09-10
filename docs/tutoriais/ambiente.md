@@ -27,7 +27,7 @@ Assim, para criar um container do Ubuntu a partir da imagem que foi baixada, exe
 
 **Atenção:** O comando `run` cria e coloca um container em execução.
 
-O argumento `-name vvs` permite atribuir nome para o container, por sua vez, o argumento `-it`, possibilita entrar num "modo interativo" do container. Já o argumento `-p` indica uma porta que será aberta pelo container. No exemplo acima, poderemos acessar o container através do ip `127.0.0.1` (localhost) na porta `80`, assim, quando o container receber uma requisição na porta `80` a requisição será internamente encaminhada para a porta `9080`.
+O argumento `-name vvs` permite atribuir nome para o container, por sua vez, o argumento `-it`, possibilita entrar num "modo interativo" do container. Já o argumento `-p` indica uma porta que será aberta pelo container. No exemplo acima, poderemos acessar o container através do ip `127.0.0.1` (localhost) na porta `80`, assim, quando o container receber uma requisição na porta `80` ela será internamente direcionada para a porta `9080`.
 
 Depois de executar o comando acima, você entrará como root em um terminal do Ubuntu. Para sair do terminal basta que você digite a instrução `exit`. Quando você digitar `exit` no terminal do Ubuntu o Docker irá parar ([stop](https://docs.docker.com/engine/reference/commandline/stop/)) a execução do seu container. Assim, para colocar novamente o container em execução use o comando [start](https://docs.docker.com/engine/reference/commandline/start/) da seguinte maneira:
 
@@ -68,24 +68,24 @@ Para assegurar que o git esteja instalado corretamente digite `git --version`.
 
 Depois de instalar o git, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:
 
-Crie um diretório `dev` no /home do container
+Crie um diretório `dev` no /home do container:
 
     cd /home
     mkdir dev
     cd dev
 
-Faça um clone do projeto Tpack que servirá como um dos exemplos da disciplina
+Faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servirá como um dos exemplos da disciplina:
 
     git clone https://github.com/rodrigoprestesmachado/tpack
     cd tpack
 
 **Nota:** O Tpack é um projeto simples que implementa um questionário sobre o conhecimento de conteúdo, pedagógico e tecnológico de professores. As tecnologias que esse projeto utiliza são: [Micro serviço](https://microprofile.io) em Java rodando em cima do [Open Liberty](https://openliberty.io) da IBM, interface Web em [Vue](https://vuejs.org) [Typescript](https://www.typescriptlang.org) e banco [MySQL](https://www.mysql.com).
 
-Compile e empacote com o Maven por meio do comando
+Para compilar e empacotar o projeto, ou seja, criar um arquivo .jar/.war, execute os [plugins](https://maven.apache.org/plugins/index.html) `clean` e `package` do Maven no mesmo diretório que se encontra o arquivo arquivo `pom.xml`:
 
     mvn clean package
 
-**Atenção:** o maven necessita baixar todas as dependências do projeto, assim, a primeira compilação pode ser demorada
+**Atenção:** o maven necessita baixar todas as dependências do projeto, assim, a primeira compilação pode ser demorada.
 
 Se tudo ocorrer bem, o maven irá criar uma diretório chamado `target`. Dentro desse diretório existirá um arquivo chamado `tpack.jar` que poderá ser executado da seguinte forma:
 
@@ -95,4 +95,8 @@ Como não colocamos um MySQL em execução, nesse primeiro momento não consegui
 
    [http://localhost/openapi/ui/](http://localhost/openapi/ui/)
 
-Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu cumprir todas as tarefas desse primeiro tutorial =)
+Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu cumprir todas as tarefas desse primeiro tutorial.
+
+## Referências
+
+JEFERSON FERNANDO NORONHA VITALINO, Marcus André Nunes Castro. [Descomplicando o Docker](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5033249&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU3NDUyOTAyOA==&label=acesso%20restrito) - 2ª Edição. Editora Brasport 152, cap. 1, ISBN 9788574529028.
