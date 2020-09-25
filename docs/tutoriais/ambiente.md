@@ -56,7 +56,7 @@ O [Apache Maven](https://maven.apache.org), ou maven, é uma ferramenta de autom
 
 Para verificar se o maven foi instalado com sucesso execute o comando `mvn -version`.
 
-# Git
+## Git
 
 O git também necessita ser instalado no container uma vez que todos os exemplos da disciplina estão disponíveis no Github. Assim, instale o Git por meio do comando:
 
@@ -64,7 +64,7 @@ O git também necessita ser instalado no container uma vez que todos os exemplos
 
 Para assegurar que o git esteja instalado corretamente digite `git --version`.
 
-# Testando o ambiente
+## Testando o ambiente
 
 Depois de instalar o git, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:
 
@@ -96,6 +96,23 @@ Como não colocamos um MySQL em execução, nesse primeiro momento não consegui
    [http://localhost/openapi/ui/](http://localhost/openapi/ui/)
 
 Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu cumprir todas as tarefas desse primeiro tutorial.
+
+## Resumo
+
+Você pode ver um resumo dos comandos que foram discutidos aqui por meio de um vídeo:
+
+[![Resumo](https://img.youtube.com/vi/qrjTsw82ABw/0.jpg)](https://youtu.be/qrjTsw82ABw)
+
+<iframe
+    width="560" height="315"
+    src="https://www.youtube.com/embed/qrjTsw82ABw"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+
+<iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
 
 ## Referências
 

@@ -7,7 +7,6 @@
 * No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
 
 ![Acesso ao Selenium IDE no Chrome](img/seleniumExtension.png)
-
 Figura 1 - Acesso ao Selenium IDE no Chrome
 
 * Depois de acessar, escolha a opção “Record a new test in a new Project” para criar um caso de teste
