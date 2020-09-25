@@ -101,15 +101,15 @@ Se você conseguir visualizar uma aplicação chamada Swagger UI, então signifi
 
 Você pode ver um resumo dos comandos que foram discutidos aqui por meio de um vídeo:
 
-[![Resumo](https://img.youtube.com/vi/qrjTsw82ABw/0.jpg)](https://youtu.be/qrjTsw82ABw)
-
-<iframe
-    width="560" height="315"
-    src="https://www.youtube.com/embed/qrjTsw82ABw"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-</iframe>
+<center>
+    <iframe
+        width="560" height="315"
+        src="https://www.youtube.com/embed/qrjTsw82ABw"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+</center>
 
 ## Referências
 
