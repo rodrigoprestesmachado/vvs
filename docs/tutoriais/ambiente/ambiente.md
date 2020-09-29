@@ -37,6 +37,24 @@ Note que o argumento `-i` do comando `start` que permite entrar no terminal do U
 
     docker ps
 
+## Comandos úteis do docker
+
+Para todos os containers em execução:
+
+    docker stop $(docker ps -a -q)
+
+Exclui todos os containers:
+
+     docker rm $(docker ps -a -q)
+
+Apaga todas as imagens:
+
+    docker rmi $(docker images -q)
+
+Eliminar todos os volumes. Uma explicação rápida, no Docker, um volume maneira um diretório entre o host e o container, esse conceito será melhor explorado quando utilizarmos uma composição de container com a ferramenta [docker-compose](https://docs.docker.com/compose/).
+
+    docker volume rm $(docker volume ls -q)
+
 **Dica:** Todos os comandos relacionados com o Docker podem ser utilizados por meio de ferramentas com interface de usuário gráfica. O Docker possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Windows e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do Docker. Outra dica de ferramenta é a [extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft. A extensão possui todas as funcionalidades do dashboard com a vantagem de poder ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar integrada a um ambiente de desenvolvimento.
 
 ## Java

@@ -8,7 +8,9 @@
 
 ## Tutoriais
 
-* [Configuração do ambiente](tutoriais/ambiente.md)
+* [Configuração do ambiente](tutoriais/ambiente/ambiente.md)
+
+* [Verificação estática com PMD](tutoriais/pmd/pmd.md)
 
 * [Junit](tutoriais/junit.md)
 
