@@ -11,8 +11,7 @@ Depois de criar um *Fork* de um repositório você deve fazer um `git clone` do 
 
 <center>
 <img src="imgs/fork.png" width="75%" height="75%">
-
-
+<br/>
 Figura 1 - Interface Web do GitHub
 </center>
 
