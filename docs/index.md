@@ -10,7 +10,7 @@
 
 * [Configuração do ambiente](tutoriais/ambiente/ambiente.md)
 
-* [Verificação estática com PMD](tutoriais/pmd/pmd.md)
+* [Inspeções estáticas com PMD](tutoriais/pmd/pmd.md)
 
 * [Junit](tutoriais/junit.md)
 
