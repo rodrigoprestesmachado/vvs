@@ -61,6 +61,8 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 ---
 
 1. Best Practices
+Remoção de imports não utilizados (Unused Imports).
+Usar Assert True ao invés de Assert Equals em testes unitários (UseAssertEqualsInsteadOfAssertTrue).
 1. Code Style
 1. Design
 1. Documentation
