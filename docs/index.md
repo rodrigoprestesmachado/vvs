@@ -12,7 +12,7 @@
 
 * [Inspeções estáticas com PMD](tutoriais/pmd/pmd.md)
 
-* [Junit](tutoriais/junit.md)
+* [Junit](tutoriais/junit/junit.md)
 
 * [Selenium](tutoriais/selenium.md)
 

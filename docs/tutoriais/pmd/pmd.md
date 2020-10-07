@@ -20,7 +20,7 @@ Depois de fazer alterações nos códigos do projeto, você poderá solicitar qu
 Porém, para que as suas mudanças sejam incorporadas, o dono do projeto principal necessitará aceitar e, consequentemente fazer uma operação de [*merge*](https://git-scm.com/docs/git-merge) para unir a nova modificação no código principal, ou seja, aceitar ou não a requisição depende do dono do projeto original.
 
 ---
-**Para saber mais:** :muscle: Existe um [tutorial](https://guides.github.com/activities/forking/) do GitHub específico sobre esse assunto onde você poderá realizar um *Fork* de um projeto chamado [Spoon-Knife](https://github.com/octocat/Spoon-Knife) e verificar na prática o funcionamento desse recurso.
+**Para saber mais:** Existe um [tutorial](https://guides.github.com/activities/forking/) do GitHub específico sobre esse assunto onde você poderá realizar um *Fork* de um projeto chamado [Spoon-Knife](https://github.com/octocat/Spoon-Knife) e verificar na prática o funcionamento desse recurso.
 
 ---
 
@@ -33,7 +33,7 @@ Nesse sentido, o [PMD](https://pmd.github.io) é uma ferramenta capaz de analisa
 Uma ferramenta como o PMD pode ser utilizada durante a fase de desenvolvimento e/ou fazer parte das etapas de construção e instalação de um sistema, assim, as próximas seções são dedicadas para mostrar o uso do PMD nesses dois contextos.
 
 ---
-**Para saber mais:** :muscle: O PMD está sendo utilizado como um exemplo nesse documento, porém, existem muitas outras ferramentas capazes de fazer o mesmo tipo de análise, um exemplo disso é o [SonarLint](https://www.sonarlint.org), que também possui possui extensões para [Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode), Eclipse, IntelliJ, entre outros. Também cabe salientar que ferramentas de inspeção de código estático não são uma exclusividade de Java, ou seja, em praticamente todas as linguagens você encontrará sistemas desse tipo.
+**Para saber mais:** O PMD está sendo utilizado como um exemplo nesse documento, porém, existem muitas outras ferramentas capazes de fazer o mesmo tipo de análise, um exemplo disso é o [SonarLint](https://www.sonarlint.org), que também possui possui extensões para [Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode), Eclipse, IntelliJ, entre outros. Também cabe salientar que ferramentas de inspeção de código estático não são uma exclusividade de Java, ou seja, em praticamente todas as linguagens você encontrará sistemas desse tipo.
 
 ---
 
@@ -56,7 +56,7 @@ O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar 
 Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, os exemplos abaixo mostram regras consideradas úteis por diversos programadores, são elas:
 
 ---
-**Nota:** :mag: as regras e explicações abaixo foram escritas de maneira colaborativa.
+**Nota:** as regras e explicações abaixo foram escritas de maneira colaborativa.
 
 ---
 
@@ -86,7 +86,7 @@ Um *goal* de um plugin representa uma tarefa específica que contribui para a co
     mvn clean pmd:pmd package
 
 ---
-**Para saber mais:** :muscle: No Maven, existe a ideia de que um ciclo de *build* compreende um conjunto de fases. Por exemplo, um ciclo no Maven pode possuir as fases: *validate*, *compile*, *test*, *package*, *verify*, *install* e *deploy*. Assim,  no Maven acesse essa [documentação](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html) disponível.
+**Para saber mais:** No Maven, existe a ideia de que um ciclo de *build* compreende um conjunto de fases. Por exemplo, um ciclo no Maven pode possuir as fases: *validate*, *compile*, *test*, *package*, *verify*, *install* e *deploy*. Assim,  no Maven acesse essa [documentação](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html) disponível.
 
 ---
 
@@ -117,9 +117,9 @@ Note que no exemplo acima, estamos executando apenas um *goal* do plugin, ou sej
 
 ## Codebeat
 
-Nos dias de hoje, existem diversas ferramentas na Web capazes de realizar inspeções estátivas em um projeto, assim, um exemplo dessas ferramentas é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens)o codebeat e outras ferramentas do mesmo estilo na Web podem ser mostrar interessantes no desenvolvimento de projetos de código aberto.
+Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estátivas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.
 
-## Exercícios :pencil2:
+## Exercícios
 
 A) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/vvs](https://github.com/rodrigoprestesmachado/vvs) e altere a seção do documento (`docs/tutoriais/pmd/pmd.md`) chamada "Regras do PMD" a fim de contribuir com transcrição de pelo menos duas regras do PMD. Quando estiver pronto, realize um *Pull Request* para que o seu texto possa ser incorporado ao documento (serão atribuído créditos aos autores).
 

@@ -54,8 +54,9 @@ Apaga todas as imagens:
 Eliminar todos os volumes. Uma explicação rápida, no Docker, um volume maneira um diretório entre o host e o container, esse conceito será melhor explorado quando utilizarmos uma composição de container com a ferramenta [docker-compose](https://docs.docker.com/compose/).
 
     docker volume rm $(docker volume ls -q)
+
 ___
-**Para saber mais:** :muscle: Todos os comandos relacionados com o Docker podem ser utilizados por meio de ferramentas com interface de usuário gráfica. O Docker possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Windows e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do Docker. Outra dica de ferramenta é a [extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft. A extensão possui todas as funcionalidades do dashboard com a vantagem de poder ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar integrada a um ambiente de desenvolvimento.
+**Para saber mais:** Todos os comandos relacionados com o Docker podem ser utilizados por meio de ferramentas com interface de usuário gráfica. O Docker possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Windows e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do Docker. Outra dica de ferramenta é a [extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft. A extensão possui todas as funcionalidades do dashboard com a vantagem de poder ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar integrada a um ambiente de desenvolvimento.
 
 ---
 
@@ -99,7 +100,7 @@ Faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servir
     git clone https://github.com/rodrigoprestesmachado/tpack
     cd tpack
 ---
-**Para saber mais:** :muscle: O Tpack é um projeto simples que implementa um questionário sobre o conhecimento de conteúdo, pedagógico e tecnológico de professores. As tecnologias que esse projeto utiliza são: [Micro serviço](https://microprofile.io) em Java rodando em cima do [Open Liberty](https://openliberty.io), interface Web/PWA em [Vue](https://vuejs.org) [Typescript](https://www.typescriptlang.org) e banco de dados [MySQL](https://www.mysql.com).
+**Para saber mais:** O Tpack é um projeto simples que implementa um questionário sobre o conhecimento de conteúdo, pedagógico e tecnológico de professores. As tecnologias que esse projeto utiliza são: [Micro serviço](https://microprofile.io) em Java rodando em cima do [Open Liberty](https://openliberty.io), interface Web/PWA em [Vue](https://vuejs.org) [Typescript](https://www.typescriptlang.org) e banco de dados [MySQL](https://www.mysql.com).
 
 ---
 
@@ -107,7 +108,7 @@ Para compilar e empacotar o projeto, ou seja, criar um arquivo .jar/.war, execut
 
     mvn clean package
 
-**Fique atento:** :mag: o maven necessita baixar todas as dependências do projeto, assim, a primeira compilação pode ser demorada.
+**Fique atento:** o maven necessita baixar todas as dependências do projeto, assim, a primeira compilação pode ser demorada.
 
 Se tudo ocorrer bem, o maven irá criar uma diretório chamado `target`. Dentro desse diretório existirá um arquivo chamado `tpack.jar` que poderá ser executado da seguinte forma:
 
