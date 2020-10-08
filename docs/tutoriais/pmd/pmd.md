@@ -189,6 +189,8 @@ Depois de modificar o `pom.xml` de um projeto, podemos executar (no diretório d
 
 Note que no exemplo acima, estamos executando apenas um *goal* do plugin, ou seja, não estamos considerando um ciclo de *build* completo. Depois de executado, o relatório do PMD estará disponível dentro de `target/pmd.xml`.
 
+Uma dica de complemento para o PMD no Maven pode ser alcançado por meio do plugin [Checkstyle](https://maven.apache.org/plugins/maven-checkstyle-plugin/). Como o nome indica, o Checkstyle tenta fazer com que os desenvolvedores de uma equipe escrevam códigos dentro de um determinado padrão, como por exemplo,  [Sun Code Conventions](https://checkstyle.org/styleguides/sun-code-conventions-19990420/CodeConvTOC.doc.html) ou [Google Java Style](https://checkstyle.org/styleguides/google-java-style-20180523/javaguide.html).
+
 ## Codebeat
 
 Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estátivas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.

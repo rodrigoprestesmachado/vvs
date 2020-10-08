@@ -2,7 +2,7 @@
 
 Os testes unitários estabelecem um processo de testar pequenos componentes de um programa, como por exemplo, os métodos e/ou classes. Assim, esse tipo de teste consiste em realizar chamadas para as rotinas com diferentes parâmetros de entrada a fim de exercitar todos os comportamentos de um trecho de código.
 
-O Junit talvez seja a principal ferramenta para testes unitários na linguagem Java. O formato de um teste unitário no Junit pode ser observado no [exemplo](https://junit.org/junit5/docs/current/user-guide/#writing-tests) abaixo:
+O [Junit](https://junit.org/junit5/) talvez seja a principal ferramenta para testes unitários na linguagem Java. O formato de um teste unitário no Junit pode ser observado no [Exemplo 1](https://junit.org/junit5/docs/current/user-guide/#writing-tests) abaixo:
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,9 +20,13 @@ class MyFirstJUnitJupiterTests {
 }
 ```
 
-No exemplo acima, a anotação `@Test` indica que `addition` é um método de teste. Por suz vez, a assertiva `assertEquals` verifica se o resultado da soma de 1+1 por meio do método `add` da classe `Calculator` retorna no valor 2.
+<center>
+Exemplo 1 - Exemplo simples de Junit
+</center
 
-Como exemplo, o vídeo 1 mostra como podemos implementar testes unitários para a classe `Calculator` no VScode. Para isso, o vídeo utiliza uma extensão chamada [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test).
+No Exemplo 1, a anotação `@Test` indica que `addition` é um método de teste. Por suz vez, a assertiva `assertEquals` verifica se o resultado da soma de 1+1 por meio do método `add` da classe `Calculator` retorna no valor 2.
+
+Como ilustração, o Vídeo 1 mostra como podemos implementar testes unitários para a classe `Calculator` no VScode. Para isso, o vídeo utiliza uma extensão chamada [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test).
 
 <center>
     <iframe
@@ -36,7 +40,7 @@ Como exemplo, o vídeo 1 mostra como podemos implementar testes unitários para 
     Vídeo 1 - Introdução ao Junit com o Vscode
 </center>
 
-A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se voc6e seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como por exemplo, o trecho abaixo: 
+A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se voc6e seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como por exemplo, o trecho abaixo:
 
 ```xml
  <dependency>
@@ -53,7 +57,7 @@ A configuração do Junit em um projeto Java com Maven é um detalhe que não fo
 </dependency>
 ```
 
-# Anotações
+## Anotações
 
 O Junit possui um conjunto de [anotações](https://junit.org/junit5/docs/current/user-guide/#writing-tests-annotations) que auxiliam na configuração dos testes, entre as principais estão: `@BeforeAll`, `@AfterAll`, `@BeforeEach` e `@AfterEach`.
 
@@ -62,14 +66,11 @@ O Junit possui um conjunto de [anotações](https://junit.org/junit5/docs/curren
 * `@BeforeEach`: Indica que o método que será executado **antes** de cada método anotado com: `@Test`, `@RepeatedTest`, `@ParameterizedTest` ou `@TestFactory`.
 * `@AfterEach`: Indica que o método que será executado **depois** de cada método anotado com: `@Test`, `@RepeatedTest`, `@ParameterizedTest` ou `@TestFactory`.
 
-O exemplo abaixo mostra um pequeno exemplo de utilização da anotação `@BeforeAll`. No exemplo, o método estático `init` será executado apenas uma única vez antes da execução de qualquer teste. Por outro lado, o método `addCar` possui a anotação `@BeforeEach` e será executado antes de cada método anotado com `@Test`, ou seja, o exemplo abaixo fará que `addCar` seja executado duas vezes. Cabe ainda destacar que o exemplo utiliza o *Logger* do Junit para criar um registro das mensagens do teste.
+O código abaixo demonstra um exemplo de como se pode utilizar a anotação `@BeforeAll`. No exemplo, o método estático `init` será executado apenas uma única vez antes da execução de qualquer teste. Por outro lado, o método `add` possui a anotação `@BeforeEach` e será executado antes de cada método anotado com `@Test`, ou seja, o exemplo abaixo fará que `add` seja executado duas vezes. Cabe ainda destacar que o exemplo utiliza o *Logger* do Junit para criar um registro das mensagens do teste.
 
 ```java
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,10 +78,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 
-public class ExampleAnnotations {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    /** Logger **/
-    private static Logger logger = LoggerFactory.getLogger(ExampleAnnotations.class);
+/**
+ * AnnotationsTest.
+ */
+public class AnnotationsTest {
+
+    /** Logger. **/
+    private static Logger logger = LoggerFactory.getLogger(AnnotationsTest.class);
 
     private static List<String> cars;
 
@@ -92,7 +98,7 @@ public class ExampleAnnotations {
     }
 
     @BeforeEach
-    public void addCar() {
+    public void add() {
         logger.info(() -> "Add a car");
         cars.add("Bmw");
     }
@@ -107,17 +113,31 @@ public class ExampleAnnotations {
     @Test
     @DisplayName("Remove")
     public void remove() {
-        logger.info(() -> "remove test");
+        logger.info(() -> "remove car");
         cars.remove(0);
         assertEquals(2, cars.size());
     }
+
 }
 ```
 
 <center>
-Exemplo 1 - Uso das anotações @BeforeAll e @BeforeEach.
+Exemplo 2 - Uso das anotações @BeforeAll e @BeforeEach.
 </center>
 
-## Exercício
+## Assertivas
 
-Utilizando o vídeo como uma referência, implemente a classe do Exemplo 1 em um projeto Java.
+---
+
+## Agora é a sua vez
+
+Utilizando o vídeo como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
+
+---
+
+## Junit com Maven
+
+O Junit pode ser incorporado dentro do ciclo de construção e instalação de um sistema por meio de um plugin chamado [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/index.html). Para que testes com o Junit possam ser executados por meio do Surefire, se faz necessário respeitar o padrão de nomes estabelecido pelo plugin, como por exemplo, nomear todos as classes Java que implementam testes com o sufixo `Test`. Como ilustração, no nome da classe do Exemplo 2 chama-se `AnnotationsTest`, ou seja, respeita o padrão de nomes do Surefire. O padrão de nomes, ou seja, testes que podem ser incluídos ou excluídos no Surefire pode ser obtido na [documentação](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) específica) da ferramenta. Assim, uma vez incorporado em um projeto Maven, os testes poderão ser executador dentro do ciclo de testes por meio do commando:
+
+    mvn test
+
