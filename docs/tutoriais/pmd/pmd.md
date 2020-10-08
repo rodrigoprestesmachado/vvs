@@ -60,7 +60,8 @@ Como foi mostrado no vídeo, o PMD possui um conjunto grande de regras, assim, o
 
 ---
 
-1. Best Practices
+###1. **Best Practices**
+
 Remoção de imports não utilizados (Unused Imports).
 Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam muito o desenvolvimento, no entanto seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas ao refatorar acabamos mudando a lógica e não utilizando o recurso da biblioteca. Deste modo apagamos o trecho de código mas o import da biblioteca pode inadivertidamente continuar lá. O linter pode nos ajudar a identificar imports não utilizados através de sua análise estática. 
 
@@ -83,10 +84,11 @@ public class FooTest extends TestCase {
     }
 }
 
-1. Code Style
+###2. **Code Style**
+
 **Resumo:** Regras que impõem um estilo de codificação específico.
 
-[AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
+####[AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
 
 **Desde:** PMD 1.4
 **Prioridade:** Média (3)
@@ -124,17 +126,17 @@ não
 
 **Use esta regra com as propriedades padrão apenas referenciando-as:**
 
-<rule ref="category/java/codestyle.xml/AbstractNaming" />
+*<*rule ref="category/java/codestyle.xml/AbstractNaming"/*>*
 
 **Use esta regra e personalize-a:**
-
+```
 <rule ref="category/java/codestyle.xml/AbstractNaming">
     <properties>
-        <property name="strict" value="true" />
+        <property name="strict" value="true"/>
     </properties>
 </rule>
-
-[AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor
+```
+####[AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor
 
 **Desde:** PMD 1.04
 **Prioridade:** Média (3)
@@ -163,24 +165,25 @@ Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados po
 sim. O delimitador é ‘|’.
 
 **Use esta regra com as propriedades padrão apenas referenciando-as:**
-
+```
 <rule ref="category/java/codestyle.xml/AbstractNaming" />
-
+```
 **Use esta regra e personalize-a:**
-
+```
 <rule ref="category/java/codestyle.xml/AbstractNaming">
     <properties>
         <property name="strict" value="true" />
     </properties>
 </rule>
+```
 
-1. Design
-1. Documentation
-1. Error Prone
-1. Multithreading
-1. Performance
-1. Security
-1. Additional rulesets
+###3. Design
+###1. Documentation
+###1. Error Prone
+###1. Multithreading
+###1. Performance
+###1. Security
+###1. Additional rulesets
 
 ## PMD com o Maven
 
