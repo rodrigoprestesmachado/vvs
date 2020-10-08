@@ -90,7 +90,7 @@ public class FooTest extends TestCase {
 
 #### [AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
 
-**Desde:** PMD 1.4
+**Desde:** PMD 1.4  
 **Prioridade:** Média (3)
 
 As classes abstratas devem ser chamadas de ‘AbstractXXX’.
@@ -115,18 +115,13 @@ public abstract class Foo { // *deveria ser AbstractFoo*
 
 **Esta regra possui as seguintes propriedades:**
 
-**Nome**
-rigoroso
-**Valor padrão**
-verdade
-**Descrição**
-Também sinaliza classes, que são chamadas de Abstract, mas não são abstratas.
-**Valores múltiplos**
-não
+**Nome** | **Valor padrão** | **Descrição** | **Valores múltiplos**
+:---: | :---: | :---: |:---:
+rigoroso | verdade | Também sinaliza classes, que são chamadas de Abstract, mas não são abstratas | não  
 
 **Use esta regra com as propriedades padrão apenas referenciando-as:**
 
-*<*rule ref="category/java/codestyle.xml/AbstractNaming"/*>*
+```<rule ref="category/java/codestyle.xml/AbstractNaming"/>```
 
 **Use esta regra e personalize-a:**
 ```
@@ -138,12 +133,12 @@ não
 ```
 #### [AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor.
 
-**Desde:** PMD 1.04
+**Desde:** PMD 1.04  
 **Prioridade:** Média (3)
 
 Cada classe não estática deve declarar pelo menos um construtor. As classes com membros apenas estáticos são ignoradas, consulte UseUtilityClassRule para detectá-las.
 
-**Esta regra é definida pela seguinte classe Java:**[net.sourceforge.pmd.lang.java.rule.codestyle.AtLeastOneConstructorRule](https://github.com/pmd/pmd/blob/master/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/AtLeastOneConstructorRule.java)
+**Esta regra é definida pela seguinte classe Java:** [net.sourceforge.pmd.lang.java.rule.codestyle.AtLeastOneConstructorRule](https://github.com/pmd/pmd/blob/master/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/AtLeastOneConstructorRule.java)
 
 **Exemplo:**
 ```
@@ -155,14 +150,9 @@ public class Foo {
 ```
 **Esta regra possui as seguintes propriedades:**
 
-**Nome**
-anotações ignoradas
-**Valor padrão**
-lombok.Data | lombok.Value | lombok.Builder | lombok.NoArgsConstructor | lombok.RequiredArgsConstructor | lombok.AllArgsConstructor
-**Descrição**
-Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados por esta regra
-**Valores múltiplos**
-sim. O delimitador é ‘|’.
+**Nome** | **Valor padrão** | **Descrição** | **Valores múltiplos**
+:---: | :---: | :---: |:---:
+anotações ignoradas | lombok.Data `|` lombok.Value `|` lombok.Builder `|` lombok.NoArgsConstructor `|` lombok.RequiredArgsConstructor `|` lombok.AllArgsConstructor | Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados por esta regra | sim. O delimitador é `'|'`.  
 
 **Use esta regra com as propriedades padrão apenas referenciando-as:**
 ```
@@ -178,12 +168,12 @@ sim. O delimitador é ‘|’.
 ```
 
 ### 3. Design
-### 1. Documentation
-### 1. Error Prone
-### 1. Multithreading
-### 1. Performance
-### 1. Security
-### 1. Additional rulesets
+### 4. Documentation
+### 5. Error Prone
+### 6. Multithreading
+### 7. Performance
+### 8. Security
+### 9. Additional rulesets
 
 ## PMD com o Maven
 
