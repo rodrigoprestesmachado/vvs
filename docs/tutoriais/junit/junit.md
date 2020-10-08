@@ -22,7 +22,7 @@ class MyFirstJUnitJupiterTests {
 
 <center>
 Exemplo 1 - Exemplo simples de Junit
-</center
+</center>
 
 No Exemplo 1, a anotação `@Test` indica que `addition` é um método de teste. Por suz vez, a assertiva `assertEquals` verifica se o resultado da soma de 1+1 por meio do método `add` da classe `Calculator` retorna no valor 2.
 
