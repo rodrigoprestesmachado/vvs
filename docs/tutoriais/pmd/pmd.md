@@ -53,7 +53,7 @@ O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar 
 
 ## Regras do PMD
 
-Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, os exemplos abaixo mostram regras consideradas úteis por diversos programadores, são elas:
+Como foi mostrado no vídeo, o PMD possui um conjunto grande de regras, assim, os exemplos abaixo mostram regras consideradas úteis por diversos programadores, são elas:
 
 ---
 **Nota:** as regras e explicações abaixo foram escritas de maneira colaborativa.
@@ -84,6 +84,96 @@ public class FooTest extends TestCase {
 }
 
 1. Code Style
+**Resumo:** Regras que impõem um estilo de codificação específico.
+
+[AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
+
+**Desde:** PMD 1.4
+**Prioridade:** Média (3)
+
+As classes abstratas devem ser chamadas de ‘AbstractXXX’.
+
+Esta regra está obsoleta e será removida com PMD 7.0.0. A regra é substituída por [ClassNamingConventions](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#classnamingconventions)
+
+**Esta regra é definida pela seguinte expressão XPath:**
+
+//ClassOrInterfaceDeclaration
+ [@Abstract= true() and @Interface= false()]
+ [not (starts-with(@SimpleName,'Abstract'))]
+|
+//ClassOrInterfaceDeclaration
+ [@Abstract= false()]
+ [$strict= true()]
+ [starts-with(@SimpleName, 'Abstract')]
+
+**Exemplo:**
+
+public abstract class Foo { // *deveria ser AbstractFoo*
+}
+
+**Esta regra possui as seguintes propriedades:**
+
+**Nome**
+rigoroso
+**Valor padrão**
+verdade
+**Descrição**
+Também sinaliza classes, que são chamadas de Abstract, mas não são abstratas.
+**Valores múltiplos**
+não
+
+**Use esta regra com as propriedades padrão apenas referenciando-as:**
+
+<rule ref="category/java/codestyle.xml/AbstractNaming" />
+
+**Use esta regra e personalize-a:**
+
+<rule ref="category/java/codestyle.xml/AbstractNaming">
+    <properties>
+        <property name="strict" value="true" />
+    </properties>
+</rule>
+
+[AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor
+
+**Desde:** PMD 1.04
+**Prioridade:** Média (3)
+
+Cada classe não estática deve declarar pelo menos um construtor. As classes com membros apenas estáticos são ignoradas, consulte UseUtilityClassRule para detectá-las.
+
+**Esta regra é definida pela seguinte classe Java:**[net.sourceforge.pmd.lang.java.rule.codestyle.AtLeastOneConstructorRule](https://github.com/pmd/pmd/blob/master/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/AtLeastOneConstructorRule.java)
+
+**Exemplo:**
+
+public class Foo {
+   // *falta de construtor*
+  public void doSomething() { ... }
+  public void doOtherThing { ... }
+}
+
+**Esta regra possui as seguintes propriedades:**
+
+**Nome**
+anotações ignoradas
+**Valor padrão**
+lombok.Data | lombok.Value | lombok.Builder | lombok.NoArgsConstructor | lombok.RequiredArgsConstructor | lombok.AllArgsConstructor
+**Descrição**
+Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados por esta regra
+**Valores múltiplos**
+sim. O delimitador é ‘|’.
+
+**Use esta regra com as propriedades padrão apenas referenciando-as:**
+
+<rule ref="category/java/codestyle.xml/AbstractNaming" />
+
+**Use esta regra e personalize-a:**
+
+<rule ref="category/java/codestyle.xml/AbstractNaming">
+    <properties>
+        <property name="strict" value="true" />
+    </properties>
+</rule>
+
 1. Design
 1. Documentation
 1. Error Prone
