@@ -152,7 +152,7 @@ public class Foo {
 
 **Nome** | **Valor padrão** | **Descrição** | **Valores múltiplos**
 :---: | :---: | :---: |:---:
-anotações ignoradas | `lombok.Data | lombok.Value | lombok.Builder | lombok.NoArgsConstructor | lombok.RequiredArgsConstructor | lombok.AllArgsConstructor` | Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados por esta regra | sim. O delimitador é `'|'`.  
+anotações ignoradas | lombok.Data \| lombok.Value \| lombok.Builder \| lombok.NoArgsConstructor \| lombok.RequiredArgsConstructor \| lombok.AllArgsConstructor | Nomes totalmente qualificados dos tipos de anotação que devem ser ignorados por esta regra | sim. O delimitador é `'|'`.  
 
 **Use esta regra com as propriedades padrão apenas referenciando-as:**
 ```
