@@ -102,44 +102,46 @@ public class FooTest {
     }
 }
 ```
-###  3. Baixo acoplamento (LooseCoupling, prioridade média)
 
-O uso de implementações de interfaces (por exemplo, ArrayList) limita a capacidade de alterações futuras que venham a ser necessárias por mudanças nos requisitos. Idealmente, deve se utilizar a interface adequada ao declarar objetos - e então inicializar o objeto com a implementação desejada. 
+### 3. Baixo acoplamento (LooseCoupling)
+
+@mottin-gui O uso de implementações de interfaces (por exemplo, `ArrayList`) limita a capacidade de alterações futuras que venham a ser necessárias por mudanças nos requisitos. Idealmente, deve se utilizar a interface adequada ao declarar objetos - e então inicializar o objeto com a implementação desejada.
 
 Exemplo:
 
 ```java
-public class BaixoAcoplamentoTeste {
+public class BaixoAcoplamentoTest {
 
-    //Uso da interface List para então inicializar uma implementação dela, a ArrayList.
-    private List<AlgumTipo> lista = new ArrayList<>();
+    // uso da interface List para então inicializar uma implementação de um ArrayList
+    private List<AlgumTipo> lista = new ArrayList<AlgumTipo>();
 
-    //Mais um exemplo de uso de uma interface e uma de suas implementações visando o baixo acoplamento.
-    
+    // mais um exemplo de uso de uma interface e uma de suas implementações visando o baixo acoplamento
     public Set<AlgumTipo> getFoo(){
         return new HashSet<AlgumTipo>();
     }
 }
 ```
+
 Para referenciar essa regra no PMD, use a linha abaixo:
 
 ```xml
     <rule ref="category/java/bestpractices.xml/JunitUseExpected"/>
 ```
-###  4. SystemPrintln (prioridade média-alta)
 
-Referências à saída padrão do sistema (out e err) geralmente são utilizadas para debug de código, entretanto podem permanecer 'esquecidas' no código e entrar em produção. Por meio do logger é possível habilitar ou não o registro das chamadas de debug e evitar que o log de saída padrão do sistema fique poluído.
+### 4. SystemPrintln (prioridade média-alta)
+
+@mottin-gui Referências à saída padrão do sistema (out e err) geralmente são utilizadas para debug de código, entretanto podem permanecer 'esquecidas' no código e entrar em produção. Por meio do `Logger` é possível habilitar ou não o registro das chamadas de debug e evitar que o log de saída padrão do sistema fique poluído.
 
 Exemplo:
 ```java
 public class Foo{
     Logger log = Logger.getLogger(Foo.class.getName());
-    public void testA(){
-	//evitar usar
-        System.out.println("Entrei em testA");
-        
-        //melhor usar
-        log.fine("Entrei em testA");
+    public void test(){
+        // evitar usar
+        System.out.println("Entrei no teste A");
+
+        // melhor usar
+        log.fine("Entrei no teste A");
     }
 }
 ```

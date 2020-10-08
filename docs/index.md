@@ -3,7 +3,7 @@
 ## Slides
 
 * [Introdução](slides/introducao/index.html)
-  
+
 * [Planejamento](slides/planejamento/index.html)
 
 ## Tutoriais
@@ -12,7 +12,7 @@
 
 * [Inspeções estáticas com PMD](tutoriais/pmd/pmd.md)
 
-* [Junit](tutoriais/junit/junit.md)
+* [Introdução ao Junit](tutoriais/junit/junit.md)
 
 * [Selenium](tutoriais/selenium.md)
 

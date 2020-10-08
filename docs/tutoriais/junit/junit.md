@@ -40,7 +40,7 @@ Como ilustração, o Vídeo 1 mostra como podemos implementar testes unitários 
     Vídeo 1 - Introdução ao Junit com o Vscode
 </center>
 
-A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se voc6e seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como por exemplo, o trecho abaixo:
+A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se você seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como por exemplo, o trecho abaixo:
 
 ```xml
  <dependency>
@@ -71,12 +71,12 @@ O código abaixo demonstra um exemplo de como se pode utilizar a anotação `@Be
 ```java
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -86,38 +86,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AnnotationsTest {
 
     /** Logger. **/
-    private static Logger logger = LoggerFactory.getLogger(AnnotationsTest.class);
+    private static Logger logger = Logger.getLogger("AnnotationsTest");
 
     private static List<String> cars;
 
     @BeforeAll
     public static void init() {
-        logger.info(() -> "Init test");
+        logger.info("init");
         cars = new ArrayList<String>();
         cars.add("Volvo");
     }
 
     @BeforeEach
     public void add() {
-        logger.info(() -> "Add a car");
+        logger.info("add");
         cars.add("Bmw");
     }
 
     @Test
-    @DisplayName("Length")
+    @DisplayName("Length test")
     public void length() {
-        logger.info(() -> "length test");
+        logger.info("length");
         assertEquals(2, cars.size());
     }
 
     @Test
-    @DisplayName("Remove")
+    @DisplayName("Remove car test")
     public void remove() {
-        logger.info(() -> "remove car");
+        logger.log(Level.INFO, "remove");
         cars.remove(0);
         assertEquals(2, cars.size());
     }
-
 }
 ```
 
@@ -125,15 +124,72 @@ public class AnnotationsTest {
 Exemplo 2 - Uso das anotações @BeforeAll e @BeforeEach.
 </center>
 
+Note que no Exemplo 2 que os dois casos de teste estão anotados com `@DisplayName`, ou seja, essa anotação permite que coloquemos um nome mais significativo para os testes.
+
+Outra situação comum é necessitarmos estabelecer uma ordem para a execução dos casos de teste, nesse caso, podemos estabelecer uma sequencia pré-definida por meio da anotação `@Order`. O Exemplo 3 mostra uma situação onde, devido a presença da anotação `@Order`, o segundo método de teste (`second`) será executado antes do primeiro.
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+
+/**
+ * TagOrderTest.
+ */
+class TagOrderTest {
+
+    private static Logger logger = Logger.getLogger("TagOrderTest");
+
+    @Test
+    @Order(1)
+    void first() {
+        logger.info("first");
+        assertEquals(1, 1);
+    }
+
+    @Test
+    @Order(2)
+    void second() {
+        logger.info("second");
+        assertEquals(1, 1);
+    }
+
+}
+```
+
+<center>
+Exemplo 3 - Ordem da execução dos casos de teste
+</center>
+
+---
+
+## Exercício 1
+
+Utilizando o Vídeo 1 como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
+
+---
+
 ## Assertivas
 
----
+O Junit 5 possui um conjunto grande de assertivas (afirmações categóricas), entre as mais comuns estão `assertEquals`, `assertTrue`, `assertTimeout`, entre outras. Porém, se faz necessário destacar a assertiva `assertThrows` que, para verificar exceções, possui uma forma de escrita um pouco diferente das demais.
 
-## Agora é a sua vez
+```java
+@Test
+void exception() {
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Integer.parseInt("One");
+    });
+}
+```
 
-Utilizando o vídeo como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
+<center>
+Exemplo 4 - Assertiva assertThrows
+</center>
 
----
+No Exemplo 4, a assertiva `assertThrows` verifica se o trecho de código `Integer.parseInt("One")` (escrito como uma expressão [lambda](https://www.w3schools.com/java/java_lambda.asp)) irá resultar a exceção `IllegalArgumentException`.
 
 ## Junit com Maven
 
@@ -141,3 +197,43 @@ O Junit pode ser incorporado dentro do ciclo de construção e instalação de u
 
     mvn test
 
+Muitas vezes se faz necessário agrupar testes para que possam ser executados de maneira separada (por requisito, componentes, funcionalidades, entre outros). Nesse sentido, a anotação `@Tag`auxilia a rotular testes dentro de categorias. Veja o exemplo do trecho abaixo:
+
+```Java
+@Test
+@Order(1)
+@Tag("VVS")
+void first() {
+    logger.info("first");
+    assertEquals(1, 1);
+}
+```
+
+<center>
+Exemplo 4 - Modificação do primeiro método do Exemplo 3 com a anotação @Tag("VVS")
+</center>
+
+Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin Surefire no Maven (dentro do `pom.xml`), podemos executar apenas um grupo de testes previamente rotulado. O trecho de código abaixo mostra um exemplo onde apenas os testes marcado com a `@Tag(VVS)` irão ser executados por meio do comando `mvn test`.
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>${maven-surefire-plugin.version}</version>
+    <configuration>
+        <groups>VVS</groups>
+    </configuration>
+</plugin>
+```
+
+---
+
+## Exercício 2
+
+Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e 2 no Vscode e execute por meio do plugin Surefire do Maven.
+
+---
+
+## Referências
+
+SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768 ISBN 9788543024974.
