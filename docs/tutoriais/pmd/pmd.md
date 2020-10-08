@@ -61,28 +61,6 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 ---
 
 1. Best Practices
-Remoção de imports não utilizados (Unused Imports).
-Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam muito o desenvolvimento, no entanto seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas ao refatorar acabamos mudando a lógica e não utilizando o recurso da biblioteca. Deste modo apagamos o trecho de código mas o import da biblioteca pode inadivertidamente continuar lá. O linter pode nos ajudar a identificar imports não utilizados através de sua análise estática. 
-
-Exemplo:
-import java.io.File;  // not referenced or required
-import java.util.*;   // not referenced or required
-
-public class Foo {}
-
-
-Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue).
-Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
-
-Exemplo:
-public class FooTest extends TestCase {
-    void testCode() {
-        Object a, b;
-        assertTrue(a.equals(b));                    // usa o equals da linguagem para comparar valores. inadequado neste caso
-        assertEquals("a should equals b", a, b);    // usa o equals do framework de testes. Correto de acordo com a regra
-    }
-}
-
 1. Code Style
 1. Design
 1. Documentation
@@ -91,8 +69,38 @@ public class FooTest extends TestCase {
 1. Performance
 1. Security
 1. Additional rulesets
+1. PMD com o Maven
 
-## PMD com o Maven
+## Best Practices
+
+### 1. Remoção de imports não utilizados (Unused Imports) - @jaquelinebonoto
+
+Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
+
+Exemplo:
+```java
+import java.io.File;  // not referenced or required
+import java.util.*;   // not referenced or required
+
+public class Foo {}
+```
+
+###  2. Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue) - @jaquelinebonoto
+
+Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
+
+Exemplo:
+```Java
+public class FooTest extends TestCase {
+    void testCode() {
+        Object a, b;
+        assertTrue(a.equals(b));                    // usa o equals da linguagem para comparar valores. inadequado neste caso
+        assertEquals("a should equals b", a, b);    // usa o equals do framework de testes. Correto de acordo com a regra
+    }
+}
+```
+
+
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
 
