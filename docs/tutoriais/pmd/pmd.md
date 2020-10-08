@@ -75,7 +75,7 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 
 ### 1. Remoção de imports não utilizados (Unused Imports)
 
-(Créditos @jaquelinebonoto) Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
+@jaquelinebonoto - Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
 
 Exemplo:
 ```java
@@ -87,12 +87,14 @@ public class Foo {}
 
 ###  2. Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue)
 
-(Créditos @jaquelinebonoto) Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
+@jaquelinebonoto - Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
 
 Exemplo:
 
 ```java
-public class FooTest extends TestCase {
+public class FooTest {
+
+    @Test
     void testCode() {
         Object a, b;
         assertTrue(a.equals(b));                    // usa o equals da linguagem para comparar valores. inadequado neste caso
