@@ -91,7 +91,7 @@ public class Foo {}
 
 Exemplo:
 
-```Java
+```java
 public class FooTest extends TestCase {
     void testCode() {
         Object a, b;
