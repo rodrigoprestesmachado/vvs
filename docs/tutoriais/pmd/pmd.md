@@ -73,9 +73,9 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 
 ## Best Practices
 
-### 1. Remoção de imports não utilizados (Unused Imports) - @jaquelinebonoto
+### 1. Remoção de imports não utilizados (Unused Imports)
 
-Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
+(Créditos @jaquelinebonoto) Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
 
 Exemplo:
 ```java
@@ -85,11 +85,12 @@ import java.util.*;   // not referenced or required
 public class Foo {}
 ```
 
-###  2. Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue) - @jaquelinebonoto
+###  2. Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue)
 
-Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
+(Créditos @jaquelinebonoto) Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
 
 Exemplo:
+
 ```Java
 public class FooTest extends TestCase {
     void testCode() {
@@ -100,7 +101,7 @@ public class FooTest extends TestCase {
 }
 ```
 
-
+## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
 
