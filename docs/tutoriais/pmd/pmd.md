@@ -60,7 +60,7 @@ Como foi mostrado no vídeo, o PMD possui um conjunto grande de regras, assim, o
 
 ---
 
-###1. **Best Practices**
+### 1. **Best Practices**
 
 Remoção de imports não utilizados (Unused Imports).
 Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam muito o desenvolvimento, no entanto seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas ao refatorar acabamos mudando a lógica e não utilizando o recurso da biblioteca. Deste modo apagamos o trecho de código mas o import da biblioteca pode inadivertidamente continuar lá. O linter pode nos ajudar a identificar imports não utilizados através de sua análise estática. 
@@ -84,11 +84,11 @@ public class FooTest extends TestCase {
     }
 }
 
-###2. **Code Style**
+### 2. **Code Style**
 
 **Resumo:** Regras que impõem um estilo de codificação específico.
 
-####[AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
+#### [AbstractNaming](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#abstractnaming) Nomenclatura Abstrata
 
 **Desde:** PMD 1.4
 **Prioridade:** Média (3)
@@ -98,7 +98,7 @@ As classes abstratas devem ser chamadas de ‘AbstractXXX’.
 Esta regra está obsoleta e será removida com PMD 7.0.0. A regra é substituída por [ClassNamingConventions](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#classnamingconventions)
 
 **Esta regra é definida pela seguinte expressão XPath:**
-
+```
 //ClassOrInterfaceDeclaration
  [@Abstract= true() and @Interface= false()]
  [not (starts-with(@SimpleName,'Abstract'))]
@@ -107,7 +107,7 @@ Esta regra está obsoleta e será removida com PMD 7.0.0. A regra é substituíd
  [@Abstract= false()]
  [$strict= true()]
  [starts-with(@SimpleName, 'Abstract')]
-
+```
 **Exemplo:**
 
 public abstract class Foo { // *deveria ser AbstractFoo*
@@ -136,7 +136,7 @@ não
     </properties>
 </rule>
 ```
-####[AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor
+#### [AtLeastOneConstructor](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_codestyle.html#atleastoneconstructor) Pelo menos um construtor.
 
 **Desde:** PMD 1.04
 **Prioridade:** Média (3)
@@ -146,13 +146,13 @@ Cada classe não estática deve declarar pelo menos um construtor. As classes co
 **Esta regra é definida pela seguinte classe Java:**[net.sourceforge.pmd.lang.java.rule.codestyle.AtLeastOneConstructorRule](https://github.com/pmd/pmd/blob/master/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/AtLeastOneConstructorRule.java)
 
 **Exemplo:**
-
+```
 public class Foo {
    // *falta de construtor*
   public void doSomething() { ... }
   public void doOtherThing { ... }
 }
-
+```
 **Esta regra possui as seguintes propriedades:**
 
 **Nome**
@@ -177,13 +177,13 @@ sim. O delimitador é ‘|’.
 </rule>
 ```
 
-###3. Design
-###1. Documentation
-###1. Error Prone
-###1. Multithreading
-###1. Performance
-###1. Security
-###1. Additional rulesets
+### 3. Design
+### 1. Documentation
+### 1. Error Prone
+### 1. Multithreading
+### 1. Performance
+### 1. Security
+### 1. Additional rulesets
 
 ## PMD com o Maven
 
