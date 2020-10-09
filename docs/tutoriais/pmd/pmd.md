@@ -173,6 +173,8 @@ anotações ignoradas | lombok.Data \| lombok.Value \| lombok.Builder \| lombok.
 ### 6. Multithreading
 ### 7. Performance
 ### 8. Security
+
+
 ### 9. Additional rulesets
 
 ## PMD com o Maven
