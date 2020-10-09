@@ -155,7 +155,6 @@ Prioridade: Média
 @cleberramiresmachado A classe abstrata não contém nenhum método abstrato. Uma classe abstrata sugere uma implementação incompleta, que deve ser completada por subclasses que implementam os métodos abstratos. Se a classe se destina a ser usada apenas como uma classe base (não para ser instanciada diretamente), um construtor protected pode ser fornecido para impedir a instanciação direta.
 
 Esta regra é definida pela seguinte classe Java:
-
 net.sourceforge.pmd.lang.java.rule.bestpractices.AbstractClassWithoutAbstractMethodRule
 
 Exemplo:
@@ -184,7 +183,6 @@ Prioridade: Média-alta
 @cleberramiresmachado Reatribuir valores aos parâmetros de entrada não é recomendado. Em vez disso, use variáveis locais temporárias.
 
 Esta regra é definida pela seguinte classe Java:
-
 net.sourceforge.pmd.lang.java.rule.bestpractices.AvoidReassigningParametersRule
 
 Exemplo:
