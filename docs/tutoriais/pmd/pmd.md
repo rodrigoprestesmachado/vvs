@@ -146,6 +146,63 @@ public class Foo{
 }
 ```
 
+### 5. Classe abstrata sem método abstrato (AbstractClassWithoutAbstractMethod)
+
+A partir de: PMD 3.0
+
+Prioridade: Média
+
+@cleberramiresmachado A classe abstrata não contém nenhum método abstrato. Uma classe abstrata sugere uma implementação incompleta, que deve ser completada por subclasses que implementam os métodos abstratos. Se a classe se destina a ser usada apenas como uma classe base (não para ser instanciada diretamente), um construtor protected pode ser fornecido para impedir a instanciação direta.
+
+Esta regra é definida pela seguinte classe Java:
+
+net.sourceforge.pmd.lang.java.rule.bestpractices.AbstractClassWithoutAbstractMethodRule
+
+Exemplo:
+
+```java
+public abstract class Foo {
+  void int method1() { ... }
+  void int method2() { ... }
+  // considere usar métodos abstratos ou remover
+  // o modificador abstrato e adicionar construtores protected
+}
+```
+
+Use esta regra referenciando-a:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+```
+
+### 6. Evite reatribuir parâmetros (AvoidReassigningParameters)
+
+A partir de: PMD 1.0
+
+Prioridade: Média-alta
+
+@cleberramiresmachado Reatribuir valores aos parâmetros de entrada não é recomendado. Em vez disso, use variáveis locais temporárias.
+
+Esta regra é definida pela seguinte classe Java:
+
+net.sourceforge.pmd.lang.java.rule.bestpractices.AvoidReassigningParametersRule
+
+Exemplo:
+
+```java
+public class Foo {
+  private void foo(String bar) {
+    bar = "something else";
+  }
+}
+```
+
+Use esta regra referenciando-a:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters" />
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
