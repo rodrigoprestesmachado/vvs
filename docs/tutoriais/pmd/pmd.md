@@ -168,13 +168,82 @@ anotações ignoradas | lombok.Data \| lombok.Value \| lombok.Builder \| lombok.
 ```
 
 ### 3. Design
+
+**Resumo:** Regras que ajudam a descobrir problemas de design.
+
+#### [AbstractClassWithoutAnyMethod](https://pmd.github.io/latest/pmd_rules_java_design.html#abstractclasswithoutanymethod) Classe abstrata sem qualquer método  
+
+**Desde:** PMD 4.2  
+**Prioridade:** Alta (1)  
+
+Se uma classe abstrata não fornece nenhum método, ela pode estar agindo como um contêiner de dados simples que não deve ser instanciado. Nesse caso, provavelmente é melhor usar um construtor privado ou protegido para evitar a instanciação do que tornar a classe enganosamente abstrata.
+
+**Esta regra é definida pela seguinte expressão XPath:**  
+```
+//ClassOrInterfaceDeclaration
+    [@Abstract = true()]
+    [not(./ClassOrInterfaceBody/*/ConstructorDeclaration)]
+    [not(./ClassOrInterfaceBody/*/MethodDeclaration)]
+    [not(../Annotation/MarkerAnnotation/Name[pmd-java:typeIs('com.google.auto.value.AutoValue')])]
+```
+**Exemplo:**
+```
+public abstract class Example {
+    String field;
+    int otherField;
+}
+```
+ **Use esta regra referenciando-a:**  
+```
+<rule ref="category/java/design.xml/AbstractClassWithoutAnyMethod" />
+```
+
+#### [AvoidCatchingGenericException](https://pmd.github.io/latest/pmd_rules_java_design.html#avoidcatchinggenericexception) Evite pegar exceções genéricas  
+
+**Desde:** PMD 4.2.6  
+**Prioridade:** Média (3)  
+
+Evite capturar exceções genéricas, como NullPointerException, RuntimeException, Exception no bloco try-catch  
+
+**Esta regra é definida pela seguinte expressão XPath:**  
+```
+//CatchStatement/FormalParameter/Type/ReferenceType/ClassOrInterfaceType[
+    @Image='NullPointerException' or
+    @Image='Exception' or
+    @Image='RuntimeException']
+```
+**Exemplo:**  
+```
+package com.igate.primitive;
+
+public class PrimitiveType {
+
+    public void downCastPrimitiveType() {
+        try {
+            System.out.println(" i [" + i + "]");
+        } catch(Exception e) {
+            e.printStackTrace();
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+**Use esta regra referenciando-a:**  
+```
+<rule ref="category/java/design.xml/AvoidCatchingGenericException" />
+```
+
+
+
+
 ### 4. Documentation
 ### 5. Error Prone
 ### 6. Multithreading
 ### 7. Performance
 ### 8. Security
-
-
 ### 9. Additional rulesets
 
 ## PMD com o Maven
