@@ -145,6 +145,36 @@ public class Foo{
     }
 }
 ```
+### 5. CheckResultSet (prioridade média)
+
+Verifica os valores de retorno nos métodos de navegação (próximo, anterior, primeiro, último) de um ResultSet. Se o valor de retorno for 'falso', ele deve ser tratado.
+
+Exemplo:
+```java
+Statement stat = conn.createStatement();
+ResultSet rst = stat.executeQuery("SELECT name FROM person");
+rst.next();     // Se retornar falso? problema
+String firstName = rst.getString(1);
+
+Statement stat = conn.createStatement();
+ResultSet rst = stat.executeQuery("SELECT name FROM person");
+if (rst.next()) {    // Resultado é examinado e usado
+    String firstName = rst.getString(1);
+    } else  {
+        // Lidar com dados perdidos
+}
+```
+
+### 6. GuardLogStatement (prioridade média-alta)
+
+Sempre que usar um nível de log, deve-se verificar se o nível de log está realmente habilitado, ou então pular a criação e manipulação de String associada.
+
+Exemplo:
+```java
+// Adicionar isso para melhorar o desempenho
+    if (log.isDebugEnabled() { ...
+        log.debug("log something" + " and " + "concat strings");
+```
 
 ## PMD no Maven
 
