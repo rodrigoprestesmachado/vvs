@@ -53,7 +53,7 @@ O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar 
 
 ## Regras do PMD
 
-Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, os exemplos abaixo mostram regras consideradas úteis por diversos programadores, são elas:
+Como foi mostrado no vídeo, o PMD possui um conjunto grande de regras, assim, os exemplos abaixo mostram regras consideradas úteis por diversos programadores, são elas:
 
 ---
 **Nota:** :mag: as regras e explicações abaixo foram escritas de maneira colaborativa.
@@ -61,14 +61,78 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 ---
 
 1. Best Practices
-1. Code Style
-1. Design
-1. Documentation
-1. Error Prone
-1. Multithreading
-1. Performance
-1. Security
-1. Additional rulesets
+2. Code Style
+3. Design
+4. Documentation
+5. Error Prone
+6. Multithreading
+7. Performance
+8. Security
+9. Additional rulesets
+
+### Verificar valores de retorno dos métodos (CheckResultSet)
+
+@guismoreira - Sempre verifique os valores de retorno dos métodos de navegação (próximo, anterior, primeiro, último) de um ResultSet. Se o valor de retorno for 'false', ele deve ser tratado corretamente.
+
+Exemplo:
+
+```java
+    Statement stat = conn.createStatement();
+    ResultSet rst = stat.executeQuery("SELECT name FROM person");
+    rst.next();     // what if it returns false? bad form
+    String firstName = rst.getString(1);
+
+    Statement stat = conn.createStatement();
+    ResultSet rst = stat.executeQuery("SELECT name FROM person");
+    if (rst.next()) {    // result is properly examined and used
+        String firstName = rst.getString(1);
+        } else  {
+            // handle missing data
+    }
+    }
+}
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/CheckResultSet" />
+```
+
+### Evitar constantes nas interfaces (ConstantsInInterface)
+
+@guismoreira - Evite constantes nas interfaces. Interfaces devem definir tipos, constantes são detalhes de implementação melhor colocados em classes ou enums.
+
+Exemplo:
+
+```java
+    public interface ConstantInterface {
+        public static final int CONST1 = 1; // violation, no fields allowed in interface!
+        static final int CONST2 = 1;        // violation, no fields allowed in interface!
+        final int CONST3 = 1;               // violation, no fields allowed in interface!
+        int CONST4 = 1;                     // violation, no fields allowed in interface!
+    }
+
+    // with ignoreIfHasMethods = false
+    public interface AnotherConstantInterface {
+        public static final int CONST1 = 1; // violation, no fields allowed in interface!
+
+        int anyMethod();
+    }
+
+    // with ignoreIfHasMethods = true
+    public interface YetAnotherConstantInterface {
+        public static final int CONST1 = 1; // no violation
+
+        int anyMethod();
+    }
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/ConstantsInInterface" />
+```
 
 ## PMD com o Maven
 
