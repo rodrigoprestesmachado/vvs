@@ -1,7 +1,7 @@
 
 # Inspeções estáticas
 
-Antes de iniciarmos o assunto sobre inspeções estática, iremos conhecer o conceito de *Fork* existente em sistemas de versionamento de código. Uma vez entendido o funciona de um *Fork*, no final desse documento iremos trabalhar com um exemplo onde iremos utilizar o *Fork* para poder analisar um código de forma estática.
+Antes de iniciarmos o assunto sobre inspeções estáticas, iremos conhecer o conceito de *Fork* existente em sistemas de versionamento de código. Uma vez entendido o funcionamento de um *Fork*, no final desse documento iremos trabalhar com um exemplo onde iremos utilizar o *Fork* para poder analisar um código de forma estática.
 
 ## GitHub Fork
 
@@ -15,7 +15,7 @@ Depois de criar um *Fork* de um repositório você deve fazer um `git clone` do 
 Figura 1 - Interface Web do GitHub
 </center>
 
-Depois de fazer alterações nos códigos do projeto, você poderá solicitar que as mudanças sejam incorporadas no projeto original. Para fazer isso, temos que criar um *Pull Request*, veja a localização dessa funcionalidade no item 2 da figura 1.Depois de criar um *Pull Request*, o GitHub mostrará um banner avisando que você realizou uma Pull Request para o projeto original, conforme mostra o item 3 da figura 1.
+Depois de fazer alterações nos códigos do projeto, você poderá solicitar que as mudanças sejam incorporadas no projeto original. Para fazer isso, temos que criar um *Pull Request*, veja a localização dessa funcionalidade no item 2 da figura 1. Depois de criar um *Pull Request*, o GitHub mostrará um banner avisando que você realizou uma Pull Request para o projeto original, conforme mostra o item 3 da figura 1.
 
 Porém, para que as suas mudanças sejam incorporadas, o dono do projeto principal necessitará aceitar e, consequentemente fazer uma operação de [*merge*](https://git-scm.com/docs/git-merge) para unir a nova modificação no código principal, ou seja, aceitar ou não a requisição depende do dono do projeto original.
 
@@ -75,7 +75,7 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 
 ### 1. Remoção de imports não utilizados (Unused Imports)
 
-@jaquelinebonoto - Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
+@jaquelinebonoto - Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código, mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
 
 Exemplo:
 ```java
@@ -146,6 +146,81 @@ public class Foo{
 }
 ```
 
+### 5. Evitar declarações com muitos aninhamentos profundos (Regra de Design - prioridade média)
+
+Evitar criar instruções if-then com muitos aninhamentos profundos, pois são mais difíceis de ler e estão sujeitos a erros de manutenção.
+
+Exemplo:
+```java
+    public class Foo {
+        public void bar(int x, int y, int z) {
+            if (x>y) {
+            if (y>z) {
+                if (z==x) {
+                // !! muitas declarações internas. Evite e ache alternativas para refazer seu trecho de código
+                }
+            }
+            }
+        }
+    }
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts" />
+```
+
+Para utilizar essa regra e customizá-la, siga o exemplo conforme a sua necessidade:
+
+```xml
+    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
+        <properties>
+            <property name="problemDepth" value="3" />
+        </properties>
+    </rule>
+```
+
+### 6. Evitar comprimento excessivos nos arquivos de classes (Regra de Design - prioridade média)
+
+Comprimentos excessivos nos arquivos de classe geralmente são indicações de que a classe pode estar sobrecarregada com responsabilidades excessivas e que podem ser fornecidas por classes ou funções externas. Ao separar esses métodos, o código se torna mais gerenciável e pronto para ser reutilizado.
+
+Exemplo:
+
+```java
+    public class Foo {
+        public void bar1() {
+            // 1000 lines of code
+        }
+        public void bar2() {
+            // 1000 lines of code
+        }
+        public void bar3() {
+            // 1000 lines of code
+        }
+
+        public void barN() {
+            // 1000 lines of code
+        }
+    }
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/design.xml/ExcessiveClassLength" />
+```
+
+Para utilizar essa regra e customizá-la, siga o exemplo conforme a sua necessidade:
+
+```xml
+    <rule ref="category/java/design.xml/ExcessiveClassLength">
+        <properties>
+            <property name="minimum" value="1000.0" />
+        </properties>
+    </rule>
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
@@ -195,7 +270,7 @@ Uma dica de complemento para o PMD no Maven pode ser alcançado por meio do plug
 
 ## Codebeat
 
-Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estátivas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.
+Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estáticas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.
 
 ## Exercícios
 
