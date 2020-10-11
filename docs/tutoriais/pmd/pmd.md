@@ -146,7 +146,7 @@ public class Foo{
 }
 ```
 
-### 5. Evitar declarações com muitos aninhamentos profundos (Regra de Design - prioridade média)
+### 9. Evitar declarações com muitos aninhamentos profundos (Regra de Design - prioridade média)
 
 Evitar criar instruções if-then com muitos aninhamentos profundos, pois são mais difíceis de ler e estão sujeitos a erros de manutenção.
 
@@ -181,7 +181,7 @@ Para utilizar essa regra e customizá-la, siga o exemplo conforme a sua necessid
     </rule>
 ```
 
-### 6. Evitar comprimento excessivos nos arquivos de classes (Regra de Design - prioridade média)
+### 10. Evitar comprimento excessivos nos arquivos de classes (Regra de Design - prioridade média)
 
 Comprimentos excessivos nos arquivos de classe geralmente são indicações de que a classe pode estar sobrecarregada com responsabilidades excessivas e que podem ser fornecidas por classes ou funções externas. Ao separar esses métodos, o código se torna mais gerenciável e pronto para ser reutilizado.
 
