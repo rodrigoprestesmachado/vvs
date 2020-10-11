@@ -146,6 +146,38 @@ public class Foo{
 }
 ```
 
+### 5. Ausência da annotation @Override (MissingOverride)
+
+@igorcemim - Essa regra verifica se os métodos sobrescritos contém a annotation @Override. Essa annotation permite que o compilador verifique em tempo de compilação se o método em questão realmente está sobrescrevendo um método de uma superclasse corretamente. A utilização dessa annotation ajuda a previnir erros ao refatorar código, por exemplo.
+
+Exemplo de código incorreto:
+```java
+public class Foo implements Runnable {
+    // Este método está sobrescrito e deveria ter uma annotation @Override
+    public void run() {
+    }
+}
+```
+
+Exemplo de código correto:
+```java
+public class Foo implements Runnable {
+    @Override
+    public void run() {
+    }
+}
+```
+### 6. Método privado não utilizado (UnusedPrivateMethod)
+
+@igorcemim - Essa regra verifica a existência de métodos privados não utilizados, ou seja, o método foi declarado mas não é executado em nenhum momento. 
+
+Exemplo:
+```java
+public class Something {
+    private void foo() {} // não utilizado
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
