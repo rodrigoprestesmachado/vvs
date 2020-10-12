@@ -197,6 +197,47 @@ Uma dica de complemento para o PMD no Maven pode ser alcançado por meio do plug
 
 Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estátivas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.
 
+@Kahrosa 
+AbstractClassWithoutAbstractMethod
+A classe abstrata não contém nenhum método abstrato. Uma classe abstrata sugere uma implementação incompleta, que deve ser completada por subclasses que implementam os métodos abstratos. Se a classe se destina a ser usada apenas como uma classe base (não para ser instanciada diretamente), um construtor protegido pode ser fornecido para impedir a instanciação direta.
+
+Essa regra é definida pela seguinte classe Java: net.sourceforge.pmd.lang.java.rule.bestpractices.AbstractClassWithoutAbstractMethodRule
+
+Exemplos):
+
+public abstract class Foo {
+  void int method1() { ... }
+  void int method2() { ... }
+  // consider using abstract methods or removing
+  // the abstract modifier and adding protected constructors
+}
+Use esta regra referenciando-a:
+
+<rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+
+
+@Kahrosa 
+AccessorClassGeneration
+
+
+A instanciação por meio de construtores privados de fora da classe do construtor geralmente causa a geração de um acessador. Um método de fábrica, ou não privatização do construtor, pode eliminar esta situação. O arquivo de classe gerado é na verdade uma interface. Ele dá à classe de acesso a capacidade de invocar um novo construtor de escopo de pacote oculto que usa a interface como um parâmetro suplementar. Isso transforma um construtor privado efetivamente em um com escopo de pacote e é difícil de discernir.
+
+Esta regra é definida pela seguinte classe Java: net.sourceforge.pmd.lang.java.rule.bestpractices.AccessorClassGenerationRule
+
+Exemplos):
+
+public class Outer {
+ void method(){
+  Inner ic = new Inner();//Causes generation of accessor class
+ }
+ public class Inner {
+  private Inner(){}
+ }
+}
+Use esta regra referenciando-a:
+
+<rule ref="category/java/bestpractices.xml/AccessorClassGeneration" />
+
 ## Exercícios
 
 A) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/vvs](https://github.com/rodrigoprestesmachado/vvs) e altere a seção do documento (`docs/tutoriais/pmd/pmd.md`) chamada "Regras do PMD" a fim de contribuir com transcrição de pelo menos duas regras do PMD. Quando estiver pronto, realize um *Pull Request* para que o seu texto possa ser incorporado ao documento (serão atribuído créditos aos autores).
