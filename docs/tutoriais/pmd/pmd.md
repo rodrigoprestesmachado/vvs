@@ -146,6 +146,65 @@ public class Foo{
 }
 ```
 
+### 5. HardCodedCryptoKey (Chave Criptografada Codificada)
+
+@bbengracio 
+**Desde:** PMD 6.4.0
+**Prioridade:** Média(3)
+Não use valores codificados para operações criptografadas. Por favor, guarde chaves fora do código-fonte.
+**Esta regra é definida pela seguinte classe Java:** net.sourceforge.pmd.lang.java.rule.security.HardCodedCryptoKeyRule
+
+**Exemplos:**
+
+```java
+public class Foo {
+    void boa() {
+        SecretKeySpec especChaveSecreta = new SecretKeySpec(Properties.getKey(), "AES");
+    }
+
+    void ruim() {
+        SecretKeySpec especChaveSecreta = new SecretKeySpec("meu segredo aqui".getBytes(), "AES");
+    }
+}
+```
+
+**Use esta regra referenciando:**
+```xml
+<rule ref="category/java/security.xml/HardCodedCryptoKey" />
+```
+
+### 6. InsecureCryptoIv (Criptografia Insegura em Vetor de Inicialização)
+@bbengracio
+**Desde:** PMD 6.3.0
+**Prioridade:** Média(3)
+Não utilize um vetor de inicialização codificado em operações criptografadas. Ao invés disso, utilize um Vetor de Inicialização gerado aleatoriamente.
+**Esta regra é definida pela seguinte classe Java:** net.sourceforge.pmd.lang.java.rule.security.InsecureCryptoIvRule
+
+**Exemplos:**
+```java
+public class Foo {
+    void boa() {
+        SecureRandom aleatorio = new SecureRandom();
+        byte iv[] = new byte[16];
+        aleatorio.nextBytes(bytes);
+    }
+
+    void ruim() {
+        byte[] iv = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, };
+    }
+
+    void tambemRuim() {
+        byte[] iv = "Vetor de Inicialização criptografado aqui".getBytes();
+    }
+}
+```
+
+**Use esta regra referenciando:**
+```xml
+<rule ref="category/java/security.xml/InsecureCryptoIv" />
+```
+
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
