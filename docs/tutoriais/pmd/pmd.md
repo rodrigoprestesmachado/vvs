@@ -146,6 +146,34 @@ public class Foo{
 }
 ```
 
+### 5. Uma Declaração por Linha (prioridade média-baixa)
+
+@ffw - Java permite o uso de várias declarações de variáveis ​​do mesmo tipo em uma linha. No entanto, isso pode levar a um código bastante confuso. Esta regra tenta evitar várias declarações na mesma linha.
+
+Esta regra é definida pela seguinte expressão XPath::
+```java
+//LocalVariableDeclaration
+   [not(parent::ForInit)]
+   [count(VariableDeclarator) > 1]
+   [$strictMode or count(distinct-values(VariableDeclarator/@BeginLine)) != count(VariableDeclarator)]
+|
+//FieldDeclaration
+   [count(VariableDeclarator) > 1]
+   [$strictMode or count(distinct-values(VariableDeclarator/@BeginLine)) != count(VariableDeclarator)]
+```
+
+Exemplo:
+```java
+String name;            // declarações separadas
+String lastname;
+
+String name, lastname;  // declaração combinada, uma violação
+
+String name,
+       lastname;        // declaração combinada em várias linhas, sem violação.
+                        // Definir propriedade strictMode para true para marcar isso como violação.
+```
+
 ## Code Style
 
 @ffw - Regras que impõem um estilo de codificação específico.
@@ -155,11 +183,11 @@ public class Foo{
 Esta regra é definida pela seguinte [classe Java](https://github.com/pmd/pmd/blob/master/pmd-jsp/src/main/java/net/sourceforge/pmd/lang/jsp/rule/codestyle/DuplicateJspImportsRule.java) .
 
 Exemplo:
-```
+```java
 <%@ page import=\"com.foo.MyClass,com.foo.MyClass\"%><html><body><b><img src=\"<%=Some.get()%>/foo\">xx</img>text</b></body></html>
 ```
 Use esta regra referenciando-a:
-```
+```java
 <rule ref="category/jsp/codestyle.xml/DuplicateJspImports" />
 ```
 
