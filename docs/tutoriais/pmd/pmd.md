@@ -146,6 +146,23 @@ public class Foo{
 }
 ```
 
+## Code Style
+
+@ffw - Regras que impõem um estilo de codificação específico.
+
+### DuplicateJspImports
+@ffw - Evite declarações de importação duplicadas dentro de JSP.
+Esta regra é definida pela seguinte [classe Java](https://github.com/pmd/pmd/blob/master/pmd-jsp/src/main/java/net/sourceforge/pmd/lang/jsp/rule/codestyle/DuplicateJspImportsRule.java) .
+
+Exemplo:
+```
+<%@ page import=\"com.foo.MyClass,com.foo.MyClass\"%><html><body><b><img src=\"<%=Some.get()%>/foo\">xx</img>text</b></body></html>
+```
+Use esta regra referenciando-a:
+```
+<rule ref="category/jsp/codestyle.xml/DuplicateJspImports" />
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
