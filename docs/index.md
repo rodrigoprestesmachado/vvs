@@ -6,6 +6,8 @@
 
 * [Planejamento](slides/planejamento/index.html)
 
+* [Dicas de Git](slides/git/index.html)
+
 ## Tutoriais
 
 * [Configuração do ambiente](tutoriais/ambiente/ambiente.md)

@@ -121,7 +121,7 @@ public class AnnotationsTest {
 ```
 
 <center>
-Exemplo 2 - Uso das anotações @BeforeAll e @BeforeEach.
+Exemplo 2 - Uso das anotações BeforeAll e BeforeEach.
 </center>
 
 Note que no Exemplo 2 que os dois casos de teste estão anotados com `@DisplayName`, ou seja, essa anotação permite que coloquemos um nome mais significativo para os testes.

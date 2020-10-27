@@ -64,8 +64,8 @@ ___
 
 Os exemplos e ferramentas de teste da disciplina serão demonstrados em projetos escritos em Java. Dessa forma, o próximo passo é instalar uma máquina virtual Java no container Ubuntu. Para isso, instale o [OpenJDK](https://openjdk.java.net) por meio dos comandos:
 
-    apt-get update
-    apt-get install openjdk-8-jdk
+    apt update
+    apt install openjdk-8-jdk
 
 Verifique se o Java foi instalado corretamente por meio da instrução `java -version`.
 
@@ -99,6 +99,7 @@ Faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servir
 
     git clone https://github.com/rodrigoprestesmachado/tpack
     cd tpack
+
 ---
 **Para saber mais:** O Tpack é um projeto simples que implementa um questionário sobre o conhecimento de conteúdo, pedagógico e tecnológico de professores. As tecnologias que esse projeto utiliza são: [Micro serviço](https://microprofile.io) em Java rodando em cima do [Open Liberty](https://openliberty.io), interface Web/PWA em [Vue](https://vuejs.org) [Typescript](https://www.typescriptlang.org) e banco de dados [MySQL](https://www.mysql.com).
 
