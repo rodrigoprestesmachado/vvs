@@ -55,7 +55,7 @@ Versão em PDF? [aqui](?print-pdf)
 * O [Git Branching](https://learngitbranching.js.org/?locale=pt_BR) é ótimo um tutorial interativo (com tradução para o português) que ensina os principais conceitos de Git.
 <!-- .element: style="margin-bottom:30px;" -->
 
-* Cursos gratuítos:
+* Cursos gratuítos (em inglês):
   * [Git Started with GitHub](https://www.udemy.com/course/git-started-with-github/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-91boMYQq8oh2IslMEQij3w&utm_medium=udemyads&utm_source=aff-campaign)
   * [The Ultimate GIT 5-day Challenge](https://www.udemy.com/course/the-ultimate-git-5-day-challenge/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-6Srg2qPDEX82bdZ9FJxdBg&utm_medium=udemyads&utm_source=aff-campaign)
   * [Git and GitHub - Step by Step for Beginners](https://www.udemy.com/course/git-and-github-step-by-step-for-beginners/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-M9UeqzA8w..L69udjTMcCQ&utm_medium=udemyads&utm_source=aff-campaign)

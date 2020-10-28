@@ -234,6 +234,16 @@ Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e 2 
 
 ---
 
+---
+
+## Exercício 3
+
+Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/). Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
+
+---
+
+
+
 ## Referências
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768 ISBN 9788543024974.

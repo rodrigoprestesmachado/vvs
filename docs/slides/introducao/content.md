@@ -16,7 +16,7 @@ Versão em PDF? [aqui](?print-pdf)
 * Verificação e validação
 
 * Inspeções e testes
-  
+
 * Testes em sistemas
 
 * Referências
@@ -48,7 +48,7 @@ Versão em PDF? [aqui](?print-pdf)
 
   * Verificação: Estamos construindo o produto corretamente?
   <!-- .element: class="fragment" -->
-  
+
   * Validação: Estamos construindo o produto correto?
   <!-- .element: class="fragment" -->
 
@@ -88,7 +88,7 @@ Versão em PDF? [aqui](?print-pdf)
 
 * Inspeções de software ou revisões por pares: analisam e verificam representações de sistema como documentos de requisitos, diagramas de projeto e código fonte dos programas
 <!-- .element: class="fragment" -->
-  
+
 * Utilizamos revisões (manuais ou automatizadas) durante todas as etapas do processo. Denomina-se este tipo de revisão como estática, ou seja, aquelas onde não se coloca um sistema em execução
 <!-- .element: class="fragment" -->
 
@@ -150,7 +150,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 <!-- .element: class="fragment" -->
   * Processos de teste são dedicados a estabelecer a existência de defeitos em um sistema
   <!-- .element: class="fragment" -->
-  
+
   * Por outro lado, depuração é um processo que localiza e corrige defeitos
   <!-- .element: class="fragment" -->
 
@@ -165,7 +165,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 * Muitas vezes o defeito está distante de onde a falha ocorreu
 <!-- .element: class="fragment" -->
-  
+
 * Por vezes, é necessário criar um teste adicional que reproduza os dados no momento que o defeito aconteceu
 <!-- .element: class="fragment" -->
 
@@ -182,10 +182,10 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
   * Executar toda a bateria de testes no sistema a cada nova alteração pode ser uma tarefa dispendiosa
   <!-- .element: class="fragment" -->
-  
+
   * portanto, existe uma necessidade de automatização para se poder conferir qualidade ao sistema
   <!-- .element: class="fragment" -->
-  
+
   * Um bom plano de teste deve relacionar as funcionalidades de um programa e os casos de testes (matriz de rastreabilidade)
   <!-- .element: class="fragment" -->
 
@@ -194,3 +194,10 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 ## Referências
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768, cap. 8 ISBN 9788543024974.
+<!-- .element: style="margin-bottom:50px;" -->
+
+SOMMERVILLE, Ian. [Vídeos](https://iansommerville.com/software-engineering-book/slides/) do capítulo 8 (em inglês).
+<!-- .element: style="margin-bottom:50px;" -->
+
+SOMMERVILLE, Ian. [Slides](https://iansommerville.com/software-engineering-book/videos/imp/) do capítulo 8 (em inglês).
+<!-- .element: style="margin-bottom:50px;" -->
