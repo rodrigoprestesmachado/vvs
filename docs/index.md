@@ -16,6 +16,8 @@
 
 * [Introdução ao Junit](tutoriais/junit/junit.md)
 
+* [Teste de integração](tutoriais/integracao/integracao.md)
+
 * [Selenium](tutoriais/selenium.md)
 
 ## Moodle
