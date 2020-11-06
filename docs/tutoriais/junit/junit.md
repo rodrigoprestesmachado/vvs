@@ -164,14 +164,6 @@ class TagOrderTest {
 Exemplo 3 - Ordem da execução dos casos de teste
 </center>
 
----
-
-## Exercício 1
-
-Utilizando o Vídeo 1 como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
-
----
-
 ## Assertivas
 
 O Junit 5 possui um conjunto grande de assertivas (afirmações categóricas), entre as mais comuns estão `assertEquals`, `assertTrue`, `assertTimeout`, entre outras. Porém, se faz necessário destacar a assertiva `assertThrows` que, para verificar exceções, possui uma forma de escrita um pouco diferente das demais.
@@ -210,7 +202,7 @@ void first() {
 ```
 
 <center>
-Exemplo 4 - Modificação do primeiro método do Exemplo 3 com a anotação @Tag("VVS")
+Exemplo 4 - Modificação do primeiro método do Exemplo 3 com a anotação `@Tag("VVS")`
 </center>
 
 Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin Surefire no Maven (dentro do `pom.xml`), podemos executar apenas um grupo de testes previamente rotulado. O trecho de código abaixo mostra um exemplo onde apenas os testes marcado com a `@Tag(VVS)` irão ser executados por meio do comando `mvn test`.
@@ -228,21 +220,17 @@ Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin S
 
 ---
 
-## Exercício 2
+## Exercícios
 
-Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e 2 no Vscode e execute por meio do plugin Surefire do Maven.
-
----
+A) Utilizando o Vídeo 1 como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
 
 ---
 
-## Exercício 3
-
-Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/). Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
+B) Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e 2 no Vscode e execute por meio do plugin Surefire do Maven.
 
 ---
 
-
+C) Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/). Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
 
 ## Referências
 
