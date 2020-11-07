@@ -18,6 +18,11 @@ O sistema Tpack (*front* e *back-end*) são instalados e executados dentro de um
 
 Por possuir essas questões de *containers* e por ser baseado em uma arquitetura de serviço Web, o projeto Tpack apresenta uma boa complexidade para analisarmos o funcionamento dos testes de integração. Assim, as próximas seções desse documento pretendem explicar alguns detalhes de como podemos construir um ambiente de teste de integração para esse sistema nesse contexto.
 
+---
+Para saber mais: consulte o o capítulo 7 do livro [Desenvolvimento de software, v.3 programação de sistemas web orientada a objetos em Java](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5020683&acesso=aHR0cHM6Ly9pbnRlZ3JhZGEubWluaGFiaWJsaW90ZWNhLmNvbS5ici9ib29rcy85Nzg4NTgyNjAzNzEw&label=acesso%20restrito) para compreender detalhes sobre o desenvolvimento de serviços Web (Web Services) em Java.
+
+---
+
 ## Configuração do Failsave
 
 Se observarmos o [arquivo](https://github.com/rodrigoprestesmachado/tpack/blob/master/pom.xml) `pom.xml` iremos observar a presença do plugin Failsave no projeto por meio do seguinte trecho de código:
@@ -140,3 +145,9 @@ HttpResponse response = this.client.execute(get);
 ## Exercício
 
 Modifique o método de teste `getSessions` contido no arquivo [`TpackApiIt`](https://github.com/rodrigoprestesmachado/tpack/blob/master/src/test/java/edu/ifrs/tpack/integration/TpackApiIT.java) a fim de contabilizar o número total de questões para os professores. São 45 questões ao todo, o serviço retorna dados em JSON onde as questões são agrupadas por sessões (*Session*).
+
+# Referências bibliográficas
+
+SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768, cap. 8 ISBN 9788543024974.
+
+MACHADO, Rodrigo Prestes. [Desenvolvimento de software, v.3 programação de sistemas web orientada a objetos em Java](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5020683&acesso=aHR0cHM6Ly9pbnRlZ3JhZGEubWluaGFiaWJsaW90ZWNhLmNvbS5ici9ib29rcy85Nzg4NTgyNjAzNzEw&label=acesso%20restrito). Porto Alegre Bookman 2016 (Tekne). ISBN 9788582603710.
