@@ -25,10 +25,10 @@ Alguns passos para reproduzir o exemplo do vídeo:
 * No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
 
 <center>
-![Acesso ao Selenium IDE no Chrome](img/seleniumExtension.png)
+<img src="img/seleniumExtension.png" width="75%" height="75%" alt="acesso ao Selenium IDE no Chrome">
+<br/>
+Figura 1 - Acesso ao Selenium IDE no Chrome
 </center>
-
-<center>Figura 1 - Acesso ao Selenium IDE no Chrome</center>
 
 * Depois de acessar, escolha a opção "*Record a new test in a new Project*" para criar um caso de teste
 
