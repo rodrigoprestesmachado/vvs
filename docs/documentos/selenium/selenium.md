@@ -14,8 +14,9 @@ Como dito anteriormente, o Selenium IDE é uma ferramenta para gravação, ediç
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
     </iframe>
-    <span>Vídeo 1 - Hello World com o Selenium IDE</span>
 </center>
+
+<center>Vídeo 1 - Hello World com o Selenium IDE</center>
 
 Alguns passos para reproduzir o exemplo do vídeo:
 
@@ -24,7 +25,8 @@ Alguns passos para reproduzir o exemplo do vídeo:
 * No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
 
 ![Acesso ao Selenium IDE no Chrome](img/seleniumExtension.png)
-Figura 1 - Acesso ao Selenium IDE no Chrome
+
+<center>Figura 1 - Acesso ao Selenium IDE no Chrome</center>
 
 * Depois de acessar, escolha a opção "*Record a new test in a new Project*" para criar um caso de teste
 
@@ -38,7 +40,7 @@ Figura 1 - Acesso ao Selenium IDE no Chrome
 * Exporte o teste no formato `.side` para poder salvar e/ou executar com o Side Runner.
 
 ---
-Nota: o exemplo de arquivo `.side` do Vídeo 1 pode ser obtido [aqui](https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/master/selenium/code/ifrs.side).
+Nota: o exemplo de arquivo `.side` do Vídeo 1 pode ser obtido [aqui](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/ifrs.side).
 
 ---
 
@@ -54,14 +56,12 @@ O Selenium Side Runner é uma aplicação que permite chamar a execução de um 
 ### Instalação do driver para Firefox ou Chrome
 
 * Firefox: `sudo npm install -g geckodriver`
-
 * Chrome: `sudo npm install -g chromedriver`
 
 Depois de instalar, podemos executar o Side Runner da seguinte maneira no Firefox e/ou Chrome:
 
-* `selenium-side-runner -c "browserName=firefox"` [ifrs.side](https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/master/selenium/code/ifrs.side)
-
-* `selenium-side-runner -c "browserName=chrome"` [ifrs.side](https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/master/selenium/code/ifrs.side)
+* `selenium-side-runner -c "browserName=firefox"` [ifrs.side](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/ifrs.side)
+* `selenium-side-runner -c "browserName=chrome"` [ifrs.side](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/ifrs.side)
 
 ---
 Atenção: não execute o selenium-side-runner com o `sudo`
