@@ -1,0 +1,76 @@
+{
+  "id": "472ec566-29f0-43ff-b39d-b8edb6f73cff",
+  "version": "2.0",
+  "name": "ifrs",
+  "url": "https://ifrs.edu.br",
+  "tests": [{
+    "id": "64da5542-e0c2-4560-9c1f-6a4d177b5db3",
+    "name": "Edital 64",
+    "commands": [{
+      "id": "03eb75b0-a0ee-448c-8ed8-d1e739b15178",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ab58cbb0-04a5-489e-af86-e214af5a9287",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1440x877",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6a3b01c1-0fcb-4dec-b5f5-2613551f4e46",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Editais",
+      "targets": [
+        ["linkText=Editais", "linkText"],
+        ["css=#menu-item-844 > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Editais')]", "xpath:link"],
+        ["xpath=//li[@id='menu-item-844']/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://ifrs.edu.br/editais/')]", "xpath:href"],
+        ["xpath=//section/div/div/nav/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Editais')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fc2757a7-a842-41e0-ad24-bbacba3b213c",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=EDITAL IFRS Nº 64/2019 FOMENTO INTERNO PARA PROJETOS DE PESQUISA E INOVAÇÃO 2020/2021",
+      "targets": [
+        ["linkText=EDITAL IFRS Nº 64/2019 FOMENTO INTERNO PARA PROJETOS DE PESQUISA E INOVAÇÃO 2020/2021", "linkText"],
+        ["css=.even:nth-child(24) > td:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'EDITAL IFRS Nº 64/2019 FOMENTO INTERNO PARA PROJETOS DE PESQUISA E INOVAÇÃO 2020/2021')]", "xpath:link"],
+        ["xpath=//table[@id='DataTables_Table_0']/tbody/tr[24]/td[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://ifrs.edu.br/editais/edital-ifrs-no-64-2019-fomento-interno-para-projetos-de-pesquisa-e-inovacao-2020-2021/')]", "xpath:href"],
+        ["xpath=//tr[24]/td[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EDITAL IFRS Nº 64/2019 FOMENTO INTERNO PARA PROJETOS DE PESQUISA E INOVAÇÃO 2020/2021')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "04e680b8-1075-4df9-ae35-049989c3d455",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.edital__title",
+      "targets": [
+        ["css=.edital__title", "css:finder"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'EDITAL IFRS Nº 64/2019 FOMENTO INTERNO PARA PROJETOS DE PESQUISA E INOVAÇÃO 2020/2021')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "270711e8-b8b0-49a0-a4d8-4a5135a51c3c",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["64da5542-e0c2-4560-9c1f-6a4d177b5db3"]
+  }],
+  "urls": ["https://ifrs.edu.br/"],
+  "plugins": []
+}
