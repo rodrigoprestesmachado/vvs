@@ -24,7 +24,9 @@ Alguns passos para reproduzir o exemplo do vídeo:
 * Instale o plugin do Selenium para Chrome ou Firefox
 * No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
 
+<center>
 ![Acesso ao Selenium IDE no Chrome](img/seleniumExtension.png)
+</center>
 
 <center>Figura 1 - Acesso ao Selenium IDE no Chrome</center>
 
@@ -68,7 +70,7 @@ Atenção: não execute o selenium-side-runner com o `sudo`
 
 ---
 
-## Selenium e Junit
+## Integração do Selenium com o Junit/Maven
 
 Para rodar casos/suíte de teste do Selenium por intermédio do Junit, temos que primeiro exportar o teste da IDE, conforme ilustra os passos um e dois da imagem abaixo:
 
