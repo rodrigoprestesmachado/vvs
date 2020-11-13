@@ -22,16 +22,7 @@ Alguns passos para reproduzir o exemplo do vídeo:
 
 * Acesse: https://www.seleniumhq.org/selenium-ide/
 * Instale o plugin do Selenium para Chrome ou Firefox
-* No Chrome o Selenium será disponibilizado como um ícone no final da barra de endereço, como mostra a Figura 1
-
-<center>
-<img src="img/seleniumExtension.png" width="75%" height="75%" alt="acesso ao Selenium IDE no Chrome">
-<br/>
-Figura 1 - Acesso ao Selenium IDE no Chrome
-</center>
-
 * Depois de acessar, escolha a opção "*Record a new test in a new Project*" para criar um caso de teste
-
 * Informe um nome para o projeto, como exemplo, informe “IFRS”
 * Logo, informe a URL do sistema que será testado, por exemplo, "http://ifrs.edu.br"
 * Como botão de gravação **ligado**, navegue pela página no IFRS até chegar no edital de fomento interno  [64/2019](https://ifrs.edu.br/editais/edital-ifrs-no-64-2019-fomento-interno-para-projetos-de-pesquisa-e-inovacao-2020-2021/)
