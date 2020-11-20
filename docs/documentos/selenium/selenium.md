@@ -103,4 +103,21 @@ public void web() {
 }
 ```
 
-O código acima realiza os seguintes passos: (1) executa um HTTP GET de uma URL (`ifrs.edu.br`), (2) configura o tamanho da janela do navegador (opcional), (3) navega por meio do link `Editais`, (4) procura um elemento que contenha a classe CSS `.editais__title` e (5) se encontrar o elemento que contenha o CSS desejado faz com que o teste passe.
+O código acima realiza os seguintes passos: (1) executa um HTTP GET de uma URL (`ifrs.edu.br`), (2) configura o tamanho da janela do navegador (opcional), (3) navega por meio do link `Editais`, (4) procura um elemento que contenha a classe CSS `.editais__title` e (5) se encontrar o elemento que contenha o CSS desejado faz com que o teste passe. O vídeo abaixo mostra como podemos utilizar o Selenium IDE para exportar e usar casos de teste em Junit.
+
+<center>
+    <iframe
+    width="560" height="315"
+    src="https://www.youtube.com/embed/5AzulTeHogY"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+    </iframe>
+</center>
+
+<center>Vídeo 2 - Selenium IDE para Junit/Maven</center>
+
+---
+Nota: O Vídeo 2 foi extraído da gravação de um encontro síncrono no Google Meet, portanto, a qualidade visual,sonora e também as falas podem estar prejudicadas em alguns trechos.
+
+---

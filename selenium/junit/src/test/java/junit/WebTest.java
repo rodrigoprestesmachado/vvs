@@ -33,8 +33,7 @@ public class WebTest {
         WebTest.driver.manage().window().setSize(new Dimension(1440, 877));
         WebTest.driver.findElement(By.linkText("Editais")).click();
 
-        List<WebElement> elements = driver.findElements(By.cssSelector(".editais__title"));
+        List<WebElement> elements = WebTest.driver.findElements(By.cssSelector(".editais__title"));
         assert elements.size() > 0;
-
     }
 }
