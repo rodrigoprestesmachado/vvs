@@ -88,3 +88,19 @@ Atenção: Atualmente o Selenium IDE exporta classes de testes no formato de Jun
 ---
 
 Por padrão, a classe Java que foi exportada do Selenium IDE utiliza o Chrome Driver para executar os testes. Assim, certifique-se que o Chrome e o Chrome Driver estão instalados no seu computador. As instruções de como instalar o Chrome Driver podem ser obtidas nno seguinte endereço na Web: [ChromeDriver](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver).
+
+Um exemplo de projeto Junit que implementa o caso de teste [ifrs.side](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/ifrs.side) do Selenium pode ser observado no seguinte [endereço](https://github.com/rodrigoprestesmachado/vvs/tree/master/selenium/junit) na Web. Note que no arquivo [pom.xml](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/junit/pom.xml) a presença da dependência do Selenium Java. Depois disso, observe o seguinte trecho de código da classe [WebTest.java](https://github.com/rodrigoprestesmachado/vvs/blob/master/selenium/junit/src/test/java/junit/WebTest.java).
+
+```java
+@Test
+@SuppressWarnings("checkstyle:magicnumber")
+public void web() {
+    WebTest.driver.get("https://ifrs.edu.br/");
+    WebTest.driver.manage().window().setSize(new Dimension(1440, 877));
+    WebTest.driver.findElement(By.linkText("Editais")).click();
+    List<WebElement> elements = driver.findElements(By.cssSelector(".editais__title"));
+    assert elements.size() > 0;
+}
+```
+
+O código acima realiza os seguintes passos: (1) executa um HTTP GET de uma URL (`ifrs.edu.br`), (2) configura o tamanho da janela do navegador (opcional), (3) navega por meio do link `Editais`, (4) procura um elemento que contenha a classe CSS `.editais__title` e (5) se encontrar o elemento que contenha o CSS desejado faz com que o teste passe.
