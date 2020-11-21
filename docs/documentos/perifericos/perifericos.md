@@ -1,4 +1,4 @@
-# Temas periféricos
+# Recursos sobre temas periféricos
 
 O presente documento reúne um conjunto de cursos/recursos gratuítos sobre temas periféricos ao tópico de Verificação e Validação de Sistemas e/ou Integração Contínua.
 
