@@ -146,6 +146,51 @@ public class Foo{
 }
 ```
 
+### 5. ForLoopCanBeForeach
+@glhrrm Desde o Java 1.5, é possível substituir ```for loops``` pela sintaxe ```foreach``` de acordo com as seguintes condições: (1) o índice é utilizado apenas para acessar um elemento da lista ou do vetor, (2) há apenas um comando para atualização do laço e (3) é necessário iterar sobre todos os elementos da esquerda para a direita. A prática torna o código mais claro e limpo, além de facilitar a manipulação do elemento.
+
+Exemplo:
+```java
+public class MyClass {
+  void loop(List<String> l) {
+    for (int i = 0; i < l.size(); i++) { // antes do Java 1.5
+      System.out.println(l.get(i));
+    }
+
+    for (String s : l) {        // desde o Java 1.5
+      System.out.println(s);
+    }
+  }
+}
+```
+
+## Error Prone
+
+### 1. AvoidLiteralsInIfCondition
+@glhrrm Evite o uso de literais em expressões condicionais - também conhecidos como "números mágicos". Declará-los como variáveis estáticas ou atributos privados com nomes sugestivos ajuda a tornar o código mais manutenível. Além disso, os literais "-1" e "0" são ignorados por padrão.
+
+Exemplo:
+```java
+private static final int MAX_NUMBER_OF_REQUESTS = 10;
+
+public void checkRequests() {
+
+    if (i == 10) {                        // numero mágico
+      doSomething();
+    }
+
+    if (i == MAX_NUMBER_OF_REQUESTS) {    // preferível
+      doSomething();
+    }
+
+    if (aString.indexOf('.') != -1) {}     // numero mágico, ignorado por padrão
+    if (aString.indexOf('.') >= 0) { }     // preferível
+
+    if (aDouble > 0.0) {}                  // numero mágico
+    if (aDouble >= Double.MIN_VALUE) {}    // preferível
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
