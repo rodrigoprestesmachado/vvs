@@ -146,7 +146,7 @@ public class Foo{
 }
 ```
 
-### 5. MisplacedNullCheck ( Verificação de null perdida)
+### 5. MisplacedNullCheck (Verificação de null perdida)
 
 Em vários momentos do nosso código acabamos usando variáveis/parâmetros que podem ter o valor nulo, se esse valor nulo não for tratado em algum momento pode ser que em runtime a aplicação acabe dando um `NullPointerException` e quebre. Com essa regra o PMD avalia se o código não possui suas devidas validações de nulo em momentos contrários e desnecessários não causando nenhuma segurança.
 
@@ -155,15 +155,30 @@ Exemplo:
 public class Foo {
 
     void bar() {
-        if (b.equals(a.buz()) && a != null) {
-            // do something  
-        }
-    }
+        if (a.equals(baz) && a != null) { }
 }
 
 ```
 
 Nesse exemplo a validação do atributo `a` ocorre depois de chamarmos o método `a.buzz()`, a primeira parte do código que ira ser executado é o que vem do lado esquero do `&&` ou seja, se o `a` for nulo o erro vai acontecer antes da validação ser realizada.
+
+### 6. UnconditionalIfStatement (Bloco de if não condicional)
+
+A regra é bem simples, te avisa de um bloco de if que não é condicional, ou seja, tem sempre apenas o valor true ou false apenas.
+
+Exemplo:
+```java
+public class Foo {
+
+    void close() {
+        boolean condicao = true
+       // muito código
+       if (condicao) {}
+    }
+}
+
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
