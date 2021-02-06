@@ -146,6 +146,36 @@ public class Foo{
 }
 ```
 
+### 5. HardCodedCryptoKey (prioridade média)
+
+@jonatan-andrei Não deixe uma chave de criptografia "hard coded" (fixa no código).
+
+Exemplo retirado da [documentação do PMD](https://pmd.github.io/pmd-6.27.0/pmd_rules_java_security.html#hardcodedcryptokey):
+```java
+public class Foo {
+    void good() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(Properties.getKey(), "AES");
+    }
+
+    void bad() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec("my secret here".getBytes(), "AES");
+    }
+}
+```
+
+### 6. ExcessiveMethodLength (prioridade média)
+
+@jonatan-andrei Não deixe métodos longos. Métodos excessivamente longos normalmente estarão realizando mais operações do que sua assinatura informa e também pode tornar difícil entender um código com muitas instruções. Melhore o código criando métodos auxiliares.
+
+Para utilizar esta regra e configurá-la de acordo com o número de linhas desejado para o tamanho limite de um método:
+```java
+<rule ref="category/java/design.xml/ExcessiveMethodLength">
+    <properties>
+        <property name="minimum" value="100.0" />
+    </properties>
+</rule>
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
