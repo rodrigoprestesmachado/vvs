@@ -195,7 +195,7 @@ public class Foo {
 Para referenciar essa regra no PMD, use a linha abaixo:
 
 ```xml
-    <rule ref="category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue" />
+    <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
 ```
 
 ## PMD no Maven
