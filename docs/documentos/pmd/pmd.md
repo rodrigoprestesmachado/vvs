@@ -125,7 +125,7 @@ public class BaixoAcoplamentoTest {
 Para referenciar essa regra no PMD, use a linha abaixo:
 
 ```xml
-    <rule ref="category/java/bestpractices.xml/JunitUseExpected"/>
+<rule ref="category/java/bestpractices.xml/JunitUseExpected"/>
 ```
 
 ### 4. SystemPrintln (prioridade média-alta)
@@ -144,6 +144,59 @@ public class Foo{
         log.fine("Entrei no teste A");
     }
 }
+```
+
+### 5. Um laço _for_ pode ser substituído por _for each_ (ForLoopCanBeForeach)
+
+@gabriel-lima96 - Reporta laços de repetição que utilizam a sintaxe padrão e que podem ser substituídos pela sintaxe "para cada". A regra considera repetições sobre listas, `array` e iteradores. Um laço pode ser substituído se ele usa a variável de controle somente para acessar o elemento de uma lista ou `array`, tem somente uma declaração de atualização e percorre _todos_ elementos da lista ou `array` da "esquerda para direita".
+
+Exemplo:
+```java
+public class MyClass {
+  void loop(List<String> l) {
+    for (int i = 0; i < l.size(); i++) { // antes do Java 1.5
+      System.out.println(l.get(i));
+    }
+
+    for (String s : l) {        // após o Java 1.5
+      System.out.println(s);
+    }
+  }
+}
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+```xml
+<rule ref="category/java/bestpractices.xml/ForLoopCanBeForeach" />
+```
+
+### 6. Muitas variáveis de controle em um único laço de repetição (ForLoopVariableCount)
+@gabriel-lima96 - Muitas variáveis de controle em um único laço de repetição torna difícil saber por quantos valores o laço deve iterar. Por padrão essa regra permite que um laço de repetição regular utilize somente uma variável de controle.
+
+Exemplo:
+```java
+// será reportado se estiver sendo utilizado as propriedades padrão da regra
+for (int i = 0, j = 0; i < 10; i++, j += 2) {
+   foo();
+```
+
+Essa regra tem as seguintes propriedades:
+Nome | Valor padrão | Descrição | Multiplos valores
+---|---|---|---
+maximumVariables | 1 | Um laço de reptição regular deve ter somente uma variável de controle | não
+
+Para referenciar essa regra com as propriedades padrão no PMD, use a linha abaixo:
+```xml
+<rule ref="category/java/bestpractices.xml/ForLoopVariableCount" />
+```
+
+Para referenciar essa regra com as propriedades personalizadas no PMD, use a linha abaixo alterando os valores:
+```xml
+<rule ref="category/java/bestpractices.xml/ForLoopVariableCount">
+    <properties>
+        <property name="maximumVariables" value="1" />
+    </properties>
+</rule>
 ```
 
 ## PMD no Maven
