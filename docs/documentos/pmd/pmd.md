@@ -146,6 +146,58 @@ public class Foo{
 }
 ```
 
+### 5. UseCollectionIsEmpty
+
+O método isEmpty() da java.util.Collection é provido para determinar se uma coleção possui quaisquer elementos. Comparar o valor do size() com 0 não transmite a intenção tão bem quanto utilizar o método isEmpty();
+
+Exemplo:
+
+```java
+public class Foo {
+    void melhor() {
+        List foo = getList();
+        if (foo.isEmpty()) {
+            // blah
+        }
+    }
+
+    void evitar() {
+        List foo = getList();
+        if (foo.size() == 0) {
+            // blah
+        }w
+    }
+}
+
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty"/>
+```
+
+### 6. UnusedLocalVariable
+
+Detecta quando uma variavel local é declarada ou assinalada, mas não usada. Variáveis cujos nomes iniciam com ignoradas ou não usadas não são consideradas.
+
+Exemplo:
+
+```java
+public class Foo {
+    public void fazAlgo() {
+        int i = 5; // não usada
+    }
+}
+
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue" />
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
