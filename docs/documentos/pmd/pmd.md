@@ -128,7 +128,36 @@ Para referenciar essa regra no PMD, use a linha abaixo:
     <rule ref="category/java/bestpractices.xml/JunitUseExpected"/>
 ```
 
-### 4. SystemPrintln (prioridade média-alta)
+### 4. () SwitchStmtsShouldHaveDefault
+
+@ggarber42  Toda declaração deveria incluir uma função _default_ (padrão) para capturar valores não especificados.
+
+**Essa regra é definida pelo `XPath` expressão:**
+
+```java
+//SwitchStatement[@DefaultCase = false() and @ExhaustiveEnumSwitch = false()]
+```
+
+**Exemplo(s):**
+
+```java
+public void bar() {
+    int x = 2;
+    switch (x) {
+      case 1: int j = 6;
+      case 2: int j = 8;
+          // missing default: here
+    }
+}
+```
+
+**Usando essa regra por referência:**
+
+```html
+<rule ref="category/java/bestpractices.xml/SwitchStmtsShouldHaveDefault" />
+```
+
+### 5. SystemPrintln (prioridade média-alta)
 
 @mottin-gui Referências à saída padrão do sistema (out e err) geralmente são utilizadas para debug de código, entretanto podem permanecer 'esquecidas' no código e entrar em produção. Por meio do `Logger` é possível habilitar ou não o registro das chamadas de debug e evitar que o log de saída padrão do sistema fique poluído.
 
@@ -144,6 +173,75 @@ public class Foo{
         log.fine("Entrei no teste A");
     }
 }
+```
+
+## SEGURANÇA
+
+@ggarber42 
+
+>
+> Resumo: Regras que podem indicar falhas de segurança
+>
+
+#### Chave Criptográfica na Codificação
+
+Não use valores de chaves criptográficas em operações. Por favor, guarde suas chaves fora do código fonte.
+
+*Essa regra é definida pela seguinte classe Java:*
+[sourceforde](net.sourceforge.pmd.lang.java.rule.security.HardCodedCryptoKeyRule)
+
+*Exemplo(s):*
+
+```java
+
+public class Foo {
+    void good() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(Properties.getKey(), "AES");
+    }
+
+    void bad() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec("my secret here".getBytes(), "AES");
+    }
+}
+
+```
+
+*Use essa regra por referência:*
+
+```html
+<rule ref="category/java/security.xml/HardCodedCryptoKey" />
+```
+
+#### Vetor Cryptográfico Inseguro
+
+Não utilize vetores com tamanhos definido em código em operações criptográficos. Por favor utilize vetores IV gerados randômicamente.
+
+*Essa regra é definida pela seguinte classe Java:*
+
+[sourceforde](net.sourceforge.pmd.lang.java.rule.security.InsecureCryptoIvRule)
+
+*Exemplo(s):*
+
+```java
+public class Foo {
+    void good() {
+        SecureRandom random = new SecureRandom();
+        byte iv[] = new byte[16];
+        random.nextBytes(bytes);
+    }
+
+    void bad() {
+        byte[] iv = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, };
+    }
+
+    void alsoBad() {
+        byte[] iv = "secret iv in here".getBytes();
+    }
+}
+```
+
+```html
+<rule ref="category/java/security.xml/InsecureCryptoIv" />
 ```
 
 ## PMD no Maven
