@@ -145,6 +145,17 @@ public class Foo{
     }
 }
 ```
+### 5. AbstractClassWithoutAnyMethod (prioridade alta)
+
+@mottin-gui Se uma classe abstrata não fornece nenhum método, ela pode estar agindo como um contêiner de dados simples que não deve ser instanciado. Nesse caso, provavelmente é melhor usar um construtor privado ou protegido para evitar a instanciação do que tornar a classe enganosamente abstrata.
+
+Exemplo:
+```java
+public abstract class Example {
+    String field;
+    int otherField;
+}
+```
 
 ## PMD no Maven
 
