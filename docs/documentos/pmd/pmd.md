@@ -145,6 +145,40 @@ public class Foo{
     }
 }
 ```
+### 5. AvoidCatchingGenericException (prioridade média)
+
+@VitorSdaRosa Evite capturar exceções genéricas, como NullPointerException, RuntimeException, Exception no bloco try-catch.
+
+Exemplo:
+```java
+package com.igate.primitive;
+
+public class PrimitiveType {
+
+    public void downCastPrimitiveType() {
+        try {
+            System.out.println(" i [" + i + "]");
+        } catch(Exception e) {
+            e.printStackTrace();
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+### 6. AbstractClassWithoutAnyMethod (prioridade alta)
+
+@VitorSdaRosa Se uma classe abstrata não fornece nenhum método, ela pode estar agindo como um contêiner de dados simples que não deve ser instanciado. Nesse caso, provavelmente é melhor usar um construtor privado ou protegido para evitar a instanciação do que tornar a classe enganosamente abstrata. 
+
+Exemplo:
+```java
+public abstract class Example {
+    String field;
+    int otherField;
+}
+```
 
 ## PMD no Maven
 
