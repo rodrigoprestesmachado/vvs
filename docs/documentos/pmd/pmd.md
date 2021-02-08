@@ -39,7 +39,7 @@ Uma ferramenta como o PMD pode ser utilizada durante a fase de desenvolvimento e
 
 ## PMD no Vscode
 
-O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar o PDM dentro do Vscode. O vídeo tem o foco em três pontos, são eles: (1) a criação de um projeto por meio dos plugins [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) e [Maven for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-maven) para VScode, (2) a configuração de regras para o PDM e o uso das regras dentro do VScode por intermédio do plugin [Apex PMD](https://marketplace.visualstudio.com/items?itemName=chuckjonas.apex-pmd).
+O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar o PMD dentro do Vscode. O vídeo tem o foco em três pontos, são eles: (1) a criação de um projeto por meio dos plugins [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) e [Maven for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-maven) para VScode, (2) a configuração de regras para o PDM e o uso das regras dentro do VScode por intermédio do plugin [Apex PMD](https://marketplace.visualstudio.com/items?itemName=chuckjonas.apex-pmd).
 
 <center>
     <iframe
