@@ -28,7 +28,7 @@ Porém, para que as suas mudanças sejam incorporadas, o dono do projeto princip
 
 Depois que você entendeu o conceito de *Fork*, iremos iniciar a trabalhar com a ideia de inspecionar  um código estaticamente, ou seja, analisar um programa sem colocá-lo em execução. Todos os artefatos de um projeto podem ser inspecionados, como por exemplo: requisitos, modelos UML, trechos de código, etc.Os artefatos podem ser analisados manualmente por meio de revisões por pares e/ou *checklists*. Porém quando pensamos em inspeções em código fonte, atualmente contamos com um grande conjunto de ferramentas capazes de realizar esse tipo específico de análise.
 
-Nesse sentido, o [PMD](https://pmd.github.io) é uma ferramenta capaz de analisar códigos fonte normalmente escritos em Java. O PDM possui um conjunto grande de [regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html) de análise que são capazes de apurar desde o estilo do código até questões mais complexas como segurança e desempenho. Além disso, existe a possibilidade de se criar novas regras no PMD, ou seja, essa característica garante uma boa flexibilidade e, consequentemente, uma possibilidade de adaptar seu uso em diferentes tipos de projeto Java.
+Nesse sentido, o [PMD](https://pmd.github.io) é uma ferramenta capaz de analisar códigos fonte normalmente escritos em Java. O PMD possui um conjunto grande de [regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html) de análise que são capazes de apurar desde o estilo do código até questões mais complexas como segurança e desempenho. Além disso, existe a possibilidade de se criar novas regras no PMD, ou seja, essa característica garante uma boa flexibilidade e, consequentemente, uma possibilidade de adaptar seu uso em diferentes tipos de projeto Java.
 
 Uma ferramenta como o PMD pode ser utilizada durante a fase de desenvolvimento e/ou fazer parte das etapas de construção e instalação de um sistema, assim, as próximas seções são dedicadas para mostrar o uso do PMD nesses dois contextos.
 
@@ -57,7 +57,6 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 
 ---
 **Nota:** as regras e explicações abaixo foram escritas de maneira colaborativa.
-
 ---
 
 1. Best Practices
@@ -71,9 +70,9 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim, o
 1. Additional rulesets
 1. PMD com o Maven
 
-## Best Practices
+## 1. Best Practices
 
-### 1. Remoção de imports não utilizados (Unused Imports)
+### 1.1 Remoção de imports não utilizados (Unused Imports)
 
 @jaquelinebonoto - Às vezes quando estamos desenvolvendo, precisamos importar bibliotecas para uso. Essas bibliotecas facilitam o desenvolvimento, no entanto, seu carregamento pode causar problemas com desempenho, devido a importação destas bibliotecas. Em algum momento, importamos a biblioteca para o desenvolvimento de um bloco de código, mas, por exemplo, quando refatoramos um código, muitas vezes um biblioteca deixa de ser necessária. Desse modo, apagamos algum trecho de código, mas o `import` da biblioteca pode equivocadamente continuar presente. O linter pode nos ajudar a identificar `imports` não utilizados através de sua análise estática.
 
@@ -83,10 +82,7 @@ import java.io.File;  // not referenced or required
 import java.util.*;   // not referenced or required
 
 public class Foo {}
-```
-
-###  2. Usar Assert Equals ao invés de Assert True em testes unitários (UseAssertEqualsInsteadOfAssertTrue)
-
+```- missing constructor
 @jaquelinebonoto - Ao realizar testes unitários em nosso código, queremos saber se o valor devolvido pelo nosso código é o esperado. O time pode definir que para essa comparação - de valor real e de valor esperado seja feita através de Assert True ao invés de Assert Equals. Os dois podem funcionar adequadamente, mas como disse, o time pode optar por usar Assert True. Entenda no exemplo a seguir:
 
 Exemplo:
@@ -96,14 +92,12 @@ public class FooTest {
 
     @Test
     void testCode() {
-        Object a, b;
-        assertTrue(a.equals(b));                    // usa o equals da linguagem para comparar valores. inadequado neste caso
-        assertEquals("a should equals b", a, b);    // usa o equals do framework de testes. Correto de acordo com a regra
-    }
+        Object a, b;- missing constructor
+        assertTrue(a.equals(b));                    // usa o equals da linguagem para comparar valores. inadequado ne- missing constructor
 }
 ```
 
-### 3. Baixo acoplamento (LooseCoupling)
+### 1.3 Baixo acoplamento (LooseCoupling)
 
 @mottin-gui O uso de implementações de interfaces (por exemplo, `ArrayList`) limita a capacidade de alterações futuras que venham a ser necessárias por mudanças nos requisitos. Idealmente, deve se utilizar a interface adequada ao declarar objetos - e então inicializar o objeto com a implementação desejada.
 
@@ -128,7 +122,7 @@ Para referenciar essa regra no PMD, use a linha abaixo:
     <rule ref="category/java/bestpractices.xml/JunitUseExpected"/>
 ```
 
-### 4. SystemPrintln (prioridade média-alta)
+### 1.4 SystemPrintln (prioridade média-alta)
 
 @mottin-gui Referências à saída padrão do sistema (out e err) geralmente são utilizadas para debug de código, entretanto podem permanecer 'esquecidas' no código e entrar em produção. Por meio do `Logger` é possível habilitar ou não o registro das chamadas de debug e evitar que o log de saída padrão do sistema fique poluído.
 
@@ -146,7 +140,35 @@ public class Foo{
 }
 ```
 
-## PMD no Maven
+## 2. Code Style
+
+### 2.1 Pelo menos um construtor (AtLeastOneConstructor)
+
+@rodrigomariamorgao Cada classe não estática deve declarar pelo menos um construtor. As classes com membros apenas estáticos são ignoradas, consulte [UseUtilityClassRule](https://pmd.github.io/latest/pmd_rules_java_design.html#useutilityclass) para detectá-las.
+
+Exemplo:
+```java
+public class Foo {
+    // faltando construtor
+    public void doSomething() { ... }
+    public void doOtherThing { ... }
+}
+```
+
+### 2.2 Use Underscore em números literais (UseUnderscoresInNumericLiterals)
+
+@rodrigomariamorgao Desde o Java 1.7, literais numéricos podem usar sublinhados para separar dígitos. Esta regra impõe que literais numéricos acima de um determinado comprimento usem esses sublinhados para aumentar a legibilidade.
+
+A regra só suporta literais decimais (base 10) por enquanto. O comprimento aceitável sob o qual os literais não precisam ter sublinhados é configurável por meio de uma propriedade. Mesmo com esse comprimento, sublinhados que estão mal colocados (não formando grupos de 3 dígitos) são relatados. 
+
+Exemplo:
+```java
+public class Foo {
+    private int num = 1000000; // poderia ser declarado 1_000_000
+}
+```
+
+## 10. PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
 
