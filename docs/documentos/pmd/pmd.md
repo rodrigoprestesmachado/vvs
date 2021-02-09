@@ -146,6 +146,102 @@ public class Foo{
 }
 ```
 
+### 5. Duplicate Code - Codigo Duplicado (Dispensables)
+
+@analuciabolico:\
+Codigo duplicado nunca é uma boa pratica em nenhuma linguagem principalmente em Java, neste caso ha uma regra onde se compara trechos de codigos iguais, sendo possivel extrair uma função deste trecho identico. Quando ha 2 ou mais vezes a repetição deste mesmo trecho já é apontado em sua IDE. Segue [link de referencia](https://refactoring.guru/pt-br/smells/duplicate-code)
+
+Exemplo:
+```java
+public class Foo {
+    private FooService fooService;
+    
+    public Foo(FooService fooService) {
+        this.fooService = fooService;
+    }
+    
+    //metodo publico com um bloco de codigo
+    public void metodoPublico(){
+        String local = fooService.getUrl();
+        
+        if (local == null) {
+            throw new Exception("Foo nao encontrado!");
+        }
+        
+        String message = String.format("URL do serviço: %s", local);
+        System.out.println(message);
+    }
+    
+    //Outros metodos e declarações
+    ....
+    
+    //metodo privado com um bloco de codigo identico ao bloco do metodo publico chamado metodoPublico
+    private void metodoPrivado() {
+        String local = fooService.getUrl();
+        
+        if (local == null) {
+            throw new Exception("Foo nao encontrado!");
+        }
+        
+        String message = String.format("URL do serviço: %s", local);
+        System.out.println(message);
+    }
+}
+```
+
+### 6. Comments - Comenatrios (Dispensables)
+
+@analuciabolico:\
+Codigo comentado é algo que normalmente as pessoas nao veem com bons olhos (bons habitos), porem ha pequenas exceçoes. Caso um metodo precise ser explicado para ser entendido o comentarios náo é necessario e sim uma refatoração para o codigo ser autoexplicativo, caso necessite explicar o nome da função se deve renomea-la para ficar mais clara, entre outros exemplos. Os comentarios sao bem vistos quando se quer explicar uma abordagem referente a uma implementação de um metodo ou classe, ou uma documentação, fora estes casos normalmente nao se deve usar os cometarios em seu codigo. Segue [link de referencia](https://refactoring.guru/pt-br/smells/comments)
+
+Exemplo:
+```java
+public class Foo {
+    private FooService fooService;
+    
+    public Foo(FooService fooService) {
+        this.fooService = fooService;
+    }
+    
+    // Esse metodo faz uma busca no servico umz URL e lança uma exceção caso a URL nao exista e se a URL existir ele printa uma mensagem com a URL
+    public void metodo(){
+        String local = fooService.getUrl();
+        
+        if (local == null) {
+            throw new Exception("Foo nao encontrado!");
+        }
+        
+        String message = String.format("URL do serviço: %s", local);
+        System.out.println(message);
+    }
+    
+    
+```
+
+Exemplo de codigo refatorado:
+
+    
+```java
+public class Foo {
+    private FooService fooService;
+    
+    public Foo(FooService fooService) {
+        this.fooService = fooService;
+    }
+    
+    public void getAndShowURLOrElseThrow() {
+        String local = fooService.getUrl();
+        
+        if (local == null) {
+            throw new Exception("Foo nao encontrado!");
+        }
+        
+        String message = String.format("URL do serviço: %s", local);
+        System.out.println(message);
+    }
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
