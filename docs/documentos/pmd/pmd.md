@@ -146,6 +146,57 @@ public class Foo{
 }
 ```
 
+### 5. Evite reatribuir parâmetros
+@anakettl Reatribuir valores aos parâmetros de entrada não é recomendado. Em vez disso, use variáveis ​​locais temporárias.
+
+Exemplo:
+```java
+public class Foo {
+    private void foo(String bar) {
+        bar = "something else";
+    }
+}
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+```xml
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters" />
+```
+
+
+### 6. Constantes na interface
+@anakettl Evite constantes nas interfaces. Interfaces devem definir tipos, constantes são detalhes de implementação melhor colocados em classes ou enums. Veja Java Efetivo, item 19.
+
+Exemplo:
+```java
+public interface ConstantInterface {
+    public static final int CONST1 = 1; // violação, nenhum campo permitido na interface!
+    static final int CONST2 = 1;        // violação, nenhum campo permitido na interface!
+    final int CONST3 = 1;               // violação, nenhum campo permitido na interface!
+    int CONST4 = 1;                     // violação, nenhum campo permitido na interface!
+}
+
+// com ignoreIfHasMethods = false
+public interface AnotherConstantInterface {
+    public static final int CONST1 = 1; // violação, nenhum campo permitido na interface!
+
+    int anyMethod();
+}
+
+// com ignoreIfHasMethods = true
+public interface YetAnotherConstantInterface {
+    public static final int CONST1 = 1; // sem violação
+
+    int anyMethod();
+}
+```
+
+Para referenciar essa regra no PMD, use a linha abaixo:
+```xml
+    <rule ref="category/java/bestpractices.xml/ConstantsInInterface" />
+```
+
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
