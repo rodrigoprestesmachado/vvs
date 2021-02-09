@@ -145,6 +145,42 @@ public class Foo{
     }
 }
 ```
+## Code Style
+
+### 1. Conveção de Nomes das Classes (ClassNamingConventions)
+ Essa regra configura a convenção de nomes das classes do projeto, relata declarações de tipo que não correspondem ao regex que se aplica ao seu tipo específico (por exemplo, enum ou interface). Cada regex pode ser configurado por meio de propriedades.
+
+ Exemplo:
+
+```java
+    public class FooClass { } // This is in pascal case, so it's ok
+
+    public class fooClass { } // This will be reported unless you change the regex
+
+```
+ Para referenciar essa regra, use o seguinte xml:
+  ```XML
+    <rule ref="category/apex/codestyle.xml/ClassNamingConventions" />
+  ```
+
+### 2. Obrigatoriedade de chaves em loops(ForLoopsMustUseBraces)
+
+  Essa regra verifica as declarações de loops(for) sem chaves, dessa maneira evitando que ocorra erros e melhorando a leitura do codigo desenvolvido.
+
+  Exemplo:
+  ```java
+    for (int i = 0; i < 42; i++) // not recommended
+        foo();
+
+    for (int i = 0; i < 42; i++) { // preferred approach
+        foo();
+    }
+  ```
+  Para referenciar essa regra, use o seguinte xml:
+  ```XML
+    <rule ref="category/apex/codestyle.xml/ForLoopsMustUseBraces" />
+  ```
+
 
 ## PMD no Maven
 
