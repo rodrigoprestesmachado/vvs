@@ -146,6 +146,68 @@ public class Foo{
 }
 ```
 
+## Regras multithread
+
+### Algumas regras sobre multithread no Java. [Neste link](https://pmd.github.io/latest/pmd_rules_java_multithreading.html#multithreading) é possível ver a documentação oficial
+
+1. **AvoidThreadGroup** - Evitar threads em grupo
+    **Desde**: PMD 3.6
+    **Prioridade**: Medium (3)
+
+    >Evite usar `java.lang.ThreadGroup`; embora se destine a ser usado em um ambiente encadeado (**por threads**), ele contém métodos que **não são seguros** para encadeamentos (thread safe).
+
+    **Esta regra é definida pela seguinte expressão XPath:**
+
+    ```xPath
+    //AllocationExpression/ClassOrInterfaceType[pmd-java:typeIs('java.lang.ThreadGroup')]|
+    //PrimarySuffix[contains(@Image, 'getThreadGroup')]
+    ```
+
+    Exemplo:
+
+    ```java
+    public class Bar {
+        void buz() {
+            ThreadGroup tg = new ThreadGroup("My threadgroup");
+            tg = new ThreadGroup(tg, "my thread group");
+            tg = Thread.currentThread().getThreadGroup();
+            tg = System.getSecurityManager().getThreadGroup();
+        }
+    }
+    ```
+
+    Use está regra através da referência:
+
+    ```xml
+        <rule ref="category/java/multithreading.xml/AvoidThreadGroup" />
+    ```
+ 1. **AvoidUsingVolatile** - Evitar usar volatilidade
+
+    **Desde**: PMD 4.1
+
+    **Prioridade**: Média alta (2)
+
+    O uso da palavra-chave `"volatile", ou em português: (volátil)`, é geralmente usada para ajustar um aplicativo Java e, portanto, requer um bom conhecimento do Modelo de Memória Java. Além disso, seu alcance de ação é um tanto mal conhecido. Portanto, a palavra-chave `"volatile"` **não** deve ser usada para fins de manutenção e portabilidade
+
+    **Esta regra é definida pela seguinte expressão XPath:**
+    ```xPath
+    //FieldDeclaration[@Volatile = true()]
+    ```
+    Example:
+
+    ```java
+    public class ThrDeux {
+        private volatile String var1; // not suggested
+        private          String var2; // preferred
+    }
+    ```
+    Use está regra através da referência:
+    ```xml
+    <rule ref="category/java/multithreading.xml/AvoidUsingVolatile" />
+    ```
+
+---
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
