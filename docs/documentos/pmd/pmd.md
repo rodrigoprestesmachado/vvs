@@ -146,6 +146,63 @@ public class Foo{
 }
 ```
 
+### 5. AbstractClassWithoutAbstractMethod
+
+Desde: PMD 3.0
+
+Prioridade: Média (3)
+
+A classe abstrata não contém nenhum método abstrato. Uma classe abstrata sugere uma implementação incompleta, que deve ser completada por subclasses que implementam os métodos abstratos. Se a classe se destina a ser usada apenas como uma classe base (não para ser instanciada diretamente), um construtor protegido pode ser fornecido para impedir a instanciação direta.
+
+Essa regra é definida pela seguinte classe Java: net.sourceforge.pmd.lang.java.rule.bestpractices.AbstractClassWithoutAbstractMethodRule
+
+Exemplos:
+```java
+public abstract class Foo {
+  void int method1() { ... }
+  void int method2() { ... }
+  // consider using abstract methods or removing
+  // the abstract modifier and adding protected constructors
+}
+```
+
+Use esta regra referenciando-a:
+``
+<rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+`` 
+
+### 6. AvoidPrintStackTrace
+Desde: PMD 3.2
+
+Prioridade: Média (3)
+
+Evite printStackTrace (); em vez disso, use uma chamada de logger.
+
+Esta regra é definida pela seguinte expressão XPath:
+```Java
+//PrimaryExpression[
+   ( PrimaryPrefix[Name[contains(@Image,'printStackTrace')]]
+   | PrimarySuffix[@Image='printStackTrace']
+   )/following-sibling::*[1][self::PrimarySuffix/Arguments[@Size=0]]
+]
+```
+
+Exemplos:
+```Java
+class Foo {
+    void bar() {
+        try {
+            // do something
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+Use esta regra referenciando-a:
+
+``<rule ref="category/java/bestpractices.xml/AvoidPrintStackTrace" />`` 
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
