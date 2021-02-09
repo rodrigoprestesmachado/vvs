@@ -146,6 +146,37 @@ public class Foo{
 }
 ```
 
+### 4. OneDeclarationPerLine (prioridade média-baixa)
+
+@hkalife O Java permite que variáveis do mesmo tipo sejam declaradas de forma combinada, onde o tipo só precisa ser especificado uma vez. Porém, para a melhor organização, legibilidade e, consequentemente, melhoria na possibilidade de manutenção do código, no caso de declarações combinadas o ideal é a utilização de uma linha por variável.
+
+Exemplo:
+```java
+Date dataDeNascimento;            // declarações separadas
+Date dataDeFalecimento;
+
+Date dataDeNascimento, dataDeFalecimento;  // declarações combinadas - errado
+
+Date dataDeNascimento,
+    dataDeFalecimento;      // declaração combinada utilizando uma linha por variável - correto
+```
+
+### 5. UnusedLocalVariable (prioridade média)
+
+@hkalife A utilização de variáveis locais inutilizadas torna o código menos legível e confuso. Sendo assim, a regra de UnusedLocalVariable possibilita a detecção das mesmas. Variáveis com nomes que iniciam com `ignored` ou `unused` são consideradas inutilizadas de forma propositalmente, saindo da análise do PMD.
+
+Exemplo:
+```java
+public class ClasseTeste {
+    public void metodo() {
+        int i = 5; // Variável sem utilização
+        int j = 10;
+
+        return 5 + j;
+    }
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
