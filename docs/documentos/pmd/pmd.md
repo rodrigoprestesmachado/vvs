@@ -146,6 +146,48 @@ public class Foo{
 }
 ```
 
+### 5. Utilizar Foreach ao invés de For (ForLoopCanBeForeach)
+
+@liquidlx - Essa regra reporta loops (laços de repetição) que podem facilmente ser substituídos por foreach. É considerado loops sobre listas, arrays e iterators. A substitução só é segura de ser realizada se:
+
+- O loop utiliza a variavel de índice apenas para acessar um elemento da lista ou array.
+- Contém apenas uma instrução de atualização.
+- Percorre todos os elementos da lista ou array da esquerda para a direita.
+
+**Exemplo: Percorrer uma lista de nomes e imprimir cada nome no console**
+
+```java
+public class Classe {
+  void loop(List<String> lista) {
+    for (int i = 0; i < lista.size(); i++) { // pré Java 1.5
+      System.out.println(lista.get(i));
+    }
+
+    for (String nome : lista) { // após Java 1.5
+      System.out.println(nome);
+    }
+  }
+}
+```
+
+### 6. Evitar usar printStackTrace() (AvoidPrintStackTrace)
+
+@liquidlx - Evitar utilizar a função printStackTrace(). Substituir por logger.
+
+**Exemplo:**
+
+```java
+class Foo {
+    void bar() {
+        try {
+            // ...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
