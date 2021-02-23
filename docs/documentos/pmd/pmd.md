@@ -10,7 +10,7 @@ No Github, você pode utilizar o projeto de outra pessoa para estudar, contribui
 Depois de criar um *Fork* de um repositório você deve fazer um `git clone` do projeto para a sua máquina para poder trabalhar com os arquivos. Uma vez criado, o clone permite que você altere os arquivos no editor de sua preferência (ex.: vscode) e versione o código por meio das operações [commit](https://docs.github.com/pt/desktop/contributing-and-collaborating-using-github-desktop/committing-and-reviewing-changes-to-your-project) (alterações no código localmente) e [push]( https://docs.github.com/pt/desktop/contributing-and-collaborating-using-github-desktop/pushing-changes-to-github) (enviar os commits para o repositório remoto).
 
 <center>
-<img src="imgs/fork.png" width="20%" height="20" alt="interface Web do GitHub">
+<img src="imgs/fork.png" width="20%" height="20%" alt="interface Web do GitHub">
 <br/>
 Figura 1 - Interface Web do GitHub
 </center>
