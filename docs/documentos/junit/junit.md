@@ -144,14 +144,14 @@ class TagOrderTest {
     private static Logger logger = Logger.getLogger("TagOrderTest");
 
     @Test
-    @Order(1)
+    @Order(2)
     void first() {
         logger.info("first");
         assertEquals(1, 1);
     }
 
     @Test
-    @Order(2)
+    @Order(1)
     void second() {
         logger.info("second");
         assertEquals(1, 1);

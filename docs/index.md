@@ -1,5 +1,5 @@
 # VVS
-## Tutoriais
+## Documentos
 
 * [Configuração do ambiente de teste](documentos/ambiente/ambiente.md)
 
