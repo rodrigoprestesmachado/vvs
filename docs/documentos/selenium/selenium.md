@@ -64,11 +64,20 @@ Atenção: não execute o selenium-side-runner com o `sudo`
 
 Para rodar casos/suíte de teste do Selenium por intermédio do Junit, temos que primeiro exportar o teste da IDE, conforme ilustra os passos um e dois da imagem abaixo:
 
-![](img/SeleniumJunitExport.png)
+<center>
+<img src="imgs/SeleniumJunitExport.png" width="50%" height="50%" alt="interface Web do GitHub">
+<br/>
+Figura 1 - Selenium IDE
+</center>
+
 
 Logo, escolha a opção Junit para poder obter um código em Java.
 
-![](img/SeleniumJunit.png)
+<center>
+<img src="imgs/SeleniumJunit.png" width="40%" height="40%" alt="interface Web do GitHub">
+<br/>
+Figura 2 - Exportando um código em Java
+</center>
 
 Agora, temos que compilar a classe para que possamos executar o código. A classe que obtivemos da IDE possui duas dependências: (1) [Junit 4](https://mvnrepository.com/artifact/junit/junit) e (2) [Selenium Java](https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java). 
 
@@ -121,3 +130,10 @@ O código acima realiza os seguintes passos: (1) executa um HTTP GET de uma URL 
 Nota: O Vídeo 2 foi extraído da gravação de um encontro síncrono no Google Meet, portanto, a qualidade visual,sonora e também as falas podem estar prejudicadas em alguns trechos.
 
 ---
+
+<br/>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licença Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />Este obra está licenciado com uma Licença <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>.
+
+<center>
+<a href="https://github.com/rodrigoprestesmachado"><img src="imgs/logo.png" width="5%" height="5%" alt="Rodrigo Prestes Machado"></a>
+</center>

@@ -34,3 +34,10 @@ O presente documento reúne um conjunto de cursos/recursos gratuítos sobre tema
 * [Docker Essentials](https://www.udemy.com/course/docker-essentials/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-pVpMJIJW0cArZP_Sfhi1jA&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
 
 * [Understanding Docker and using it for Selenium automation](https://www.udemy.com/course/understanding-docker-performing-selenium-automation/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-m9ORi_E7gZgHCcyTspD3og&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
+
+<br/>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licença Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />Este obra está licenciado com uma Licença <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>.
+
+<center>
+<a href="https://github.com/rodrigoprestesmachado"><img src="imgs/logo.png" width="5%" height="5%" alt="Rodrigo Prestes Machado"></a>
+</center>
