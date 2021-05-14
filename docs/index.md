@@ -1,24 +1,24 @@
 # Trilha de aprendizagem
 
-* [Introdução](slides/introducao/index.html)
+[Introdução](slides/introducao/index.html)
 
-* [Planejamento](slides/planejamento/index.html)
+[Planejamento](slides/planejamento/index.html)
 
-* [Configuração do ambiente de teste](documentos/ambiente/ambiente.md)
+[Configuração do ambiente de teste](documentos/ambiente/ambiente.md)
 
-* [Inspeções estáticas](documentos/pmd/pmd.md)
+[Inspeções estáticas](documentos/pmd/pmd.md)
 
-* [Testes unitários com Junit e Surefire](documentos/junit/junit.md)
+[Testes unitários com Junit e Surefire](documentos/junit/junit.md)
 
-* [Testes de integração com Junit, Failsafe e Testcontainers](documentos/integracao/integracao.md)
+[Testes de integração com Junit, Failsafe e Testcontainers](documentos/integracao/integracao.md)
 
-* [Testes funcionais na Web com Selenium](documentos/selenium/selenium.md)
+[Testes funcionais na Web com Selenium](documentos/selenium/selenium.md)
 
 ## Extras
 
-* [Recursos relacionados com a disciplina](documentos/perifericos/perifericos.md)
+[Recursos relacionados com a disciplina](documentos/perifericos/perifericos.md)
 
-* [Dicas de Git](slides/git/index.html)
+[Dicas de Git](slides/git/index.html)
 
 # Comunidade de aprendizagem
 
