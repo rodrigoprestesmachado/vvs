@@ -1,3 +1,8 @@
+---
+layout: default
+title: Inspeções estáticas
+nav_order: 3
+---
 
 # Inspeções estáticas
 

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Teste de integração
+nav_order: 5
+---
+
 # Teste de integração com o Failsafe
 
 Como visto anteriormente, o teste de integração/componente, sucedem os testes unitário, ou seja, trata-se de uma etapa onde classes são combinadas a fim de formar módulos a serem testados. Um dos plugins do Maven mais famosos para executar testes de integração é o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/). A principal diferença entre o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/) e o [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/) é que no primeiro, se um teste falhar o seu processo de construção do sistema (*build*) não será comprometido.

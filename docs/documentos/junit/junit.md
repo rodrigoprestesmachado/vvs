@@ -1,3 +1,8 @@
+---
+layout: default
+title: Testes unitários
+nav_order: 4
+---
 # Introdução ao Junit
 
 Os testes unitários estabelecem um processo de testar pequenos componentes de um programa, como por exemplo, os métodos e/ou classes. Assim, esse tipo de teste consiste em realizar chamadas para as rotinas com diferentes parâmetros de entrada a fim de exercitar todos os comportamentos de um trecho de código.
