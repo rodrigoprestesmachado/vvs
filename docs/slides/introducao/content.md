@@ -1,8 +1,3 @@
----
-layout: default
-title: 404
-nav_exclude: true
----
 # Introdução
 
 rodrigo.prestes@poa.ifrs.edu.br

@@ -1,3 +1,8 @@
+---
+layout: default
+title: 404
+nav_exclude: true
+---
 # Dicas de Git
 
 rodrigo.prestes@poa.ifrs.edu.br

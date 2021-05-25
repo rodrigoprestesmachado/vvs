@@ -1,9 +1,3 @@
----
-layout: default
-title: Inspeções estáticas
-nav_order: 3
----
-
 # Inspeções estáticas
 
 Antes de iniciarmos o assunto sobre inspeções estáticas, iremos conhecer o conceito de *Fork* existente em sistemas de versionamento de código. Uma vez entendido o funcionamento de um *Fork*, no final desse documento iremos trabalhar com um exemplo onde iremos utilizar o *Fork* para poder analisar um código de forma estática.

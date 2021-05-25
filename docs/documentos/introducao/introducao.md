@@ -1,9 +1,3 @@
----
-layout: default
-title: Introdução
-nav_order: 2
----
-
 # Introdução
 
 <center>

@@ -1,3 +1,6 @@
-remote_theme: pmarsceill/just-the-docs
-color_scheme: dark
-gh_edit_link_text: "Repositório no GitHub."
+title: VVS
+description: Disciplina de Validação e Verificação de Sistemas
+show_downloads: false
+plugins:
+  - jekyll-mentions
+theme: jekyll-theme-hacker

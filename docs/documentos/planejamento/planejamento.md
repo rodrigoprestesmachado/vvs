@@ -1,9 +1,3 @@
----
-layout: default
-title: Planejamento
-nav_order: 2
----
-
 # Planejamento
 
 <center>
