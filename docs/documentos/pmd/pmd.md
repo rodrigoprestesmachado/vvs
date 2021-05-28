@@ -210,9 +210,7 @@ B) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/tpack](h
 
 O plugin do desse projeto está configurado para analisar questões de comentários no código e as regras pré-definidas do plugin do PMD no Maven. Identifique os locais aonde ocorreram os problemas e realize ajustes no código (existem vários problemas com os comentários) e, no final do processo, faça um *Pull Request* para que a sua modificação possa ser avaliada e, se tudo estiver correto, incorporada ao projeto.
 
-<br/>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licença Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />Este obra está licenciado com uma Licença <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>.
-
 <center>
-<a href="https://github.com/rodrigoprestesmachado"><img src="imgs/logo.png" width="5%" height="5%" alt="Rodrigo Prestes Machado"></a>
+<a href="https://github.com/rodrigoprestesmachado" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
 </center>
