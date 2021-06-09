@@ -1,6 +1,6 @@
 # Trilha de aprendizagem
 
-[Introdução](documentos/introducao/introducao.md)
+[Introdução](documentos/introducao/slides/index.html)
 
 [Planejamento](documentos/planejamento/planejamento.md)
 
@@ -18,7 +18,7 @@
 
 [Recursos relacionados com a disciplina](documentos/perifericos/perifericos.md)
 
-[Dicas de Git](slides/git/index.html)
+[Dicas de Git](documentos/perifericos/slidesgit/index.html)
 
 # Comunidade de aprendizagem
 
