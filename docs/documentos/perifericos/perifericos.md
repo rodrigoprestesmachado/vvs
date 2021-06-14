@@ -41,8 +41,3 @@ O presente documento reúne um conjunto de cursos/recursos gratuítos sobre tema
 <a href="https://github.com/rodrigoprestesmachado" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
 </center>
-
-
-<center>
-<iframe src="https://liascript.github.io/course/?https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/master/docs/documentos/perifericos/lia.md#1" title="Lia" width="90%" height="500" style="border:none;"></iframe>
-</center>
