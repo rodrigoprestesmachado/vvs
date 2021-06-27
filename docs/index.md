@@ -1,26 +1,26 @@
 # Trilha de aprendizagem
 
-* [Configuração do ambiente de teste](documentos/ambiente/ambiente.md)
+* [Configuração do ambiente de teste](ambiente/ambiente.md)
 
-* [Introdução](documentos/introducao/slides/index.html)
+* [Introdução](introducao/slides/index.html)
 
-* [Planejamento](documentos/planejamento/planejamento.md)
+* [Planejamento](planejamento/planejamento.md)
 
-* [Análises estáticas](documentos/pmd/pmd.md)
+* [Análises estáticas](pmd/pmd.md)
 
-* [Teste de software](documentos/teste/teste.md)
+* [Teste de software](teste/teste.md)
 
-* [Testes unitários com Junit e Surefire](documentos/junit/junit.md)
+* [Testes unitários com Junit e Surefire](junit/junit.md)
 
-* [Testes de componente com Junit, Failsafe e Testcontainers](documentos/integracao/integracao.md)
+* [Testes de componente com Junit, Failsafe e Testcontainers](integracao/integracao.md)
 
-* [Testes de sistema Web com Selenium](documentos/selenium/selenium.md)
+* [Testes de sistema Web com Selenium](selenium/selenium.md)
 
 ## Extras
 
-* [Recursos relacionados com a disciplina](documentos/perifericos/perifericos.md)
+* [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
-* [Dicas de Git](documentos/perifericos/slidesgit/index.html)
+* [Dicas de Git](perifericos/slidesgit/index.html)
 
 # Comunidade de aprendizagem
 
@@ -35,6 +35,6 @@ SOMMERVILLE, Ian. [Slides](https://iansommerville.com/software-engineering-book/
 SOMMERVILLE, Ian. [Vídeos](https://iansommerville.com/software-engineering-book/videos/imp/) do capítulo 8 (em inglês).
 
 <center>
-<a href="https://github.com/rodrigoprestesmachado" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+<a href="https://rpmhub.dev" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
 </center>
