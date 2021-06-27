@@ -36,6 +36,14 @@ Pressione 'F' para tela cheia
 
 <!-- .slide: data-background="#4AA791" data-transition="zoom" -->
 ## Introdução
+<!-- .element: style="margin-bottom:60px; font-family: Bradley Hand; font-size: 50px; font-family: Chalkduster" -->
+
+![imagem](img/teste.png) 
+<!-- .element height="50%" width="50%" -->
+
+
+<!-- .slide: data-background="#4AA791" data-transition="zoom" -->
+## Introdução
 <!-- .element: style="margin-bottom:40px; font-family: Bradley Hand; font-size: 50px; font-family: Chalkduster" -->
 
 * O desenvolvimento de testes incluem todas as fases do desenvolvimento de um software
@@ -66,14 +74,6 @@ Pressione 'F' para tela cheia
 
 * **Teste de sistema** – quando todos os componentes de um sistema são integrados e o sistema é testado como um todo. O teste de sistema tem foco na interação entre componentes
 <!-- .element: style="margin-bottom:60px; font-size: 25px; font-family: Bradley Hand" -->
-
-
-<!-- .slide: data-background="#4AA791" data-transition="zoom" -->
-## Teste de validação e defeitos
-<!-- .element: style="margin-bottom:60px; font-family: Bradley Hand; font-size: 50px; font-family: Chalkduster" -->
-
-![imagem](img/teste.png) 
-<!-- .element height="50%" width="50%" -->
 
 
 

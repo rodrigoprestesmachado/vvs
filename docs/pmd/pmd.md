@@ -204,7 +204,7 @@ A documentação do projeto está escrita em Markdown, assim, se você tiver dú
 
 ---
 
-B) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/tpack](https://github.com/rodrigoprestesmachado/tpack). Depois disso, faça um `clone` para o seu container docker (tutorial de configuração do [ambiente](https://vvs.rpmhub.dev/documentos/ambiente/ambiente.html)) e execute o seguinte comando:
+B) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/tpack](https://github.com/rodrigoprestesmachado/tpack). Depois disso, faça um `clone` para o seu container docker (tutorial de configuração do [ambiente](https://vvs.rpmhub.dev/ambiente/ambiente.html)) e execute o seguinte comando:
 
     mvn pmd:pmd
 
