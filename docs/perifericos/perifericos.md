@@ -27,6 +27,10 @@ O presente documento reúne um conjunto de cursos/recursos gratuítos sobre tema
 
   * [Version Control with Git](https://www.coursera.org/learn/version-control-with-git?ranMID=40328&ranEAID=JVFxdTr9V80&ranSiteID=JVFxdTr9V80-n8OfI.bLURNl0pa4T5hguw&siteID=JVFxdTr9V80-n8OfI.bLURNl0pa4T5hguw&utm_content=10&utm_medium=partners&utm_source=linkshare&utm_campaign=JVFxdTr9V80)
 
+* Live de 10/06/2021 com dicas sobre o uso de git no vscode
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SDowGAvT0l0" title="Dicas sobre o uso de git no vscode" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Docker
 
 * [Curso de Docker](https://www.cursou.com.br/informatica/programacao/docker/#player) - em português
