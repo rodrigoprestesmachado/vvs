@@ -20,8 +20,6 @@
 
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
-* [Dicas de Git](perifericos/slidesgit/index.html)
-
 # Comunidade de aprendizagem
 
 Comunidade [Discord](https://discord.com/invite/C29cqvm): canal `#vvs`
