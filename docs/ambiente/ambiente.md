@@ -1,12 +1,59 @@
-# Configurações do ambiente
+# Configurações
+
+Essa página tem o objetivo de orientar sobre a instalação das ferramentas que serão utilizadas na disciplina de Verificação e Validação de Sistemas.
+
+## Java
+
+Os exemplos e ferramentas de teste da disciplina serão demonstrados em projetos escritos em Java. Dessa forma, o primeiro passo é instalar uma máquina virtual Java. Se você estiver utilizando Linux instale o [OpenJDK](https://openjdk.java.net):
+
+    apt install default-jre
+
+Se você estiver usando windows uma dica é utilizar o [Chocolatey](https://chocolatey.org) e instalar o openjdk:
+
+    choco install openjdk
+
+No maxOS, o openjdk pode ser instalado com o [HomeBrew](https://brew.sh):
+
+    brew install openjdk
+
+Verifique se o Java foi instalado corretamente por meio da instrução `java -version`.
+
+## Apache Maven
+
+O [Apache Maven](https://maven.apache.org), ou maven, é uma ferramenta de automação de projetos que permite acelerar diversos processos de desenvolvimento de um sistema, como por exemplo: compilação, empacotamento, instalação, verificação, teste, entre outros. Assim, essa ferramenta será fundamental no decorrer da disciplina uma vez que irá possibilitar uma automação e, consequentemente, a construção de integração contínua (*Continuous Integration* - CI) em projetos Java. No Ubunto, instale o maven por meio do comando:
+
+    apt install maven
+
+No windows: 
+
+    choco install maven
+
+macOS:
+
+    brew install maven
+
+Para verificar se o maven foi instalado com sucesso execute o comando `mvn -version`.
+
+## Git
+
+O git também necessita ser instalado uma vez que todos os exemplos da disciplina estão disponíveis no Github. Assim, no Ubuntu instale o Git por meio do comando:
+
+    apt install git
+
+Windows:
+
+    choco install git.install
+
+macOS:
+    
+    brew install git
+
+Para ter certeza que o git esteja instalado corretamente digite `git --version`.
 
 ## Docker
 
-A fim de garantir que todos consigam seguir os exemplos da disciplina e, consequentemente, obtenham o mesmo resultado, se faz necessário que todos utilizem o mesmo ambiente. Nesse sentido, iremos utilizar a versão mais atualizada de uma imagem Ubuntu no Docker, portanto, o primeiro passo para a participar da cadeira é instalar o [Docker](https://docs.docker.com/get-docker/) na sua máquina.
-
-## Ubuntu
-
-Depois de instalar o Docker, podemos baixar uma imagem do Ubuntu por meio do comando [pull](https://docs.docker.com/engine/reference/commandline/pull/):
+Em um determinado momento da disciplina será necessário instalar o [Docker](https://docs.docker.com/get-docker/) na sua máquina.
+Depois de instalar o Docker, para testar podemos baixar uma imagem do Ubuntu por meio do comando [pull](https://docs.docker.com/engine/reference/commandline/pull/):
 
     docker pull ubuntu
 
@@ -37,7 +84,7 @@ Note que o argumento `-i` do comando `start` que permite entrar no terminal do U
 
     docker ps
 
-## Comandos úteis do docker
+### Alguns comandos úteis do docker
 
 Para todos os containers em execução:
 
@@ -60,42 +107,9 @@ ___
 
 ---
 
-## Java
+## Testando o ambiente com o projeto TPACK
 
-Os exemplos e ferramentas de teste da disciplina serão demonstrados em projetos escritos em Java. Dessa forma, o próximo passo é instalar uma máquina virtual Java no container Ubuntu. Para isso, instale o [OpenJDK](https://openjdk.java.net) por meio dos comandos:
-
-    apt update
-    apt install openjdk-8-jdk
-
-Verifique se o Java foi instalado corretamente por meio da instrução `java -version`.
-
-## Apache Maven
-
-O [Apache Maven](https://maven.apache.org), ou maven, é uma ferramenta de automação de projetos que permite acelerar diversos processos de desenvolvimento de um sistema, como por exemplo: compilação, empacotamento, instalação, verificação, teste, entre outros. Assim, essa ferramenta será fundamental no decorrer da disciplina uma vez que irá possibilitar uma automação e, consequentemente, a construção de ambientes de testes contínuos (*Continuous Integration* - CI) em projetos Java. Para instalar o maven digite:
-
-    apt install maven
-
-Para verificar se o maven foi instalado com sucesso execute o comando `mvn -version`.
-
-## Git
-
-O git também necessita ser instalado no container uma vez que todos os exemplos da disciplina estão disponíveis no Github. Assim, instale o Git por meio do comando:
-
-    apt install git
-
-Para assegurar que o git esteja instalado corretamente digite `git --version`.
-
-## Testando o ambiente
-
-Depois de instalar o git, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:
-
-Crie um diretório `dev` no /home do container:
-
-    cd /home
-    mkdir dev
-    cd dev
-
-Faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servirá como um dos exemplos da disciplina:
+Depois de instalar todas as ferramentas, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:. Primeiro, faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servirá como um dos exemplos da disciplina:
 
     git clone https://github.com/rodrigoprestesmachado/tpack
     cd tpack
@@ -115,25 +129,11 @@ Se tudo ocorrer bem, o maven irá criar uma diretório chamado `target`. Dentro 
 
     java -jar target/tpack.jar
 
-Como não colocamos um MySQL em execução, nesse primeiro momento não conseguiremos ver o sistema Tpack em sua plenitude. Apesar disso, podemos verificar se o micro serviço em Java está rodando, nesse sentido abra e digite a seguinte URL no seu navegador:
+Como não colocamos um MySQL em execução, nesse primeiro momento não conseguiremos ver o sistema Tpack em sua plenitude. Apesar disso, podemos verificar se Web Service do TPACK está rodando, nesse sentido abra e digite a seguinte URL no seu navegador:
 
    [http://localhost/openapi/ui/](http://localhost/openapi/ui/)
 
-Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu cumprir todas as tarefas desse primeiro tutorial.
-
-## Resumo
-
-Você pode ver um resumo dos comandos que foram discutidos aqui por meio de um vídeo:
-
-<center>
-    <iframe
-        width="560" height="315"
-        src="https://www.youtube.com/embed/qrjTsw82ABw"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-    </iframe>
-</center>
+Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu compilar e rodar o projeto.
 
 ## Referências
 
