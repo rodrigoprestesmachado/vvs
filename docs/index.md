@@ -1,20 +1,19 @@
 # Trilha de aprendizagem
 
-* [Configuração do ambiente de teste](ambiente/ambiente.md)
+* [Configuração do ambiente](ambiente/ambiente.md) 🖥️
 
-* [Introdução](introducao/slides/index.html)
-
-* [Planejamento](planejamento/planejamento.md)
+* [Verificação e validação, inspeções, testes e planejamento](introducao/introducao.md) 🚀
 
 * [Análises estáticas](pmd/pmd.md)
 
-* [Teste de software](teste/teste.md)
+* [Teste de desenvolvimento](teste/teste.md)
 
-* [Testes unitários com Junit e Surefire](junit/junit.md)
+    * [Testes unitários com Junit e Surefire](junit/junit.md)
 
-* [Testes de componente com Junit, Failsafe e Testcontainers](integracao/integracao.md)
+    * [Testes de componente com Junit, Failsafe e Testcontainers](integracao/integracao.md)
 
-* [Testes de sistema Web com Selenium](selenium/selenium.md)
+    * [Testes de sistema Web com Selenium](selenium/selenium.md)
+
 
 ## Extras
 

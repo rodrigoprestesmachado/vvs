@@ -1,123 +1,127 @@
-# Introdução
+<!-- .slide:  data-background-opacity="0.1" data-background-image="https://media.itpro.co.uk/image/upload/v1570816546/itpro/2019/02/software_shutterstock_1290773869.jpg" 
+data-transition="convex"  -->
+# Verificação e validação, inspeções, testes e planejamento 🚀
+<!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
 
-rodrigo.prestes@poa.ifrs.edu.br
-<!-- .element: style="margin-bottom:150px;" -->
+Pressione 'F' para tela cheia
+<!-- .element: style="font-size: small; color:white;" -->
 
-Tela cheia? pressione a tecla 'F'
+[versão em pdf](?print-pdf)
 <!-- .element: style="font-size: small;" -->
 
-Versão em PDF? [aqui](?print-pdf)
-<!-- .element: style="font-size: small;" -->
 
 
-
-## Índice
-
-* Verificação e validação
-
-* Inspeções e testes
-
-* Testes em sistemas
-
-* Referências
+# Verificação e validação 🐛
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Verificação e validação 🐛
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-## Verificação e validação
-
-
-## Verificação e validação
-
-* A aplicação de testes em um programa é a maneira mais comum de verificar se ele atende a especificação e, portanto, realiza o que o cliente deseja
-<!-- .element: class="fragment" -->
+* A aplicação de testes em um programa é a maneira mais comum de verificar se ele atende a especificação e, portanto, realiza o que o cliente deseja 😊
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Denomina-se verificação e validação (VV) o processo de análise de um programa
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Atividades de verificação e validação ocorrem em todos os estágios do processo de desenvolvimento de um sistema
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Portanto, inicia nos requisitos e continua ao longo do projeto, codificação e teste do produto
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Verificação e validação
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Verificação e validação 🐛
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-* A verificação e a validação pode ser entendida por meio de duas perguntas:
-<!-- .element: class="fragment" -->
+* A verificação e a validação pode ser entendida por meio de duas perguntas: 💭
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-  * Verificação: Estamos construindo o produto corretamente?
-  <!-- .element: class="fragment" -->
+  * Verificação: Estamos construindo o produto corretamente? 
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-  * Validação: Estamos construindo o produto correto?
-  <!-- .element: class="fragment" -->
+  * Validação: Estamos construindo o produto correto? 
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * O foco da verificação está em analisar se o *software* se encontra de acordo com as especificações
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Por outro lado, o processo de validação tem o objetivo de assegurar que um sistema atende as expectativas do cliente
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Verificação e Validação
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Verificação e validação 🐛
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * O objetivo da VV é atingir um nível de confiabilidade entre o *software* e os seus usuários
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * O nível de confiabilidade depende do propósito do sistema, das expectativas dos clientes e/ou do ambiente de mercado:
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
   * Propósito do sistema: o nível de confiabilidade depende de quão crítico é o sistema. Por exemplo, trata-se de um protótipo ou um *software* que trabalhe com operações financeiras?
-  <!-- .element: class="fragment" -->
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
   * Clientes: nível de tolerância dos usuários
-  <!-- .element: class="fragment" -->
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
   * Ambiente de Mercado: programas concorrentes, preço que os clientes estão dispostos a pagar e/ou cronograma exigido
-  <!-- .element: class="fragment" -->
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
 
-## Inspeções e testes
+# Inspeções e testes 🔎
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 
-## Inspeções e testes
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Inspeções e testes 🔎
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-* No processo de VV existem duas abordagens complementares: inspeções e testes
-<!-- .element: class="fragment" -->
+* No processo de VV existem duas abordagens complementares: inspeções e testes 🧪
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-* Inspeções de software ou revisões por pares: analisam e verificam representações de sistema como documentos de requisitos, diagramas de projeto e código fonte dos programas
-<!-- .element: class="fragment" -->
+* Inspeções de software e/ou revisões por pares: analisam e verificam representações de sistema como documentos de requisitos, diagramas de projeto e código fonte dos programas
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Utilizamos revisões (manuais ou automatizadas) durante todas as etapas do processo. Denomina-se este tipo de revisão como estática, ou seja, aquelas onde não se coloca um sistema em execução
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Inspeções e testes
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Inspeções e testes 🔎
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * Teste de software: envolve executar um sistema por meio de dados fictícios e analisar o seu comportamento, ou seja, trata-se de uma abordagem dinâmica
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Podemos analisar um sistema de maneira dinâmica apenas quando um protótipo ou versão executável estiver disponível
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-* Nesse sentido, o desenvolvimento incremental se torna interessante uma vez que testes podem ser realizados em uma versão inicial do sistema e continuar ao longo de todo o desenvolvimento
-<!-- .element: class="fragment" -->
+* Nesse sentido, o desenvolvimento incremental se mostra interessante uma vez que testes podem ser realizados em uma versão inicial do sistema e continuar ao longo de todo o desenvolvimento
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Inspeções e testes
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Inspeções e testes 🔎
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * Técnicas estáticas incluem análise de código fonte automatizada e verificação formal
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Porém, técnicas estáticas podem somente verificar a correspondência entre o programa e sua especificação
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * Não é possível utilizar técnicas estáticas para verificar propriedade como desempenho e confiabilidade
-<!-- .element: class="fragment" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Inspeções e testes
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Inspeções e testes 🔎
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 ![](img/inspecaoteste.png)
 <!-- .element: style="height: 250px; margin-top: 50px" -->
@@ -127,77 +131,107 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 
 
-## Testes em sistemas
+# Planejamento 🗓️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 
-## Testes em sistemas
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Planejamento 🗓️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-* Embora técnicas estáticas sejam muito utilizadas, as práticas dinâmicas serão sempre o método principal de verificação e validação
-<!-- .element: class="fragment" -->
+* Verificação e Validação é um processo dispendioso
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+  
+* Para alguns sistema de tempo real com restrições com funcionais complexas, mais da metade do orçamento de desenvolvimento pode ser gasto em V&V
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-* Existem dois tipos distintos de teste que podem ser usados em estágios diferentes no processo de software:
-<!-- .element: class="fragment" -->
-  * Testes de validação: possuem a finalidade de demonstrar que o *software* faz o que o cliente deseja, portanto, atendendo aos requisitos
-  <!-- .element: class="fragment" -->
-
-  * Testes de defeitos: revelam problemas no sistema em vez de simular o seu uso operacional. O objetivo neste momento é encontrar problemas entre o programa e a sua especificação
-  <!-- .element: class="fragment" -->
-
-
-## Depuração
-
-* A verificação e validação possuem finalidades distintas da depuração
-<!-- .element: class="fragment" -->
-  * Processos de teste são dedicados a estabelecer a existência de defeitos em um sistema
-  <!-- .element: class="fragment" -->
-
-  * Por outro lado, depuração é um processo que localiza e corrige defeitos
-  <!-- .element: class="fragment" -->
-
-* Note, portanto, que os processos de VV e de depuração normalmente são intercalados
-<!-- .element: class="fragment" -->
+* Assim, é necessário iniciar de forma antecipada o planejamento de V&V no processo de desenvolvimento
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-## Depuração
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Planejamento 🗓️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-* Não existe método simples de depuração de programas
-<!-- .element: class="fragment" -->
+* Como parte do processo de planejamento, você pode decidir:
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-* Muitas vezes o defeito está distante de onde a falha ocorreu
-<!-- .element: class="fragment" -->
+  * Sobre o equilíbrio entre abordagens estáticas e dinâmicas
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+   
+  * Especificar padrões e procedimentos para inspecionar o programa
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+   
+  * Estabelecer checklists para orientar as inspeções
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+   
+  * Definir um plano de teste para o programa
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-* Por vezes, é necessário criar um teste adicional que reproduza os dados no momento que o defeito aconteceu
-<!-- .element: class="fragment" -->
-
-* Por intermédio de um *debugger*, ocasionalmente deve-se executar linha por linha para se encontrar o problema
-<!-- .element: class="fragment" -->
-
-
-## Teste de regressão
-
-* Depois que o defeito foi descoberto e corrigido é necessário reavaliar o sistema por meio de uma nova execução de testes
-<!-- .element: class="fragment" -->
-  * Se surgirem novos defeitos quando juntarmos (*merge*) uma alteração ao sistema, então podemos afirmar que o sistema regrediu
-  <!-- .element: class="fragment" -->
-
-  * Executar toda a bateria de testes no sistema a cada nova alteração pode ser uma tarefa dispendiosa
-  <!-- .element: class="fragment" -->
-
-  * portanto, existe uma necessidade de automatização para se poder conferir qualidade ao sistema
-  <!-- .element: class="fragment" -->
-
-  * Um bom plano de teste deve relacionar as funcionalidades de um programa e os casos de testes (matriz de rastreabilidade)
-  <!-- .element: class="fragment" -->
+* O esforço dependerá do tipo de sistema, em geral quanto mais crítico, mais esforço com inspeções um sistema receberá
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Plano de teste 🖊️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-## Referências
+* Os principais componentes de um plano de teste são:
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+  * Processo de teste: descrição das fases principais de processo de teste
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+   
+  * Rastreabilidade de requisitos: Mapeamento entre requisitos e os casos de testes
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+   
+  * Itens testados: os produtos do processo de software a serem testados
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+  * Cronograma de testes: um cronograma global de testes e alocação de recursos que está vinculado ao cronograma geral do projeto
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Plano de teste 🖊️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Procedimento de registro de testes: os resultados dos testes devem ser sistematicamente registrados para que seja possível auditar o processo de teste e verificar se foi corretamente executado
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+  
+* Requisitos de hardware e software: esta seção deve estabelecer as ferramentas de software necessárias e a utilização de hardware
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Restrições: as restrições que afetam o processo de teste, como falta de pessoal, devem ser antecipadas nesta seção
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+## Plano de teste 🖊️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Plano de teste não são documentos estáticos, eles evoluem durante o processo de desenvolvimento
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Os planos de teste mudam devido a atrasos em outros estágios do processo de desenvolvimento
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Se parte de um sistema está incompleta, o sistema como um todo não poderá ser testado
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Neste momento é importante atualizar o plano de teste com o objetivo de realocar os testadores e trazê-los de volta quando o software estiver disponível
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+
+<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+# Referências 📚
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768, cap. 8 ISBN 9788543024974.
-<!-- .element: style="margin-bottom:50px;" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 SOMMERVILLE, Ian. [Slides](https://iansommerville.com/software-engineering-book/slides/) do capítulo 8 (em inglês).
-<!-- .element: style="margin-bottom:50px;" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 SOMMERVILLE, Ian. [Vídeos](https://iansommerville.com/software-engineering-book/videos/imp/) do capítulo 8 (em inglês).
-<!-- .element: style="margin-bottom:50px;" -->
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->

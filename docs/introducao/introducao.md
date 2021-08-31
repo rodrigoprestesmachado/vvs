@@ -1,7 +1,7 @@
-# Introdução
+# Verificação e validação, inspeções, testes e planejamento 🚀
 
 <center>
-<iframe src="https://vvs.rpmhub.dev/slides/introducao/index.html#/" title="Introdução" width="90%" height="500" style="border:none;"></iframe>
+<iframe src="https://vvs.rpmhub.dev/introducao/slides/index.html#/" title="Verificação e validação, inspeções, testes e planejamento" width="90%" height="500" style="border:none;"></iframe>
 </center>
 
 <center>
