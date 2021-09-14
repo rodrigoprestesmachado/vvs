@@ -15,6 +15,8 @@ O presente documento reúne um conjunto de cursos/recursos gratuítos sobre tema
 * [Curso de Git e Github](https://www.cursou.com.br/informatica/programacao/curso-de-git-e-github/)
 
 * Cursos de Git em inglês:
+  * [Learn Git Version Control using Interactive Browser-Based Scenarios](https://www.katacoda.com/courses/git)
+
   * [Git Started with GitHub](https://www.udemy.com/course/git-started-with-github/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-91boMYQq8oh2IslMEQij3w&utm_medium=udemyads&utm_source=aff-campaign)
 
   * [The Ultimate GIT 5-day Challenge](https://www.udemy.com/course/the-ultimate-git-5-day-challenge/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-6Srg2qPDEX82bdZ9FJxdBg&utm_medium=udemyads&utm_source=aff-campaign)
@@ -39,11 +41,14 @@ O presente documento reúne um conjunto de cursos/recursos gratuítos sobre tema
 
 * [Curso de Docker](https://www.cursou.com.br/informatica/programacao/docker/#player) - em português
 
+* [Docker Para Desenvolvedores](https://leanpub.com/dockerparadesenvolvedores) - em português
+
+* [Learn Docker, Container Runtimes, Builders and Registries using Interactive Browser-Based Scenarios](https://www.katacoda.com/courses/container-runtimes) - em inglês
+
 * [Docker Essentials](https://www.udemy.com/course/docker-essentials/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-pVpMJIJW0cArZP_Sfhi1jA&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
 
 * [Understanding Docker and using it for Selenium automation](https://www.udemy.com/course/understanding-docker-performing-selenium-automation/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-m9ORi_E7gZgHCcyTspD3og&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
 
-* [Docker Para Desenvolvedores](https://leanpub.com/dockerparadesenvolvedores) - em português
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
