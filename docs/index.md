@@ -4,7 +4,9 @@
 
 * [Verificação e validação, inspeções, testes e planejamento](introducao/introducao.md) 🚀
 
-* [Análises estáticas](pmd/pmd.md)
+* [Análises estáticas: PMD](pmd/pmd.md)
+
+* [Análises estáticas: SonarLint](sonar/sonar.md)
 
 * [Teste de desenvolvimento](teste/teste.md)
 
