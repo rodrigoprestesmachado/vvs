@@ -7,7 +7,7 @@ O [SonarLint](https://www.sonarlint.org) é uma ferramenta de inspeção estáti
 Para instalar o SonarLint no VSCode, basta procurar o pacote no [Marketplace](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode) e clicar no botão `Install`. Alternativamente, você pode utilizar o próprio Visual Studio Code para instalar o SonarLint por meio das extensões, nesse caso, pesquise por SonarLint que você encontrará a extensão para VSCode, a imagem abaixo ilustra esse processo:
 
 <center>
-<a href="https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode"><img src="imgs/sonar.png" alt="SonarLint no VS Code" width="40%" height="40%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+<a href="https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode"><img src="imgs/sonar.png" alt="SonarLint no VS Code" width="50%" height="50%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
 Figura 1 - Instalação do SonarLint no VSCode
 </center>
 
@@ -34,7 +34,7 @@ public int foo(int a) {
 Se o SonarLint estiver rodando com sucesso, você verá um alerta conforme a figura abaixo: 👊
 
 <center>
-<img src="imgs/vscode.png" alt="SonarLint no VS Code" width="40%" height="40%" border=0 style="border:0; text-decoration:none; outline:none"><br/>
+<img src="imgs/vscode.png" alt="SonarLint no VS Code" width="60%" height="60%" border=0 style="border:0; text-decoration:none; outline:none"><br/>
 Figura 2 - SonarLint no VSCode
 </center>
 
