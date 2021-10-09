@@ -145,6 +145,46 @@ public class Foo{
 }
 ```
 
+## Code Style
+
+### 1. Retorno desnecessário (UnnecessaryReturn)
+
+É preciso evitar `returns` desnecessários.
+
+Exemplo:
+```java
+public class Foo {
+    public void bar() {
+        int x = 42;
+        return;
+    }
+}
+```
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/codestyle.xml/UnnecessaryReturn" />
+```
+
+### 2. Convenção de nome de classe (ClassNamingConventions)
+
+Através de um regex, a regra que verifica se o nome da classe está de acordo com o esperado. O regex de cada tipo de classe pode ser customizado. A convenção de nomenclatura do Java é o PascalCase, porém a regra também se aplica em classes _utilitys_ que não terminam com 'Util'.
+
+Exemplo:
+```java
+// Essa é a convenção Pascal case, recomendada para Java
+// Observe que não são permitidos undercores ou acentuações nos nomes
+public class FooBar {}
+
+// Esse nome de classe não respeita a convenção
+public class Éléphant {}
+```
+Para referenciar essa regra no PMD, use a linha abaixo:
+
+```xml
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions" />
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
