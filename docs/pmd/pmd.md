@@ -145,6 +145,38 @@ public class Foo{
 }
 ```
 
+### 5. ForLoopVariableCount (prioridade média)
+
+@sunderhus Ter diversas variáveis dentro de um laço de repetição <code>'for'</code> dificulta o entendimento sobre quais são os limites usados para o laço de repetição. Por padrão esta regra permite o laço de repetição mais comum que conta apenas com uma variável.
+
+Exemplo:
+```java
+// Isso será reportado ao utilizar as configurações padrão de utilizar apenas uma variável no laço de repetição.
+for (int i = 0, j = 0; i < 10; i++, j += 2) {
+   foo();
+}
+```
+
+### 6. DefaultLabelNotLastInSwitchStmt (prioridade média)
+
+@sunderhus Por convenção, última opção dentro de uma intrução de switch deve ser a com rótulo 'default'. 
+
+Exemplo:
+```java
+public class Foo {
+  void bar(int a) {
+   switch (a) {
+    case 1:  // fazendo algo caso seja 1
+       break;
+    default:  // esta é a opção padrão e deveria estar na última posição
+       break;
+    case 2:
+       break;
+   }
+  }
+}
+```
+
 ## PMD no Maven
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/) para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas dentro do processo de integração contínua. Portanto, antes mesmo de compilarmos um código, podemos realizar uma análise e, por meio de parâmetros de qualidade, decidir se iremos ou não continuar com a integração de um novo trecho de código (funcionalidade, correção de defeitos, etc.) em um sistema.
