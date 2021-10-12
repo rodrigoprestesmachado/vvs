@@ -190,25 +190,13 @@ Depois de modificar o `pom.xml` de um projeto, podemos executar (no diretório d
 
 Note que no exemplo acima, estamos executando apenas um *goal* do plugin, ou seja, não estamos considerando um ciclo de *build* completo. Depois de executado, o relatório do PMD estará disponível dentro de `target/pmd.xml`.
 
+🚨 Experimente executar o PMD no projeto [TPACK](https://github.com/rodrigoprestesmachado/tpack) seguindo o seguinte [tutorial](https://katacoda.com/rodrigoprestesmachado/scenarios/pmd) do Katacoda
+
 Uma dica de complemento para o PMD no Maven pode ser alcançado por meio do plugin [Checkstyle](https://maven.apache.org/plugins/maven-checkstyle-plugin/). Como o nome indica, o Checkstyle tenta fazer com que os desenvolvedores de uma equipe escrevam códigos dentro de um determinado padrão, como por exemplo,  [Sun Code Conventions](https://checkstyle.org/styleguides/sun-code-conventions-19990420/CodeConvTOC.doc.html) ou [Google Java Style](https://checkstyle.org/styleguides/google-java-style-20180523/javaguide.html).
 
 ## Codebeat
 
 Atualmente, existem diversas ferramentas na Web capazes de realizar inspeções estáticas em um projeto, um exemplo desse tipo de ferramenta é o [codebeat.co](https://codebeat.co). Por se tratar de uma ferramenta gratuíta para repositórios públicos (GitHub, Bitbucket, Gitlab, etc.) e bastante abrangente (com suporte para várias linguagens) o codebeat e outras ferramentas do mesmo estilo na Web podem se mostrar interessantes no desenvolvimento de projetos de código aberto.
-
-## Exercícios
-
-A) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/vvs](https://github.com/rodrigoprestesmachado/vvs) e altere a seção do documento (`docs/tutoriais/pmd/pmd.md`) chamada "Regras do PMD" a fim de contribuir com transcrição de pelo menos duas regras do PMD. Quando estiver pronto, realize um *Pull Request* para que o seu texto possa ser incorporado ao documento (serão atribuído créditos aos autores).
-
-A documentação do projeto está escrita em Markdown, assim, se você tiver dúvidas sobre esse formato, por favor, acesse o seguinte [tutorial](https://guides.github.com/features/mastering-markdown/). Para aqueles que utilizam Vscode, existe uma [extensão](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) capaz de fazer uma inspeção e *preview* de arquivos em Markdown (`.md`).
-
----
-
-B) Faça um *Fork* do projeto [https://github.com/rodrigoprestesmachado/tpack](https://github.com/rodrigoprestesmachado/tpack). Depois disso, faça um `clone` para o seu container docker (tutorial de configuração do [ambiente](https://vvs.rpmhub.dev/ambiente/ambiente.html)) e execute o seguinte comando:
-
-    mvn pmd:pmd
-
-O plugin do desse projeto está configurado para analisar questões de comentários no código e as regras pré-definidas do plugin do PMD no Maven. Identifique os locais aonde ocorreram os problemas e realize ajustes no código (existem vários problemas com os comentários) e, no final do processo, faça um *Pull Request* para que a sua modificação possa ser avaliada e, se tudo estiver correto, incorporada ao projeto.
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
