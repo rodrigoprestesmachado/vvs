@@ -11,11 +11,12 @@ Pressione 'F' para tela cheia
 
 
 
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
 # Verificação e validação 🐛
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Verificação e validação 🐛
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -32,7 +33,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Verificação e validação 🐛
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -52,7 +53,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Verificação e validação 🐛
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -73,11 +74,12 @@ Pressione 'F' para tela cheia
 
 
 
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
 # Inspeções e testes 🔎
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Inspeções e testes 🔎
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -91,7 +93,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Inspeções e testes 🔎
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -105,7 +107,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Inspeções e testes 🔎
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -119,7 +121,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Inspeções e testes 🔎
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -131,11 +133,12 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 
 
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
 # Planejamento 🗓️
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Planejamento 🗓️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -149,7 +152,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Planejamento 🗓️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -172,7 +175,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Plano de teste 🖊️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -191,7 +194,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Plano de teste 🖊️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -205,7 +208,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Plano de teste 🖊️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -223,7 +226,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 # Referências 📚
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -234,4 +237,10 @@ SOMMERVILLE, Ian. [Slides](https://iansommerville.com/software-engineering-book/
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 SOMMERVILLE, Ian. [Vídeos](https://iansommerville.com/software-engineering-book/videos/imp/) do capítulo 8 (em inglês).
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+<!-- .element: style="margin-bottom:40px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+<center>
+<a href="https://rpmhub.dev" target="blanck"><img src="../../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
+</center>
+  <!-- .element: style="margin-top:150px; font-size: 15px; font-family: Bradley Hand" -->

@@ -11,12 +11,12 @@ Pressione 'F' para tela cheia
 
 
 
-<!-- .slide: data-background="#2B2625" data-transition="zoom" -->
-## Introdução 🐛
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
+## Introdução 🛫
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Introdução
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -33,7 +33,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Introdução
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -41,7 +41,7 @@ Pressione 'F' para tela cheia
 <!-- .element height="50%" width="50%" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Introdução 
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -58,7 +58,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Introdução
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -76,12 +76,12 @@ Pressione 'F' para tela cheia
 
 
 
-<!-- .slide: data-background="#2B2625" data-transition="zoom" -->
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
 ## Teste Unitário 🔍
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -95,7 +95,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -112,7 +112,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -134,7 +134,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -151,7 +151,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -171,7 +171,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -185,7 +185,7 @@ Pressione 'F' para tela cheia
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -202,7 +202,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -210,7 +210,7 @@ Pressione 'F' para tela cheia
 <!-- .element height="50%" width="50%" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -224,7 +224,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -232,7 +232,7 @@ Pressione 'F' para tela cheia
 <!-- .element height="50%" width="50%" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -246,7 +246,7 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
@@ -266,31 +266,11 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
-## Teste Unitário
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
-
-* Algumas ideias gerais para teste:
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-
-  * Escolha entradas que forcem o sistema a gerar todas as mensagens de erro possíveis
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-
-  * Verifique entradas que causem buffers overflow
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
-  * Repita a mesma entrada ou série inúmeras vezes
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
-  * Force saídas inválidas
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
-  * Force resultados de computação muito grandes ou muito pequenos
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+<!-- .slide:  data-background-opacity="1" data-background-image="img/dicas.png" data-transition="zoom"  -->
 
 
 
-<!-- .slide: data-background="#0E6655" data-transition="convex"  -->
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Referências 📚
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
