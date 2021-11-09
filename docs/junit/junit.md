@@ -1,6 +1,6 @@
 # Introdução ao Junit
 
-Os testes unitários estabelecem um processo de testar pequenos componentes de um programa, como por exemplo, os métodos e/ou classes. Assim, esse tipo de teste consiste em realizar chamadas para as rotinas com diferentes parâmetros de entrada a fim de exercitar todos os comportamentos de um trecho de código.
+Os testes unitários estabelecem um processo de testar pequenos componentes de um programa, como, por exemplo, os métodos e/ou classes. Assim, este tipo de teste consiste em realizar chamadas para as rotinas com diferentes parâmetros de entrada a fim de exercitar todos os comportamentos de um trecho de código.
 
 O [Junit](https://junit.org/junit5/) talvez seja a principal ferramenta para testes unitários na linguagem Java. O formato de um teste unitário no Junit pode ser observado no [Exemplo 1](https://junit.org/junit5/docs/current/user-guide/#writing-tests) abaixo:
 
@@ -24,7 +24,7 @@ class MyFirstJUnitJupiterTests {
 Exemplo 1 - Exemplo simples de Junit
 </center>
 
-No Exemplo 1, a anotação `@Test` indica que `addition` é um método de teste. Por suz vez, a assertiva `assertEquals` verifica se o resultado da soma de 1+1 por meio do método `add` da classe `Calculator` retorna no valor 2.
+No Exemplo 1, a anotação `@Test` indica que `addition` é um método de teste. Por sua vez, a assertiva `assertEquals` verifica se o resultado da soma de 1+1, por meio do método `add` da classe `Calculator`, retorna no valor 2.
 
 Como ilustração, o Vídeo 1 mostra como podemos implementar testes unitários para a classe `Calculator` no VScode. Para isso, o vídeo utiliza uma extensão chamada [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test).
 
@@ -40,7 +40,7 @@ Como ilustração, o Vídeo 1 mostra como podemos implementar testes unitários 
     Vídeo 1 - Introdução ao Junit com o Vscode
 </center>
 
-A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se você seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como por exemplo, o trecho abaixo:
+A configuração do Junit em um projeto Java com Maven é um detalhe que não foi retratado no vídeo. Porém, se você seguir os mesmos passos do vídeo, perceberá a presença de dependências no Junit no arquivo `pom.xml`, como, por exemplo, o trecho abaixo:
 
 ```xml
  <dependency>
@@ -124,9 +124,9 @@ public class AnnotationsTest {
 Exemplo 2 - Uso das anotações BeforeAll e BeforeEach.
 </center>
 
-Note que no Exemplo 2 que os dois casos de teste estão anotados com `@DisplayName`, ou seja, essa anotação permite que coloquemos um nome mais significativo para os testes.
+Note que no Exemplo 2 que os dois casos de teste estão anotados com `@DisplayName`, ou seja, esta anotação permite que coloquemos um nome mais significativo para os testes.
 
-Outra situação comum é necessitarmos estabelecer uma ordem para a execução dos casos de teste, nesse caso, podemos estabelecer uma sequencia pré-definida por meio da anotação `@Order`. O Exemplo 3 mostra uma situação onde, devido a presença da anotação `@Order`, o segundo método de teste (`second`) será executado antes do primeiro.
+Outra situação comum é necessitarmos estabelecer uma ordem para a execução dos casos de teste, neste caso, podemos estabelecer uma sequencia pré-definida por meio da anotação `@Order`. O Exemplo 3 mostra uma situação onde, devido a presença da anotação `@Order`, o segundo método de teste (`second`) será executado antes do primeiro.
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -166,7 +166,7 @@ Exemplo 3 - Ordem da execução dos casos de teste
 
 ## Assertivas
 
-O Junit 5 possui um conjunto grande de assertivas (afirmações categóricas), entre as mais comuns estão `assertEquals`, `assertTrue`, `assertTimeout`, entre outras. Porém, se faz necessário destacar a assertiva `assertThrows` que, para verificar exceções, possui uma forma de escrita um pouco diferente das demais.
+O Junit 5 possui um conjunto grande de assertivas (afirmações categóricas), entre as mais comuns estão: `assertEquals`, `assertTrue`, `assertTimeout`, entre outras. Porém, faz-se necessário destacar a assertiva `assertThrows` que, para verificar exceções, possui uma forma de escrita um pouco diferente das demais.
 
 ```java
 @Test
@@ -185,11 +185,11 @@ No Exemplo 4, a assertiva `assertThrows` verifica se o trecho de código `Intege
 
 ## Junit com Maven
 
-O Junit pode ser incorporado dentro do ciclo de construção e instalação de um sistema por meio de um plugin chamado [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/index.html). Para que testes com o Junit possam ser executados por meio do Surefire, se faz necessário respeitar o padrão de nomes estabelecido pelo plugin, como por exemplo, nomear todos as classes Java que implementam testes com o sufixo `Test`. Como ilustração, no nome da classe do Exemplo 2 chama-se `AnnotationsTest`, ou seja, respeita o padrão de nomes do Surefire. O padrão de nomes, ou seja, testes que podem ser incluídos ou excluídos no Surefire pode ser obtido na [documentação](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) específica) da ferramenta. Assim, uma vez incorporado em um projeto Maven, os testes poderão ser executador dentro do ciclo de testes por meio do commando:
+O Junit pode ser incorporado dentro do ciclo de construção e instalação de um sistema por meio de um plugin chamado [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/index.html). Para que testes com o Junit possam ser executados por meio do Surefire, faz-se necessário respeitar o padrão de nomes estabelecido pelo plugin, como, por exemplo, nomear todos as classes Java que implementam testes com o sufixo `Test`. Como ilustração, no nome da classe do Exemplo 2 chama-se: `AnnotationsTest`, ou seja, respeita o padrão de nomes do Surefire. O padrão de nomes, ou seja, testes que podem ser incluídos ou excluídos no Surefire pode ser obtido na [documentação](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) específica) da ferramenta. Assim, uma vez incorporado em um projeto Maven, os testes poderão ser executador dentro do ciclo de testes por meio do commando:
 
     mvn test
 
-Muitas vezes se faz necessário agrupar testes para que possam ser executados de maneira separada (por requisito, componentes, funcionalidades, entre outros). Nesse sentido, a anotação `@Tag`auxilia a rotular testes dentro de categorias. Veja o exemplo do trecho abaixo:
+Muitas vezes faz-se necessário agrupar testes para que possam ser executados de maneira separada (por requisito, componentes, funcionalidades, entre outros). Neste sentido, a anotação `@Tag`auxilia a rotular testes dentro de categorias. Veja o exemplo do trecho abaixo:
 
 ```Java
 @Test
@@ -230,7 +230,9 @@ B) Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e
 
 ---
 
-C) Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/). Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
+C) Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/).
+
+Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
 
 ## Referências
 
