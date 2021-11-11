@@ -220,18 +220,58 @@ Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin S
 
 ---
 
-## Exercícios
+# Mock
 
-A) Utilizando o Vídeo 1 como uma referência, implemente a classe do Exemplo 2 em um projeto Java com o Vscode.
+Um exemplo simples de objetos Mock em Java com o [Mockito](https://site.mockito.org) pode ser analisado em:
 
----
+    git clone -b dev https://github.com/rodrigoprestesmachado/vvs
+    code vvs/exemplos/mockito/
 
-B) Utilizando o Vídeo 1 como referência, implemente os testes dos Exemplos 1 e 2 no Vscode e execute por meio do plugin Surefire do Maven.
+A principal classe desse projeto é `AppTest.java`:
 
----
+```java
+// 1 - Estende o Junit para suportar, por exemplo, injeção de dependência de objetos Mock
+@ExtendWith(MockitoExtension.class)
+public class AppTest {
 
-C) Agora é a sua vez de projetar casos de teste. O código do [repositório bubble sort](https://github.com/rodrigoprestesmachado/bubblesort) implementa uma classe que contém o algoritmo de ordenação [bubble sort](http://www.universidadejava.com.br/pesquisa_ordenacao/bubble-sort/). Projete casos de testes com o Junit para classe [Bubblesort.java](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/main/java/edu/ifrs/vvs/BubbleSort.java) e quando o resultado for satisfatório faça um Pull Request dos seus casos de teste para [completar](https://github.com/rodrigoprestesmachado/bubblesort/blob/main/src/test/java/edu/ifrs/vvs/AppTest.java) o código de teste desse sistema.
+    // 2 - Cria um objeto mock da classe/interface DataBase
+    @Mock
+    DataBase base;
 
+    @Test
+    public void create() {
+        // 3 - define o comportamento do método createUser
+        when(base.createUser("Rodrigo")).thenReturn("Rodrigo");
+
+        // TODO ... código do método de teste
+
+        assertEquals("Rodrigo", base.createUser("Rodrigo"));
+    }
+
+    @Test
+    public void delete() {
+        when(base.deleteUser(5L)).thenReturn(false);
+
+        // TODO ... código do método de teste
+
+        assertEquals(false, base.deleteUser(5L));
+    }
+
+    @Test
+    public void deleteProblem() {
+        // 4 - define que o método deleteUser irá lançar uma exceção se receber um valor negativo
+        when(base.deleteUser(-1L)).thenThrow(new IllegalArgumentException());
+
+        // TODO ... código do método de teste
+
+        // 5 - verifica se a exceção lançada é igual a esperada
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            base.deleteUser(-1L);
+        });
+    }
+}
+
+```
 ## Referências
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768 ISBN 9788543024974.

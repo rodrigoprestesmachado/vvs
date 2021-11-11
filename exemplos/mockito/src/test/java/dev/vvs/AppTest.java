@@ -21,15 +21,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class AppTest {
 
+    // 2 - Cria um objeto mock da classe/interface DataBase
     @Mock
     DataBase base;
 
     @Test
     public void create() {
-        // definindo o comportamento do método createUser
+        // 3 - define o comportamento do método createUser
         when(base.createUser("Rodrigo")).thenReturn("Rodrigo");
 
-        // TODO ...
+        // TODO ... código do método de teste
 
         assertEquals("Rodrigo", base.createUser("Rodrigo"));
     }
@@ -38,16 +39,20 @@ public class AppTest {
     public void delete() {
         when(base.deleteUser(5L)).thenReturn(false);
 
-        // TODO ...
-        // base.deleteUser(5L);
+        // TODO ... código do método de teste
 
         assertEquals(false, base.deleteUser(5L));
     }
 
     @Test
     public void deleteProblem() {
+        // 4 - define que o método deleteUser irá lançar uma exceção se receber um valor
+        // negativo
         when(base.deleteUser(-1L)).thenThrow(new IllegalArgumentException());
 
+        // TODO ... código do método de teste
+
+        // 5 - verifica se a exceção lançada é igual a esperada
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             base.deleteUser(-1L);
         });
