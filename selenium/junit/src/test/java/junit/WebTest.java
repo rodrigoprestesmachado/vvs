@@ -22,7 +22,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 /**
  * Exemplo Selenium/Chrome Driver com Junit.
  */
-public class WebTest {
+class WebTest {
     private static WebDriver driver;
 
     @BeforeAll
@@ -35,9 +35,10 @@ public class WebTest {
         driver.quit();
     }
 
+    //https://stackoverflow.com/questions/38764125/sonarqube-issue-add-at-least-one-assertion-to-this-test-case-for-unit-test-wit
     @Test
-    @SuppressWarnings("checkstyle:magicnumber")
-    public void web() {
+    @SuppressWarnings("squid:S2699")
+    void web() {
         WebTest.driver.get("https://ifrs.edu.br/");
         WebTest.driver.manage().window().setSize(new Dimension(1440, 877));
         WebTest.driver.findElement(By.linkText("Editais")).click();

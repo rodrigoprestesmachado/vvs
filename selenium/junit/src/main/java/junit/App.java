@@ -8,6 +8,8 @@
  *
 */
 package junit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Hello world!
@@ -21,6 +23,9 @@ public final class App {
      * @param args The arguments of the program.
      */
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        // System.out.println("Hello World!");
+        // https://www.geeksforgeeks.org/logger-log-method-in-java-with-examples/
+        Logger logger = Logger.getLogger(App.class.getName());
+        logger.log(Level.INFO, "Hello World!");
     }
 }

@@ -40,7 +40,13 @@
       <artifactId>selenium-java</artifactId>
       <version>4.0.0-alpha-7</version>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>4.0.0</version>
+    </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -71,7 +77,8 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>${checkstyle.version}</version>
+            
+            <version>3.1.0</version>
           </dependency>
           <dependency>
             <groupId>com.github.ngeor</groupId>
@@ -82,10 +89,12 @@
         <configuration>
           <configLocation>com/github/ngeor/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <skip>${skipTests}</skip>
+          <encoding>UTF-8</encoding>
+          <consoleOutput>true</consoleOutput>
         </configuration>
         <executions>
           <execution>
+            <?m2e execute onConfiguration?>
             <id>checkstyle</id>
             <phase>validate</phase>
             <goals>
