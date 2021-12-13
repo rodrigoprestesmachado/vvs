@@ -16,6 +16,7 @@
 
     * [Testes de sistema Web com Selenium](selenium/selenium.md)
 
+    * [Testes de sistema Web com Cypress](cypress/cypress.md)
 
 ## Extras
 

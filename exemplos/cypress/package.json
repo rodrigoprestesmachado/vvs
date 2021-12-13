@@ -1,0 +1,20 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "Exemplo de uso do Cypress",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "cy:run": "cypress run --browser chrome",
+    "test": "start-server-and-test start http://localhost:8080 cy:run"
+  },
+  "author": "Rodrigo Prestes Machado",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^9.1.1",
+    "start-server-and-test": "^1.14.0"
+  },
+  "dependencies": {
+    "http-server": "^14.0.0"
+  }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exemplo Cypress</title>
+  </head>
+  <body>
+    <label for="inputNome">Nome:</label>
+    <input type="text" id="inputNome" />
+
+    <br />
+
+    <label for="inputSenha">Senha:</label>
+    <input type="password" id="inputSenha" />
+
+    <br />
+
+    <button id="button" onclick="save()">Save</button>
+
+    <div id="result"></div>
+
+    <script>
+      function save() {
+        let nome = document.getElementById("inputNome").value;
+        let divResult = document.getElementById("result");
+
+        let divNome = document.createElement("div");
+        divNome.textContent = nome;
+        divResult.appendChild(divNome);
+      }
+    </script>
+  </body>
+</html>
