@@ -144,7 +144,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 * Verificação e Validação é um processo dispendioso
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
 * Para alguns sistema de tempo real com restrições com funcionais complexas, mais da metade do orçamento de desenvolvimento pode ser gasto em V&V
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -161,13 +161,13 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
   * Sobre o equilíbrio entre abordagens estáticas e dinâmicas
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-   
+
   * Especificar padrões e procedimentos para inspecionar o programa
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-   
+
   * Estabelecer checklists para orientar as inspeções
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-   
+
   * Definir um plano de teste para o programa
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -183,10 +183,10 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
   * Processo de teste: descrição das fases principais de processo de teste
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-   
+
   * Rastreabilidade de requisitos: Mapeamento entre requisitos e os casos de testes
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-   
+
   * Itens testados: os produtos do processo de software a serem testados
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -200,7 +200,7 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 * Procedimento de registro de testes: os resultados dos testes devem ser sistematicamente registrados para que seja possível auditar o processo de teste e verificar se foi corretamente executado
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
 * Requisitos de hardware e software: esta seção deve estabelecer as ferramentas de software necessárias e a utilização de hardware
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -223,6 +223,16 @@ Visão geral sobre o processo de inspeções e testes. Fonte: SOMMERVILLE.
 
 * Neste momento é importante atualizar o plano de teste com o objetivo de realocar os testadores e trazê-los de volta quando o software estiver disponível
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="zoom"  -->
+# Questões 📚
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
+
+<center>
+<iframe src="https://vvs.rpmhub.dev/introducao/slides/questions.html" title="Introdução" width="90%" height="500" style="border:none;"></iframe>
+</center>
 
 
 
