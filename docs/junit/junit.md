@@ -222,25 +222,24 @@ Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin S
 
 # Mock
 
-Um exemplo simples de objetos Mock em Java com o [Mockito](https://site.mockito.org) pode ser analisado em:
+A ideia por trás dos objetos mock está na possibilidade de simular o comportamento de uma ou mais dependências (acoplamentos) que por ventura possa existir em um método. Uma vez que conseguimos simular e, consequentemente, controlar o comportamento das dependências, podemos então testar de forma segura um trecho de código do nosso interesse.
 
-    git clone -b dev https://github.com/rodrigoprestesmachado/vvs
-    code vvs/exemplos/mockito/
+A grande maioria de linguagens de programação possui _frameworks_ para construir objetos mock. Em Java, por exemplo, existe uma série de ferramentas capazes de realizar essa tarefa, entre elas: [Mockito](https://site.mockito.org), [EasyMock](https://easymock.org), [JMock](https://jmock.org).
 
-A principal classe desse projeto é `AppTest.java`:
+Possivelmente, o [Mockito](https://site.mockito.org) seja o _framework_ em Java mais utilizado na construção de objetos _mock_. Nesse sentido, observe trecho de código do exemplo abaixo que ilustra a utilização de objetos _mock_ em um teste unitário: 😃
 
 ```java
 // 1 - Estende o Junit para suportar, por exemplo, injeção de dependência de objetos Mock
 @ExtendWith(MockitoExtension.class)
 public class AppTest {
 
-    // 2 - Cria um objeto mock da classe/interface DataBase
+    // 2 - Cria um objeto mock da interface (ou classe) DataBase
     @Mock
     DataBase base;
 
     @Test
     public void create() {
-        // 3 - define o comportamento do método createUser
+        // 3 - define o comportamento do método createUser (stub)
         when(base.createUser("Rodrigo")).thenReturn("Rodrigo");
 
         // TODO ... código do método de teste
@@ -272,11 +271,169 @@ public class AppTest {
 }
 
 ```
+
+Como pode ser visto no item (3) do exemplo acima, utilizamos o comando `when` para criar um _stub_. Um stub faz com que uma chamada de método sempre retorne o mesmo valor, ou seja, com essa técnica podemos prever o comportamento das dependências e testar de forma segura um trecho de código.
+## Principais anotações do Mockito
+
+O Mockito possui algumas anotações úteis que nos auxiliam no momento de construir objetos mock, não elas: `@Mock`, `@Spy`, `@InjectMocks` e `@Captor`.
+
+A anotação mais usada no Mockito é [`@Mock`](https://frontbackend.com/java/mockito-mock-annotation), pois, por meio dela podemos criar e injetar instâncias simuladas. Trata-se de uma implementação fictícia para uma interface ou uma classe na qual você pode definir os valores de retorno para as chamadas dos métodos. O exemplo acima demostra a utilização da anotação `@Mock`.
+
+Já a anotação [`@Spy`](https://frontbackend.com/java/mockito-spy-annotation) é usada para adicionar um mecanismo de rastreamento das chamadas de método, vejamos um exemplo:
+
+```java
+@RunWith(MockitoExtension.class)
+public class MockitoSpyTest {
+
+    @Spy
+    private final List<String> list = new ArrayList<>();
+
+    @Test
+    public void shouldAddItemsToListSuccessfully() {
+        // 1 - estamos fazendo algumas operações no objeto que estamos espionando
+        // onde cada chamada é rastreada pelo Mockito.
+        list.add("one");
+        list.add("two");
+
+        // 2- o método verify analisa se algumas das condições especificadas
+        // foram atendidas
+        verify(list, times(2)).add(anyString());
+
+        // 3 - verificando se o método add foi chamado com o valor esperado
+        verify(list).add("one");
+        verify(list).add("two");
+
+        // 4 - a assertiva prova que o método add foi chamado na instância real
+        Assert.assertEquals(2, list.size());
+    }
+}
+```
+
+Podemos configurar os objetos que estamos espionando de forma que os métodos selecionados retornem um valor específico (_stub_), veja o exemplo abaixo:
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class MockitoSpyStubTest {
+
+    @Spy
+    private final List<String> list = new ArrayList<>();
+
+    @Test
+    public void shouldReturnDifferentSizeWhenStubbed() {
+
+        // 1 - Estamos sobrescrevendo o comportamento original do método size()
+        // (stub)
+        when(list.size()).thenReturn(100);
+
+        list.add("one");
+        list.add("two");
+
+        verify(list, times(2)).add(anyString());
+
+        verify(list).add("one");
+        verify(list).add("two");
+
+        // 2- Nesse caso, não podemos mais esperar que o método size retorne 2
+        Assertions.assertEquals(100, list.size());
+    }
+
+}
+```
+
+A anotação [`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation) é usada para injetar objetos Mock em um objeto real. Vejamos um exemplo, imagine uma interface chama `Network` e uma classe `Communication` que utiliza essa interface:
+
+```java
+public interface Network {
+
+    public boolean send(String message);
+
+}
+```
+
+```java
+public class Communication {
+
+    private Network network;
+
+    public boolean send(String message) {
+        boolean result = false;
+        try {
+            result = network.send(message);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return result;
+    }
+
+}
+```
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class MockitoInjectMocksTest {
+
+    // 1 - a interface Network, que é uma dependência da classe Communication, será simulada
+    @Mock
+    Network network;
+
+    // 2 - a anotação @InjectMocks permite criar um mock da classe Communication e resolver
+    // a dependência Network
+    @InjectMocks
+    Communication communication;
+
+    @Test
+    public void injectMocksTest() {
+        when(communication.send("message")).thenReturn(true);
+        Assertions.assertEquals(true, communication.send("message"));
+    }
+
+}
+```
+
+Outra anotação interessante é a [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation), utilizada em conjunto com a classe `ArgumentCaptor`, permite  capturar os argumentos passados para um método que queremos inspecionar. A captura de parâmetros pode ser útil para testar métodos chamados em outros métodos, observe um exemplo:
+
+```java
+    @Mock
+    private List<String> list;
+
+    @Captor
+    private ArgumentCaptor<String> valueCaptor;
+
+    @Test
+    public void shouldCaptureListParameters() {
+
+        // 1 - Primeiro, adicionamos dois valores String à nossa lista: "um", "dois".
+        // Depois, usando o método Verify(...) com o ArgumentCaptor para capturar essas strings.
+        list.add("one");
+        list.add("two");
+        verify(list, times(2)).add(valueCaptor.capture());
+
+        // 2 - ArgumentCaptor possui dois métodos getValue() e getAllValues():
+        //    O getValue() pode ser usado quando capturamos um argumento de uma única chamada de método e
+        // retornará o último valor capturado.
+        //    O getAllValues() retorna a lista de argumentos que foram passados para o método
+        List<String> allValues = valueCaptor.getAllValues();
+
+        Assertions.assertTrue(allValues.contains("one"));
+        Assertions.assertTrue(allValues.contains("two"));
+        // 3 - retorna o último valor capturado
+        Assertions.assertEquals("two", valueCaptor.getValue());
+    }
+```
+
+## Exemplos
+
+Para se obter o código completo dos exemplos dos Mocks acima, por favor acesse:
+
+    git clone -b dev https://github.com/rodrigoprestesmachado/vvs
+    code vvs/exemplos/mockito/
+
 ## Referências
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768 ISBN 9788543024974.
 
 <center>
-<a href="rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
+    <a href="rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+
+    <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
 </center>

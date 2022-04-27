@@ -7,12 +7,10 @@
  * work. If not, see <http://creativecommons.org/licenses/by/4.0/>.
 */
 
-package dev.vvs;
+package dev.rpmhub.injectmock;
 
-public interface DataBase {
+public interface Network {
 
-    public String createUser(String name);
-
-    public Boolean deleteUser(Long id) throws IllegalArgumentException;
+    public boolean send(String message);
 
 }

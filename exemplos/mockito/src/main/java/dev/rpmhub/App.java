@@ -7,11 +7,10 @@
  * work. If not, see <http://creativecommons.org/licenses/by/4.0/>.
 */
 
-package dev.vvs;
+package dev.rpmhub;
 
 /**
  * Hello world!
- *
  */
 public class App {
     public static void main(String[] args) {

@@ -7,7 +7,7 @@
  * work. If not, see <http://creativecommons.org/licenses/by/4.0/>.
 */
 
-package dev.vvs;
+package dev.rpmhub;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -19,9 +19,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class AppTest {
+public class MockitoMockTest {
 
-    // 2 - Cria um objeto mock da classe/interface DataBase
+    // 2 - Cria um objeto mock da interface (ou classe) DataBase
     @Mock
     DataBase base;
 
