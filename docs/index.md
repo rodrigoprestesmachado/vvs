@@ -8,11 +8,11 @@
 
 * [Análises estáticas: SonarLint](sonar/sonar.md)  👓
 
-* [Teste de desenvolvimento](teste/teste.md)
+* [Teste de desenvolvimento](teste/teste.md) 🧪
 
-    * [Testes unitários com Junit e Surefire](junit/junit.md)
+    * [Testes unitários](junit/junit.md)
 
-    * [Testes de componente com Junit, Failsafe e Testcontainers](integracao/integracao.md)
+    * [Testes de componente](integracao/integracao.md)
 
     * [Testes de sistema Web com Selenium](selenium/selenium.md)
 
