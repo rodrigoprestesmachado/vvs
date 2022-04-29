@@ -224,9 +224,9 @@ Assim, se alterarmos un dos métodos do Exemplo 3 e a configuração do plugin S
 
 A ideia por trás dos objetos mock está na possibilidade de simular o comportamento de uma ou mais dependências (acoplamentos) que por ventura possa existir em um método. Uma vez que conseguimos simular e, consequentemente, controlar o comportamento das dependências, podemos então testar de forma segura um trecho de código do nosso interesse.
 
-A grande maioria de linguagens de programação possui _frameworks_ para construir objetos mock. Em Java, por exemplo, existe uma série de ferramentas capazes de realizar essa tarefa, entre elas: [Mockito](https://site.mockito.org), [EasyMock](https://easymock.org), [JMock](https://jmock.org).
+A grande maioria de linguagens de programação possui *frameworks* para construir objetos mock. Em Java, por exemplo, existe uma série de ferramentas capazes de realizar essa tarefa, entre elas: [Mockito](https://site.mockito.org), [EasyMock](https://easymock.org), [JMock](https://jmock.org).
 
-Possivelmente, o [Mockito](https://site.mockito.org) seja o _framework_ em Java mais utilizado na construção de objetos _mock_. Nesse sentido, observe trecho de código do exemplo abaixo que ilustra a utilização de objetos _mock_ em um teste unitário: 😃
+Possivelmente, o [Mockito](https://site.mockito.org) seja o *framework* em Java mais utilizado na construção de objetos *mock*. Nesse sentido, observe trecho de código do exemplo abaixo que ilustra a utilização de objetos _mock_ em um teste unitário: 😃
 
 ```java
 // 1 - Estende o Junit para suportar, por exemplo, injeção de dependência de objetos Mock
@@ -272,14 +272,15 @@ public class AppTest {
 
 ```
 
-Como pode ser visto no item (3) do exemplo acima, utilizamos o comando `when` para criar um _stub_. Um stub faz com que uma chamada de método sempre retorne o mesmo valor, ou seja, com essa técnica podemos prever o comportamento das dependências e testar de forma segura um trecho de código.
+Como pode ser visto no item (3) do exemplo acima, utilizamos o comando `when` para criar um *stub*. Um stub faz com que uma chamada de método sempre retorne o mesmo valor, ou seja, com essa técnica podemos prever o comportamento das dependências e testar de forma segura um trecho de código.
+
 ## Principais anotações do Mockito
 
 O Mockito possui algumas anotações úteis que nos auxiliam no momento de construir objetos mock, não elas: `@Mock`, `@Spy`, `@InjectMocks` e `@Captor`.
 
-A anotação mais usada no Mockito é [`@Mock`](https://frontbackend.com/java/mockito-mock-annotation), pois, por meio dela podemos criar e injetar instâncias simuladas. Trata-se de uma implementação fictícia para uma interface ou uma classe na qual você pode definir os valores de retorno para as chamadas dos métodos. O exemplo acima demostra a utilização da anotação `@Mock`.
+A anotação mais usada no Mockito é a [`@Mock`](https://frontbackend.com/java/mockito-mock-annotation). Por meio desta anotação podemos criar e injetar instâncias de classes/interfaces simuladas e, por meio da operação de *stub*, podemos definir os valores de retorno para as chamadas dos métodos. O exemplo acima demostra a utilização da anotação `@Mock`.
 
-Já a anotação [`@Spy`](https://frontbackend.com/java/mockito-spy-annotation) é usada para adicionar um mecanismo de rastreamento das chamadas de método, vejamos um exemplo:
+Já a anotação [`@Spy`](https://www.studytonight.com/java-examples/spy-in-mockito) é usada para adicionar um mecanismo de rastreamento em um objeto real, por essa razão, trata-se de um mock "parcial", vejamos um exemplo:
 
 ```java
 @RunWith(MockitoExtension.class)
@@ -309,7 +310,7 @@ public class MockitoSpyTest {
 }
 ```
 
-Podemos configurar os objetos que estamos espionando de forma que os métodos selecionados retornem um valor específico (_stub_), veja o exemplo abaixo:
+Podemos configurar os objetos que estamos espionando de forma que os métodos selecionados retornem um valor específico (*stub*), veja o exemplo abaixo:
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -340,7 +341,7 @@ public class MockitoSpyStubTest {
 }
 ```
 
-A anotação [`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation) é usada para injetar objetos Mock em um objeto real. Vejamos um exemplo, imagine uma interface chama `Network` e uma classe `Communication` que utiliza essa interface:
+A anotação [`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation) permite injetar objetos Mock em um objeto real. Vejamos um exemplo, imagine uma interface chama `Network` e uma classe `Communication` que utiliza essa interface:
 
 ```java
 public interface Network {
@@ -390,35 +391,64 @@ public class MockitoInjectMocksTest {
 }
 ```
 
-Outra anotação interessante é a [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation), utilizada em conjunto com a classe `ArgumentCaptor`, permite  capturar os argumentos passados para um método que queremos inspecionar. A captura de parâmetros pode ser útil para testar métodos chamados em outros métodos, observe um exemplo:
+Outra anotação interessante é a [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation), utilizada em conjunto com a classe `ArgumentCaptor`, permite  capturar os argumentos passados para um método que queremos inspecionar. A captura de parâmetros pode ser útil na construção de alguns tipos de testes, por [exemplo](https://www.baeldung.com/mockito-argumentcaptor):
 
 ```java
-    @Mock
-    private List<String> list;
+public class EmailService {
 
+    private DeliveryPlatform platform;
+
+    public EmailService(DeliveryPlatform platform) {
+        this.platform = platform;
+    }
+
+    public void send(String to, String subject, String body, boolean html) {
+        Format format = Format.TEXT_ONLY;
+        if (html) {
+            format = Format.HTML;
+        }
+        Email email = new Email(to, subject, body);
+        email.setFormat(format);
+        platform.deliver(email);
+    }
+
+}
+```
+
+```java
+@RunWith(MockitoJUnitRunner.class)
+public class EmailServiceUnitTest {
+
+    @Mock
+    DeliveryPlatform platform;
+
+    @InjectMocks
+    EmailService emailService;
+
+    // 1 - utilizando a anotação @Captor em conjunto da classe ArgumentCaptor
     @Captor
-    private ArgumentCaptor<String> valueCaptor;
+    ArgumentCaptor<Email> emailCaptor;
 
     @Test
-    public void shouldCaptureListParameters() {
+    public void whenDoesSupportHtml_expectHTMLEmailFormat() {
+        String to = "info@baeldung.com";
+        String subject = "Using ArgumentCaptor";
+        String body = "Hey, let'use ArgumentCaptor";
 
-        // 1 - Primeiro, adicionamos dois valores String à nossa lista: "um", "dois".
-        // Depois, usando o método Verify(...) com o ArgumentCaptor para capturar essas strings.
-        list.add("one");
-        list.add("two");
-        verify(list, times(2)).add(valueCaptor.capture());
+        // 2 - invocando o método send da classe EmailServices
+        // note que foi criado um objeto mock chamado platform
+        emailService.send(to, subject, body, true);
 
-        // 2 - ArgumentCaptor possui dois métodos getValue() e getAllValues():
-        //    O getValue() pode ser usado quando capturamos um argumento de uma única chamada de método e
-        // retornará o último valor capturado.
-        //    O getAllValues() retorna a lista de argumentos que foram passados para o método
-        List<String> allValues = valueCaptor.getAllValues();
+        // 3 - capturando o argumento do método deliver do objeto platform
+        verify(platform).deliver(emailCaptor.capture());
 
-        Assertions.assertTrue(allValues.contains("one"));
-        Assertions.assertTrue(allValues.contains("two"));
-        // 3 - retorna o último valor capturado
-        Assertions.assertEquals("two", valueCaptor.getValue());
+        // 4 - recuperando o último valor capturado por meio do método getValue
+        Email value = emailCaptor.getValue();
+
+        // 5 - verificando se o e-mail foi enviado no formato HTML
+        assertEquals(Format.HTML, value.getFormat());
     }
+}
 ```
 
 ## Exemplos
