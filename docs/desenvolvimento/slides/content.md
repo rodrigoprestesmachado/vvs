@@ -1,6 +1,6 @@
 <!-- .slide:  data-background-opacity="0.1" data-background-image="https://media.itpro.co.uk/image/upload/v1570816546/itpro/2019/02/software_shutterstock_1290773869.jpg" 
 data-transition="convex"  -->
-# Teste de software 🖥️
+# Teste de Desenvolvimento 🖥️
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
 
 Pressione 'F' para tela cheia

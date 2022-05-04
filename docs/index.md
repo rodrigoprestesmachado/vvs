@@ -10,7 +10,7 @@
 
 * [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
-    * [Teste unitários(unitario/junit.md)
+    * [Teste unitários](unitario/junit.md)
       * [Mock](unitario/mock.md)
 
     * [Teste de componente](componente/componente.md)

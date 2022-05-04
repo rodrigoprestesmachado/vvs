@@ -238,7 +238,7 @@ Para se obter o código completo dos exemplos dos Mocks acima, por favor acesse:
 
 ## Referências
 
-Mockito framework site. Disponível em: (https://site.mockito.org)[https://site.mockito.org].
+Mockito framework site. Disponível em: [https://site.mockito.org](https://site.mockito.org).
 
 <center>
     <a href="rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
