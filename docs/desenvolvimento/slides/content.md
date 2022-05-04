@@ -37,12 +37,12 @@ Pressione 'F' para tela cheia
 ## Introdução
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-![imagem](img/teste.png) 
+![imagem](img/teste.png)
 <!-- .element height="50%" width="50%" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Introdução 
+## Introdução
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * O desenvolvimento de testes incluem todas as fases do desenvolvimento de um software
@@ -64,7 +64,7 @@ Pressione 'F' para tela cheia
 
 * Durante o desenvolvimento, os testes podem ser executados testes em três níveis de granularidade, são eles:
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
 * **Teste unitários** – onde unidades de programas ou classes são testadas. Assim, este tipo de teste enfatiza objetos e seus métodos
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -104,10 +104,10 @@ Pressione 'F' para tela cheia
 
   * Todas as operações associadas com o objeto
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Atribuir e analisar todos os valores de atributos
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Colocar o objeto em diversos estados com o objetivo de simular todos os eventos que façam com que o objeto troque de estado
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -160,13 +160,13 @@ Pressione 'F' para tela cheia
 
 * Assim, é importante criar casos de teste efetivos:
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Casos de teste devem mostrar que o trecho de código faz o que ele deveria fazer
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Se existem defeitos, o teste deve revelar estes problemas
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Assim, normalmente escrevemos casos de testes para analisar o funcionamento normal de um sistema e, baseado na experiência de programação, criar testes para revelar problemas (usando entradas anormais)
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
@@ -206,7 +206,7 @@ Pressione 'F' para tela cheia
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-![imagem](img/domain.png) 
+![imagem](img/domain.png)
 <!-- .element height="50%" width="50%" -->
 
 
@@ -228,7 +228,7 @@ Pressione 'F' para tela cheia
 ## Teste Unitário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-![imagem](img/partition.png) 
+![imagem](img/partition.png)
 <!-- .element height="50%" width="50%" -->
 
 
@@ -255,13 +255,13 @@ Pressione 'F' para tela cheia
 
 * Por exemplo, se você estiver testando um método que contém uma lista (_array_)
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Teste sequências com um único valor
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Use diferentes sequências de diferentes tamanhos em testes diferentes
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-  
+
   * Derive testes de modo que exercite os primeiros elementos, meio e fim da sequência. Esta abordagem revela problemas de limites na partição
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 

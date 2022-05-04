@@ -2,17 +2,18 @@
 
 * [Configuração do ambiente](ambiente/ambiente.md) 🖥️
 
-* [Verificação e validação, inspeções, testes e planejamento](introducao/introducao.md) 🚀
+* [Introdução](introducao/introducao.md) 🚀
 
 * [Análises estáticas: PMD](pmd/pmd.md) 💥
 
 * [Análises estáticas: SonarLint](sonar/sonar.md)  👓
 
-* [Teste de desenvolvimento](teste/teste.md) 🧪
+* [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
-    * [Testes unitários](junit/junit.md)
+    * [Testes unitários](unitario/junit.md)
+      * [Mocks](unitario/mock.md)
 
-    * [Testes de componente](integracao/integracao.md)
+    * [Testes de componente](componente/componente.md)
 
     * [Testes de sistema Web com Selenium](selenium/selenium.md)
 

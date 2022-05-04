@@ -40,10 +40,10 @@ Pressione 'F' para tela cheia
 * A verificação e a validação pode ser entendida por meio de duas perguntas: 💭
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-  * Verificação: Estamos construindo o produto corretamente? 
+  * Verificação: Estamos construindo o produto corretamente?
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
-  * Validação: Estamos construindo o produto correto? 
+  * Validação: Estamos construindo o produto correto?
   <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 * O foco da verificação está em analisar se o *software* se encontra de acordo com as especificações
