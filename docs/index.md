@@ -4,9 +4,9 @@
 
 * [Introdução](introducao/introducao.md) 🚀
 
-* [Análises estáticas: PMD](pmd/pmd.md) 💥
+* [Análises estática: PMD](pmd/pmd.md) 💥
 
-* [Análises estáticas: SonarLint](sonar/sonar.md)  👓
+* [Análises estática: SonarLint](sonar/sonar.md)  👓
 
 * [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
@@ -14,10 +14,11 @@
       * [Mock](unitario/mock.md)
 
     * [Teste de componente](componente/componente.md)
+      * Teste de estresse: K6 (em breve)
 
-    * [Teste de sistema Web com Selenium](selenium/selenium.md)
+    * [Teste de sistema Web: Selenium](selenium/selenium.md)
 
-    * [Teste de sistema Web com Cypress](cypress/cypress.md)
+    * [Teste de sistema Web: Cypress](cypress/cypress.md)
 
 ## Extras
 
