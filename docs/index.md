@@ -10,22 +10,22 @@
 
 * [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
-    * [Testes unitários](unitario/junit.md)
-      * [Mocks](unitario/mock.md)
+    * [Teste unitários(unitario/junit.md)
+      * [Mock](unitario/mock.md)
 
-    * [Testes de componente](componente/componente.md)
+    * [Teste de componente](componente/componente.md)
 
-    * [Testes de sistema Web com Selenium](selenium/selenium.md)
+    * [Teste de sistema Web com Selenium](selenium/selenium.md)
 
-    * [Testes de sistema Web com Cypress](cypress/cypress.md)
+    * [Teste de sistema Web com Cypress](cypress/cypress.md)
 
 ## Extras
 
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
-# Comunidade de aprendizagem
+# Comunidade
 
-Comunidade [Discord](https://discord.com/invite/C29cqvm): canal `#vvs`
+Comunidade no [Discord](https://discord.com/invite/C29cqvm): canal `#vvs`
 
 # Referências
 
@@ -36,6 +36,6 @@ SOMMERVILLE, Ian. [Slides](https://iansommerville.com/software-engineering-book/
 SOMMERVILLE, Ian. [Vídeos](https://iansommerville.com/software-engineering-book/videos/imp/) do capítulo 8 (em inglês).
 
 <center>
-<a href="https://rpmhub.dev" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
+    <a href="https://rpmhub.dev" target="blanck"><img src="imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
+    <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
 </center>
