@@ -270,6 +270,84 @@ Pressione 'F' para tela cheia
 
 
 
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
+## Teste de sistema 🛫
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* O teste de sistema durante o desenvolvimento envolve a integração dos componentes para criar uma versão do sistema
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Esse tipo de teste verifica se os componentes são compatíveis, se interagem corretamente e se transferem os dados certos no momento certo por meio de suas interfaces.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Existem duas diferença entre o teste de sistema e de componentes:
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+  * Os componentes reutilizados podem ser integrados com componentes recém-desenvolvidos.
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+  * Componentes desenvolvidos por diferentes membros do time podem ser integrados nessa fase.
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Todos os sistemas possuem comportamentos emergentes. Isso significa que algumas funcionalidades e características se tornam óbvias somente quando os componentes são unidos.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Em virtude de seu foco nas interações, o teste baseado em casos de uso é uma abordagem eficaz para o teste de sistema.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Caso seja desenvolvido um diagrama de sequência para modelar a implementação do caso de uso, será possível observar os objetos ou os componentes envolvidos na interação.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Na maioria dos sistemas, é difícil saber o quanto de teste de sistema é essencial e quando se deve parar de testar.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* É impossível testar exaustivamente, ao ponto em que toda a sequência possível de execução seja testada.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Assim, as empresas de _software_ devem ter políticas para escolher o conjunto de teste. Por exemplo, grau de cobertura, entrada de dados dos usuários, casos de uso críticos, etc.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* O teste de sistema automatizado tende a ser mais difícil do que o teste automatizado de unidade ou de componente
+<!-- .element: style="margin-bottom:70px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* A razão de implementar um sistema pode ser a geração de saídas grandes ou que não possam ser previstas com facilidade.
+<!-- .element: style="margin-bottom:70px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* O teste de sistema envolve a integração de diferentes componentes
+<!-- .element: style="margin-bottom:70px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Uma abordagem incremental para integração e teste deve sempre ser usada: se um componente é integrado, o sistema é testado novamente, e assim por diante.
+<!-- .element: style="margin-bottom:70px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* A integração e os teste incrementais são fundamentais para os métodos ágeis, cujos testes de regressão são executados a cada novo incremento.
+<!-- .element: style="margin-bottom:70px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Referências 📚
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->

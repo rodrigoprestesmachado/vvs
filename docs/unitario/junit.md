@@ -1,9 +1,4 @@
-# Teste unitário
-
-<center>
-    <iframe src="https://vvs.rpmhub.dev/unitario/slides/index.html" title="Teste de Componente" width="90%" height="500" style="border:none;"></iframe>
-</center>
-# Introdução ao Junit
+# Teste Unitário
 
 Os testes unitários estabelecem um processo de testar pequenos componentes de um programa, como por exemplo, os métodos e/ou classes. Assim, esse tipo de teste consiste em realizar chamadas para as rotinas com diferentes parâmetros de entrada a fim de exercitar todos os comportamentos de um trecho de código.
 
