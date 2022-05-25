@@ -1,6 +1,6 @@
-<!-- .slide:  data-background-opacity="0.1" data-background-image="https://media.itpro.co.uk/image/upload/v1570816546/itpro/2019/02/software_shutterstock_1290773869.jpg" 
+<!-- .slide:  data-background-opacity="0.1" data-background-image="https://media.itpro.co.uk/image/upload/v1570816546/itpro/2019/02/software_shutterstock_1290773869.jpg"
 data-transition="convex"  -->
-# Teste de Desenvolvimento 🖥️
+# Teste de Desenvolvimento
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
 
 Pressione 'F' para tela cheia
@@ -266,17 +266,74 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide:  data-background-opacity="1" data-background-image="img/dicas.png" data-transition="zoom"  -->
+<!-- .slide:  data-background-opacity="1" data-background-image="img/dicasUnitario.png" data-transition="zoom"  -->
 
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
-## Teste de sistema 🛫
+## Teste de componente 🏠
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Teste de sistema
+## Componentes 🏠
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Os componentes de software consistem frequentemente em vários objetos que interagem entre sí. 😊
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* O teste de componente deve se concentrar em mostrar que a interface (ou interfaces) do componente se comporta de acordo com a sua especificação, por exemplo:
+<!-- .element: style="margin-bottom:25px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+![](img/testedecomponentes.png)
+<!-- .element: style="height: 250px; margin-top: 20px" -->
+
+Fonte: SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed., Editora Pearson, cap. 8., Figura 8.7.
+<!-- .element: style="margin-bottom:25px; font-size: 10px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Tipos de interface 🖱️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* **Interface de parâmetro:** são interfaces onde passamos dados ou referências a funções de um componente para o outro.
+<!-- .element: style="margin-bottom:40px; font-size: 18px; font-family: arial; color:#F5F5F5" -->
+
+* **Interface de memória compartilhada:** são interfaces nas quais um bloco de memória é compartilhado por um componente. Os dados são colocamos na memória por um subsistema e recuperados por outro subsistema (por exemplo: em sistemas embarcados).
+<!-- .element: style="margin-bottom:40px; font-size: 18px; font-family: arial; color:#F5F5F5" -->
+
+* **Interface de procedimento:** são interfaces em que um component encapsula um conjunto de procedimentos. Objetos e/ou componentes reusáveis têm esse formato de interface.
+<!-- .element: style="margin-bottom:40px; font-size: 18px; font-family: arial; color:#F5F5F5" -->
+
+* **Interface de passagem de mensagens:** são interfaces em que um componente solicita um serviço de outro componente por meio da passagem de uma mensagem (por exemplo: um Web services).
+<!-- .element: style="margin-bottom:20px; font-size: 18px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Erros de interfaces 🐛
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* **Mau uso da interface:** Um componente chama outro componente e comete um erro no uso de sua interface. Por exemplo, enviar dados errados (tipo, ordem, valores, etc.) em uma interface de parâmetro.
+<!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
+
+* **Má compreensão da interface:** Um componente não compreende a interface e faz suposições sobre o seu comportamento.
+<!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
+
+* **Erros de temporização:** Um componente, por possuir uma velocidade diferente, pode consumir dados obsoletos.
+<!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide:  data-background-opacity="0.9" data-background-image="img/dicasComponentes.png" data-transition="zoom"  -->
+
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
+## Teste de sistema 🖥️
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt;" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de sistema 🖥️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * O teste de sistema durante o desenvolvimento envolve a integração dos componentes para criar uma versão do sistema
@@ -296,7 +353,7 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Teste de sistema
+## Teste de sistema 🖥️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * Todos os sistemas possuem comportamentos emergentes. Isso significa que algumas funcionalidades e características se tornam óbvias somente quando os componentes são unidos.
@@ -310,7 +367,7 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Teste de sistema
+## Teste de sistema 🖥️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * Na maioria dos sistemas, é difícil saber o quanto de teste de sistema é essencial e quando se deve parar de testar.
@@ -324,7 +381,7 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Teste de sistema
+## Teste de sistema 🖥️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * O teste de sistema automatizado tende a ser mais difícil do que o teste automatizado de unidade ou de componente
@@ -335,7 +392,7 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Teste de sistema
+## Teste de sistema 🖥️
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 * O teste de sistema envolve a integração de diferentes componentes
