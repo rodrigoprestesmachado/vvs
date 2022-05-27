@@ -1,12 +1,6 @@
 # Teste de componente
 
-<center>
-    <iframe src="https://vvs.rpmhub.dev/componente/slides/index.html" title="Teste de Componente" width="90%" height="500" style="border:none;"></iframe>
-</center>
-
-# Teste de componente com o Failsafe
-
-Como visto nos slides acima, o teste de componente, sucedem os testes unitários, ou seja, trata-se de uma etapa onde classes são combinadas a fim de formar módulos a serem testados. Um dos plugins do Maven mais famosos para executar testes de integração é o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/). A principal diferença entre o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/) e o [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/) é que no primeiro, se um teste falhar o processo de construção do sistema (*build*) não será comprometido.
+Como visto anteriormente, os teste de componente sucedem os testes unitários, ou seja, trata-se de uma etapa onde classes são combinadas a fim de formar módulos a serem testados. Um dos plugins do Maven mais famosos para executar testes de integração é o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/). A principal diferença entre o [Failsafe](https://maven.apache.org/surefire/maven-failsafe-plugin/) e o [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/) é que no primeiro, se um teste falhar o processo de construção do sistema (*build*) não será comprometido.
 
 O plugin Failsafe tem apenas dois objetivos:
 
