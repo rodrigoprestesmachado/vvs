@@ -13,14 +13,14 @@
     * [Teste unitários](unitario/junit.md)
       * [Mock](unitario/mock.md)
 
-
     * [Teste de componente](componente/componente.md)
       * Teste de estresse: K6
-      
 
     * [Teste de sistema Web: Cypress](cypress/cypress.md)
-  
+
     * [Teste de sistema Web: Selenium](selenium/selenium.md)
+
+* [Teste de lançamento e de usuário](usuario/usuario.md) 🧪
 
 ## Extras
 
