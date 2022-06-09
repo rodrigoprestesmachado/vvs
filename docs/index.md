@@ -20,7 +20,7 @@
 
     * [Teste de sistema Web: Selenium](selenium/selenium.md)
 
-* [Teste de lançamento e de usuário](usuario/usuario.md) 🧪
+* [Teste de lançamento e de usuário](usuario/usuario.md) 🔍
 
 ## Extras
 

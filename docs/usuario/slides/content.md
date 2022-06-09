@@ -12,6 +12,83 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
+# Teste de lançamento
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de lançamento
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* O teste de lançamento (**release**) é um processo de teste que deve ser realizado fora do time de desenvolvimento.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Normalmente, esse tipo de teste é realizado com clientes, usuários do sistema ou outros times de desenvolvimento.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* O objetivo do teste de lançamento é conferir a validade para garantir que um sistema cumpra seus requisitos e seja bom o bastante para ser usado.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste baseado em requisitos
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* O teste baseado em requisitos é uma abordagem sistemática para o projeto de casos de teste
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Cada requisito deve derivar um conjunto de testes.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de cenário
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Um cenário é uma história que descreve uma maneira como o sistema poderia ser usado.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Deve ser realista, e os os verdadeiros usuários sejam capazes de se relacionar com o cenário.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de desempenho
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Normalmente esse tipo de teste se aumenta a carga até o desempenho do sistema ficar inaceitável.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Assim como outros tipos de teste, o de desempenho se preocupa tanto em mostrar que o sistema cumpre os requisitos quanto em descobrir problemas e defeitos no sistema.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Muitas vezes, se faz necessário construir um perfil operacional, por exemplo, 50% das requisições do tipo A, 25% do tipo B e 25% do tipo C.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Teste de desempenho
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+* Uma maneira eficaz é testar fora dos limites do projeto do software, esse processo é conhecido como teste de estresse.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* Por exemplo, o sistema foi projetado para suportar 300 transações por segundo, assim, testa-se até 300 transações e depois acima desse limite.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+* O teste de estresse ajuda em duas coisas:
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+  * Testar o comportamento de falha do sistema. Nessas circunstâncias, uma falha não pode, por exemplo, causar uma ruptura nos dados do sistema.
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+  * Revelar defeitos que só aparecem quando o sistema está plenamente carregado, ou seja, mostrar combinações incomuns causadas pelo estresse.
+  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="zoom" -->
 # Teste de usuário
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt" -->
 
