@@ -61,7 +61,7 @@ A anotação mais usada no Mockito é a [`@Mock`](https://frontbackend.com/java/
 Já a anotação [`@Spy`](https://www.studytonight.com/java-examples/spy-in-mockito) é usada para adicionar um mecanismo de rastreamento em um objeto real, por essa razão, trata-se de um mock "parcial", vejamos um exemplo:
 
 ```java
-@RunWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class MockitoSpyTest {
 
     @Spy
@@ -194,7 +194,7 @@ public class EmailService {
 ```
 
 ```java
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EmailServiceUnitTest {
 
     @Mock
