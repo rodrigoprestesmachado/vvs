@@ -14,7 +14,7 @@
       * [Mock](unitario/mock.md)
 
     * [Teste de componente](componente/componente.md)
-      * Teste de estresse: K6
+      * [Teste de estresse: K6](carga/carga.md)
 
     * [Teste de sistema Web: Cypress](cypress/cypress.md)
 
