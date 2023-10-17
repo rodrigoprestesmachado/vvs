@@ -58,4 +58,40 @@ public class Vehicle {
         return total <= maximumWeightLimit;
     }
 
+    /**
+     * Gets the maximum weight limit of the vehicle.
+     *
+     * @return the maximum weight limit of the vehicle
+     */
+    public int getMaximumWeightLimit() {
+        return maximumWeightLimit;
+    }
+
+    /**
+     * Sets the maximum weight limit of the vehicle.
+     *
+     * @param maximumWeightLimit the maximum weight limit of the vehicle
+     */
+    public void setMaximumWeightLimit(int maximumWeightLimit) {
+        this.maximumWeightLimit = maximumWeightLimit;
+    }
+
+    /**
+     * Gets the list of loads for this vehicle.
+     *
+     * @return the list of loads for this vehicle
+     */
+    public List<Load> getLoads() {
+        return loads;
+    }
+
+    /**
+     * Sets the list of loads for this vehicle.
+     *
+     * @param loads the list of loads to set
+     */
+    public void setLoads(List<Load> loads) {
+        this.loads = loads;
+    }
+
 }
