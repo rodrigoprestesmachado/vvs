@@ -8,9 +8,10 @@ no [NodeJS](https://nodejs.org), o Cypress fornece uma curva de aprendizado
 bastante interessante.
 
 Ao contrário de outras ferramentas de teste, o Cypress é executado diretamente
-no navegador, permitindo que ele interaja com o aplicativo da web em tempo real.
-Isso permite que os testes sejam executados de maneira rápida, permitindo que os
-desenvolvedores e testadores vejam os resultados imediatamente.
+no navegador, oportunizando que ele interaja com o aplicativo da web em tempo
+real. Isso possibilita que os testes sejam executados de maneira rápida,
+permitindo que os desenvolvedores e testadores vejam os resultados
+imediatamente.
 
 O Cypress também tem uma API e oferece recursos avançados, como captura de vídeo
 dos testes, debug interativo, e simulação de interações com usuários, como
@@ -58,9 +59,10 @@ Figura 2 - Navegador Chrome com o Cypress
 ## Cypress Studio
 
 A forma mais fácil de se criar um teste é interagir com a interface para poder
-gravar. Para isso, se faz necessário habilitar uma funcionalidade chamada
-"Cypress Studio". Para isto, adicione o comandoNo abaixo no arquivo
-`cypress.config.js` :
+gravar. O Cypress Studio é uma funcionalidade que permite que você grave a
+interação com a página. Para isso, se faz necessário habilitar uma
+funcionalidade chamada "Cypress Studio". Assim, adicione o comando no abaixo
+no arquivo `cypress.config.js` :
 
 ```json
 e2e: {
@@ -69,7 +71,25 @@ e2e: {
 ```
 
 Além de permitir gravar a interação com a página, o Cypress Studio também
-permite que você crie assertivas.
+permite que você crie assertivas. O exemplo abaixo ilustra um teste que foi
+gravado com o Cypress Studio. Neste exemplo, o teste acessa o site do IFRS,
+clica os editais e busca por editais de pesquisa.
+
+```js
+describe('template spec', () => {
+  it('passes', () => {
+    cy.visit('https://poa.ifrs.edu.br')
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('.menu-de-apoio > ul > .item-652 > a').click();
+    cy.get('#filter-search').clear('p');
+    cy.get('#filter-search').type('pesquisa');
+    cy.get('[type="button"] > .icon-search').click();
+    cy.get(':nth-child(1) > .list-title').click();
+    cy.get(':nth-child(1) > .list-title > a').should('have.text', '\n\t\t\t\t\t\t\t\tEdital 36/2023 - Bolsas de Pesquisa: publicado o resultado final\t\t\t\t\t\t\t');
+    /* ==== End Cypress Studio ==== */
+  })
+})
+```
 
 ## Gravando um vídeo
 

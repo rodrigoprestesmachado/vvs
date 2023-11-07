@@ -131,6 +131,16 @@ Nota: O Vídeo 2 foi extraído da gravação de um encontro síncrono no Google 
 
 ---
 
+## Exemplo Selenium Java
+
+O exemplo abaixo demonstra a execução de um teste funcional com o Selenium Java.
+O teste consiste em acessar o site do IFRS/POA e verificar se a página do curso de
+Sistemas para Internet possui um coordenador. Veja o código:
+
+[Exemplo Selenium Java](https://gist.github.com/rodrigoprestesmachado/f197484e99ea175a830a4f78b11d8255)
+
+
+
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
