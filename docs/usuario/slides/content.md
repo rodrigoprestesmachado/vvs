@@ -1,4 +1,4 @@
-<!-- .slide:  data-background-opacity="0.1" data-background-image="https://w7.pngwing.com/pngs/689/909/png-transparent-learning-plan-adaptive-learning-test-business-red-target-business-information-chart-miscellaneous-business-woman-service.png"
+<!-- .slide:  data-background-opacity="0.1" data-background-image="https://t4.ftcdn.net/jpg/05/18/53/19/360_F_518531918_oYY8KSe4BpIPHLWVx46UaOqddEdviSD6.jpg"
 data-transition="convex"  -->
 # Teste de lançamento e de usuário 🚀
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
