@@ -51,7 +51,7 @@ execução dinâmica do software para verificar seu comportamento e funcionalida
 Ambos são cruciais para garantir a qualidade do produto final.
 
 <center>
-<iframe src="https://vvs.rpmhub.dev/introducao/slides/questions.html" title="Introdução" width="90%" height="500" style="border:none;"></iframe>
+<iframe src="https://vvs.rpmhub.dev/introducao/slides/questions.html" title="Introdução" width="90%" height="500" style="border:none;background-color:white;"></iframe>
 </center>
 
 <center>

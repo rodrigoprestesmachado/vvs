@@ -1,4 +1,4 @@
-<!-- .slide:  data-background-opacity="0.1" data-background-image="https://media.itpro.co.uk/image/upload/v1570816546/itpro/2019/02/software_shutterstock_1290773869.jpg"
+<!-- .slide:  data-background-opacity="0.1" data-background-image="https://w7.pngwing.com/pngs/689/909/png-transparent-learning-plan-adaptive-learning-test-business-red-target-business-information-chart-miscellaneous-business-woman-service.png"
 data-transition="convex"  -->
 # Introdução ao Rest Assured
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
