@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Análises estática: SonarLint
-nav_order: 5
+title: Análise estáticas Sonar
+nav_order: 4
 ---
 
 # Análises estática: SonarLint

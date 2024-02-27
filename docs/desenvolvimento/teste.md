@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Teste de desenvolvimento
+has_children: true
 nav_order: 6
 ---
 
