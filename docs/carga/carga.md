@@ -1,3 +1,9 @@
+---
+layout: default
+title: K6
+nav_order: 11
+---
+
 # Teste de estresse: K6
 
 ## Sobre o K6

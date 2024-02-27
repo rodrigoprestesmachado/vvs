@@ -1,6 +1,12 @@
+---
+layout: default
+title: Recursos sobre temas periféricos
+nav_order: 15
+---
+
 # Recursos sobre temas periféricos
 
-O presente documento reúne um conjunto de cursos/recursos gratuítos sobre temas periféricos ao tópico de Verificação e Validação de Sistemas e/ou Integração Contínua.
+O presente documento reúne um conjunto de cursos/recursos gratuitos sobre temas periféricos ao tópico de Verificação e Validação de Sistemas e/ou Integração Contínua.
 
 ## Maven
 

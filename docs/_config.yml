@@ -1,6 +1,7 @@
-title: VVS
-description: Disciplina de Validação e Verificação de Sistemas
-show_downloads: false
-plugins:
-  - jekyll-mentions
-theme: jekyll-theme-hacker
+remote_theme: pmarsceill/just-the-docs
+aux_links:
+  "Verificação e validação de Sistemas":
+    - "https://vvs.rpmhub.dev"
+
+# Footer content appears at the bottom of every page's main content
+footer_content: "Copyright &copy; 2024 RPM Hub. Distributed by Apache 2.0 license."

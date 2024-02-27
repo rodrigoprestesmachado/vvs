@@ -1,3 +1,9 @@
+---
+layout: default
+title: Teste de desenvolvimento
+nav_order: 6
+---
+
 # Teste de desenvolvimento
 
 <center>

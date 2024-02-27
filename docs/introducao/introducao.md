@@ -1,3 +1,9 @@
+---
+layout: default
+title: Verificação e validação, inspeções, testes e planejamento
+nav_order: 3
+---
+
 # Verificação e validação, inspeções, testes e planejamento 🚀
 
 <center>

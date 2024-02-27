@@ -1,3 +1,9 @@
+---
+layout: default
+title: Rest Assured
+nav_order: 10
+---
+
 # Rest Assured 🔍
 
 <center>

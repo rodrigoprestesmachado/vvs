@@ -1,3 +1,9 @@
+---
+layout: default
+title: Cypress
+nav_order: 12
+---
+
 # Cypress
 
 O foco de um teste de sistema deve se concentrar na interação entre os

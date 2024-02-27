@@ -1,3 +1,9 @@
+---
+layout: default
+title: Teste de lançamento e de usuário
+nav_order: 14
+---
+
 # Teste de lançamento e de usuário 🔍
 
 <center>

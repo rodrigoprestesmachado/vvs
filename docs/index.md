@@ -1,4 +1,10 @@
-# Trilha de aprendizagem
+---
+layout: default
+title: Home
+nav_order: 1
+---
+
+# Verificação e Validação de Sistemas
 
 * [Configuração do ambiente](ambiente/ambiente.md) 🖥️
 

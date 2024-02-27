@@ -1,3 +1,9 @@
+---
+layout: default
+title: Configurações
+nav_order: 2
+---
+
 # Configurações
 
 Essa página tem o objetivo de orientar sobre a instalação das ferramentas que serão utilizadas na disciplina de Verificação e Validação de Sistemas.
@@ -45,7 +51,7 @@ Windows:
     choco install git.install
 
 macOS:
-    
+
     brew install git
 
 Para ter certeza que o git esteja instalado corretamente digite `git --version`.
