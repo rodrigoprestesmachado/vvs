@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 ---
 
-# Verificação e Validação de Sistemas
+# Verificação e Validação de Sistemas 🧪
 
 * [Configuração do ambiente](ambiente/ambiente.md) 🖥️
 
@@ -19,7 +19,7 @@ nav_order: 1
     * [Teste unitários](unitario/junit.md)
       * [Mock](unitario/mock.md)
 
-    * [Teste de componente](componente/componente.md)
+    * [Teste de componente](componente/componente.md) 🔍
       * [Rest Assured](componente/restassured.md)
       * [K6](carga/carga.md)
 
@@ -29,15 +29,16 @@ nav_order: 1
 
 * [Teste de lançamento e de usuário](usuario/usuario.md) 🔍
 
-## Extras
+# Comunidade da disciplina 📢
+
+Comunidade da disciplina no [Discord](https://discord.com/invite/C29cqvm):
+canal `#vvs`
+
+## Material de apoio 📒
 
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
-# Comunidade
-
-Comunidade no [Discord](https://discord.com/invite/C29cqvm): canal `#vvs`
-
-# Referências
+# Referências 📚
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768, cap. 8 ISBN 9788543024974.
 

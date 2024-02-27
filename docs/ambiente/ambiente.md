@@ -1,48 +1,63 @@
 ---
 layout: default
-title: Configurações
+title: Configuração do ambiente
 nav_order: 2
 ---
 
-# Configurações
+# Configuração do ambiente 🛠️
 
-Essa página tem o objetivo de orientar sobre a instalação das ferramentas que serão utilizadas na disciplina de Verificação e Validação de Sistemas.
+Essa página tem o objetivo de orientar sobre a instalação das ferramentas que
+serão utilizadas na disciplina de Verificação e Validação de Sistemas.
 
-## Java
+### Java ♨️
 
-Os exemplos e ferramentas de teste da disciplina serão demonstrados em projetos escritos em Java. Dessa forma, o primeiro passo é instalar uma máquina virtual Java. Se você estiver utilizando Linux instale o [OpenJDK](https://openjdk.java.net):
+Antes de iniciarmos, se faz necessário verificar se você possui uma JVM
+(*Java Virtual Maquine*) e um JDK (*Java Development Kit*) 11 ou superior
+instalado na sua máquina:
 
-    apt install default-jre
+    java -version
 
-Se você estiver usando windows uma dica é utilizar o [Chocolatey](https://chocolatey.org) e instalar o openjdk:
+Para verificar se o JDK que está instalado digite:
 
-    choco install openjdk
+    javac -version
 
-No maxOS, o openjdk pode ser instalado com o [HomeBrew](https://brew.sh):
+Se os comandos acima retornarem a versão do Java e do compilador, significa que
+tem que a sua máquina possui o primeiro requisito para rodar o Quarkus.
 
-    brew install openjdk
+Porém, se você não tiver o Java instalado na sua máquina, recomendo que você
+utilize o gerenciador de SDKs [SDKMAN](https://sdkman.io) para instalar o Java.
 
-Verifique se o Java foi instalado corretamente por meio da instrução `java -version`.
+Para instalá-lo, abra um terminal e copie e cole o seguinte comando:
 
-## Apache Maven
+    curl -s "https://get.sdkman.io" | bash
 
-O [Apache Maven](https://maven.apache.org), ou maven, é uma ferramenta de automação de projetos que permite acelerar diversos processos de desenvolvimento de um sistema, como por exemplo: compilação, empacotamento, instalação, verificação, teste, entre outros. Assim, essa ferramenta será fundamental no decorrer da disciplina uma vez que irá possibilitar uma automação e, consequentemente, a construção de integração contínua (*Continuous Integration* - CI) em projetos Java. No Ubunto, instale o maven por meio do comando:
+Com o SDKMAN instalado, utilize o seguinte comando para instalar o Java:
 
-    apt install maven
+    sdk install java
 
-No windows: 
+O SDKMAN é uma ferramenta que permite a instalação de diversas versões do Java,
+tais como: OpenJDK, Oracle JDK, Temurin, GraalVM, etc. Assim, a grande vantagem
+de se utilizar o SDKMAN é que ele alterar a versão do Java que está sendo
+utilizada na sua máquina de maneira descomplicada. Para saber mais sobre o
+SDKMAN, por favor, consulte a [documentação](https://sdkman.io) da ferramenta.
 
-    choco install maven
+### Maven 🌐
 
-macOS:
+O Maven é uma ferramenta de automação de compilação utilizada principalmente
+para projetos Java. Ele é utilizado para gerar um artefato (geralmente um
+arquivo `.jar` ou `.war`) a partir do código fonte do projeto. Além disso,
+o Maven gerencia as dependências do projeto, o ciclo de vida do *build*, teste e
+a até mesmo a distribuição do projeto.
 
-    brew install maven
+Para instalar o Maven utilizando o SDKMAN, digite o seguinte comando:
 
-Para verificar se o maven foi instalado com sucesso execute o comando `mvn -version`.
+    sdk install maven
 
-## Git
+## Git 🐙
 
-O git também necessita ser instalado uma vez que todos os exemplos da disciplina estão disponíveis no Github. Assim, no Ubuntu instale o Git por meio do comando:
+O git também necessita ser instalado uma vez que todos os exemplos da disciplina
+ estão disponíveis no Github. Assim, no Ubuntu instale o Git por meio do
+ comando:
 
     apt install git
 
@@ -56,41 +71,61 @@ macOS:
 
 Para ter certeza que o git esteja instalado corretamente digite `git --version`.
 
-## Docker
+## Docker 🐳
 
-Em um determinado momento da disciplina será necessário instalar o [Docker](https://docs.docker.com/get-docker/) na sua máquina.
-Depois de instalar o Docker, para testar podemos baixar uma imagem do Ubuntu por meio do comando [pull](https://docs.docker.com/engine/reference/commandline/pull/):
+Em um determinado momento da disciplina será necessário instalar o
+[Docker](https://docs.docker.com/get-docker/) na sua máquina.
+Depois de instalar o Docker, para testar podemos baixar uma imagem do Ubuntu por
+ meio do comando
+ [pull](https://docs.docker.com/engine/reference/commandline/pull/):
 
     docker pull ubuntu
 
-Para verificar se a imagem está disponível na sua máquina, digite a instrução [images](https://docs.docker.com/engine/reference/commandline/images/):
+Para verificar se a imagem está disponível na sua máquina, digite a instrução
+[images](https://docs.docker.com/engine/reference/commandline/images/):
 
     docker images
 
-Como resultado, o Docker listará as imagens disponíveis na sua máquina, como por exemplo:
+Como resultado, o Docker listará as imagens disponíveis na sua máquina, como
+por exemplo:
 
 ```shell
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ubuntu              latest              4e2eef94cd6b        2 weeks ago         73.9MB
 ```
 
-Assim, para criar um container do Ubuntu a partir da imagem que foi baixada, execute o comando [run](https://docs.docker.com/engine/reference/commandline/run/):
+Assim, para criar um container do Ubuntu a partir da imagem que foi baixada,
+execute o comando 
+[run](https://docs.docker.com/engine/reference/commandline/run/):
 
     docker run --name vvs -it -p 127.0.0.1:80:9080 ubuntu
 
 **Fique atento:** O comando `run` cria e coloca um container em execução.
 
-O argumento `-name vvs` permite atribuir nome para o container, por sua vez, o argumento `-it`, possibilita entrar num "modo interativo" do container. Já o argumento `-p` indica uma porta que será aberta pelo container. No exemplo acima, poderemos acessar o container através do ip `127.0.0.1` (localhost) na porta `80`, assim, quando o container receber uma requisição na porta `80` ela será internamente direcionada para a porta `9080`.
+O argumento `-name vvs` permite atribuir nome para o container, por sua vez, o
+argumento `-it`, possibilita entrar num "modo interativo" do container. Já o
+argumento `-p` indica uma porta que será aberta pelo container. No exemplo
+acima, poderemos acessar o container através do ip `127.0.0.1` (localhost) na
+porta `80`, assim, quando o container receber uma requisição na porta `80` ela
+será internamente direcionada para a porta `9080`.
 
-Depois de executar o comando acima, você entrará como root em um terminal do Ubuntu. Para sair do terminal basta que você digite a instrução `exit`. Quando você digitar `exit` no terminal do Ubuntu o Docker irá parar ([stop](https://docs.docker.com/engine/reference/commandline/stop/)) a execução do seu container. Assim, para colocar novamente o container em execução use o comando [start](https://docs.docker.com/engine/reference/commandline/start/) da seguinte maneira:
+Depois de executar o comando acima, você entrará como root em um terminal do
+Ubuntu. Para sair do terminal basta que você digite a instrução `exit`. Quando
+você digitar `exit` no terminal do Ubuntu o Docker irá parar o container. Para
+([stop](https://docs.docker.com/engine/reference/commandline/stop/)) a execução
+ do seu container. Assim, para colocar novamente o container em execução use o
+ comando [start](https://docs.docker.com/engine/reference/commandline/start/)
+ da seguinte maneira:
 
     docker start -i vvs
 
-Note que o argumento `-i` do comando `start` que permite entrar no terminal do Ubuntu. Para saber quais os containers que estão rodando na sua máquina utilize o [ps](https://docs.docker.com/engine/reference/commandline/ps/):
+Note que o argumento `-i` do comando `start` que permite entrar no terminal do
+Ubuntu. Para saber quais os containers que estão rodando na sua máquina utilize
+o [ps](https://docs.docker.com/engine/reference/commandline/ps/):
 
     docker ps
 
-### Alguns comandos úteis do docker
+### Alguns comandos úteis do docker 📜
 
 Para todos os containers em execução:
 
@@ -104,44 +139,28 @@ Apaga todas as imagens:
 
     docker rmi $(docker images -q)
 
-Eliminar todos os volumes. Uma explicação rápida, no Docker, um volume maneira um diretório entre o host e o container, esse conceito será melhor explorado quando utilizarmos uma composição de container com a ferramenta [docker-compose](https://docs.docker.com/compose/).
+Eliminar todos os volumes. Uma explicação rápida, no Docker, um volume maneira
+um diretório entre o host e o container, esse conceito será melhor explorado
+quando utilizarmos uma composição de container com a ferramenta
+ [docker-compose](https://docs.docker.com/compose/).
 
     docker volume rm $(docker volume ls -q)
 
 ___
-**Para saber mais:** Todos os comandos relacionados com o Docker podem ser utilizados por meio de ferramentas com interface de usuário gráfica. O Docker possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Windows e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do Docker. Outra dica de ferramenta é a [extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft. A extensão possui todas as funcionalidades do dashboard com a vantagem de poder ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar integrada a um ambiente de desenvolvimento.
+**Para saber mais:** Todos os comandos relacionados com o Docker podem ser
+utilizados por meio de ferramentas com interface de usuário gráfica. O Docker 
+possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Window
+e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do
+Docker. Outra dica de ferramenta é a
+[extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft.
+A extensão possui todas as funcionalidades do dashboard com a vantagem de poder
+ ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar
+  integrada a um ambiente de desenvolvimento.
 
 ---
 
-## Testando o ambiente com o projeto TPACK
-
-Depois de instalar todas as ferramentas, podemos fazer um teste para verificar se já podemos compilar, empacotar e executar um projeto java:. Primeiro, faça um [clone](https://git-scm.com/docs/git-clone) do projeto Tpack que servirá como um dos exemplos da disciplina:
-
-    git clone https://github.com/rodrigoprestesmachado/tpack
-    cd tpack
-
----
-**Para saber mais:** O Tpack é um projeto simples que implementa um questionário sobre o conhecimento de conteúdo, pedagógico e tecnológico de professores. As tecnologias que esse projeto utiliza são: [Micro serviço](https://microprofile.io) em Java rodando em cima do [Open Liberty](https://openliberty.io), interface Web/PWA em [Vue](https://vuejs.org) [Typescript](https://www.typescriptlang.org) e banco de dados [MySQL](https://www.mysql.com).
-
----
-
-Para compilar e empacotar o projeto, ou seja, criar um arquivo .jar/.war, execute os [plugins](https://maven.apache.org/plugins/index.html) `clean` e `package` do Maven no mesmo diretório que se encontra o arquivo arquivo `pom.xml`:
-
-    mvn clean package
-
-**Fique atento:** o maven necessita baixar todas as dependências do projeto, assim, a primeira compilação pode ser demorada.
-
-Se tudo ocorrer bem, o maven irá criar uma diretório chamado `target`. Dentro desse diretório existirá um arquivo chamado `tpack.jar` que poderá ser executado da seguinte forma:
-
-    java -jar target/tpack.jar
-
-Como não colocamos um MySQL em execução, nesse primeiro momento não conseguiremos ver o sistema Tpack em sua plenitude. Apesar disso, podemos verificar se Web Service do TPACK está rodando, nesse sentido abra e digite a seguinte URL no seu navegador:
-
-   [http://localhost/openapi/ui/](http://localhost/openapi/ui/)
-
-Se você conseguir visualizar uma aplicação chamada Swagger UI, então significa que você conseguiu compilar e rodar o projeto.
-
-## Referências
+# Referências 📚
 
 JEFERSON FERNANDO NORONHA VITALINO, Marcus André Nunes Castro. [Descomplicando o Docker](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5033249&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU3NDUyOTAyOA==&label=acesso%20restrito) - 2ª Edição. Editora Brasport 152, cap. 1, ISBN 9788574529028.
 

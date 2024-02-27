@@ -1,13 +1,16 @@
 ---
 layout: default
-title: Verificação e validação, inspeções, testes e planejamento
+title: Introdução
 nav_order: 3
 ---
 
-# Verificação e validação, inspeções, testes e planejamento 🚀
+# Introdução 🚀
 
 <center>
-<iframe src="https://vvs.rpmhub.dev/introducao/slides/index.html#/" title="Verificação e validação, inspeções, testes e planejamento" width="90%" height="500" style="border:none;"></iframe>
+    <iframe src="https://vvs.rpmhub.dev/introducao/slides/index.html#/"
+    title="Verificação e validação, inspeções, testes e planejamento"
+    width="90%" height="500" style="border:none;">
+    </iframe>
 </center>
 
 A verificação e validação (V&V) é um processo fundamental no desenvolvimento de
@@ -15,11 +18,11 @@ software e em outras áreas, como engenharia e ciência, que envolve a confirma�
 de que um produto, sistema ou processo atende aos requisitos especificados e
 funciona conforme o esperado.
 
-* Verificação: Envolve a avaliação do produto para garantir que ele atenda aos
+* **Verificação:** Envolve a avaliação do produto para garantir que ele atenda aos
   requisitos e especificações definidos durante o estágio de planejamento. Isso
   geralmente é feito através de revisões, inspeções, testes e análises.
 
-* Validação: Envolve a avaliação do produto para garantir que ele atenda às
+* **Validação:** Envolve a avaliação do produto para garantir que ele atenda às
   necessidades e expectativas do usuário final. Isso pode incluir testes de
   aceitação do usuário, simulações de uso real e feedback direto dos usuários.
 
@@ -27,7 +30,7 @@ As inspeções e os testes são duas atividades distintas, mas complementares, n
 contexto da verificação e validação de software e outros produtos. Aqui está a
 diferença entre eles:
 
-- Inspeções:
+- **Inspeções:**
   - As inspeções são uma forma de revisão sistemática e formal de documentos,
   código fonte ou outros artefatos de trabalho.
   - Geralmente são conduzidas por pessoas qualificadas que examinam os artefatos
@@ -39,7 +42,7 @@ diferença entre eles:
   - As inspeções geralmente são realizadas por meio de reuniões estruturadas,
   onde os revisores discutem os problemas encontrados e propõem soluções.
 
-- Testes:
+- **Testes:**
   - Os testes envolvem a execução controlada do software ou sistema para avaliar
   seu comportamento em condições específicas.
   - Os testes podem ser automatizados ou manuais e são projetados para validar
@@ -59,10 +62,19 @@ Ambos são cruciais para garantir a qualidade do produto final.
 ## Exercícios 📝
 
 <center>
-<iframe src="https://vvs.rpmhub.dev/introducao/slides/questions.html" title="Introdução" width="90%" height="500" style="border:none;background-color:white;"></iframe>
+    <iframe src="https://vvs.rpmhub.dev/introducao/slides/questions.html"
+    title="Introdução" width="90%" height="500"
+    style="border:none;background-color:white;">
+    </iframe>
 </center>
 
 <center>
-<a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
+<a href="https://rpmhub.dev" target="blanck">
+    <img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%"
+    height="3%" border=0 style="border:0; text-decoration:none; outline:none">
+</a>
+<br/>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+    Creative Commons Atribuição 4.0 Internacional
+</a>
 </center>

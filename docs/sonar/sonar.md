@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Inspeções estáticas: SonarLint
+title: Análises estática: SonarLint
 nav_order: 5
 ---
 
-# Inspeções estáticas: SonarLint 👓
+# Análises estática: SonarLint
 
 O [SonarLint](https://www.sonarlint.org) é uma ferramenta de inspeção estática que auxilia um programador na identificação e correções de problemas de codificação. O [SonarLint](https://www.sonarlint.org) está disponível para diversas IDEs (_Integrated Development Environment_) como por exemplo: [VSCode](https://code.visualstudio.com), [Eclipse](https://www.eclipse.org/), [Intellij](https://www.jetbrains.com/pt-br/idea/), entre outros e, possui um conjunto grande de [regras](https://rules.sonarsource.com) para análise de código JavaScript, TypeScript, Python, Java, HTML, PHP, entre muitas outras. 😀
 

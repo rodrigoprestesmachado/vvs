@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Teste de componente
+parent: Teste de desenvolvimento
 nav_order: 9
 ---
 
