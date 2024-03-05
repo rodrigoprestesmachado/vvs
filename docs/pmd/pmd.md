@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Análise estáticas PMD
+title: Análise estática - PMD
 nav_order: 5
 ---
 
-# Análise estáticas: PMD
+# Análise estática: PMD
 
 Antes de iniciarmos o assunto sobre inspeções estáticas, iremos conhecer o conceito de *Fork* existente em sistemas de versionamento de código. Uma vez entendido o funcionamento de um *Fork*, no final desse documento iremos trabalhar com um exemplo onde iremos utilizar o *Fork* para poder analisar um código de forma estática.
 
