@@ -10,9 +10,9 @@ nav_order: 1
 
 * [Introdução](introducao/introducao.md) 🚀
 
-* [Análises estática: PMD](pmd/pmd.md) 💥
-
 * [Análises estática: SonarLint](sonar/sonar.md)  👓
+
+* [Análises estática: PMD](pmd/pmd.md) 💥
 
 * [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
