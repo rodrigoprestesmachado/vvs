@@ -4,6 +4,8 @@ title: Análise estática - Sonar
 nav_order: 3
 ---
 
+# Sonar
+
 <center>
     <iframe src="https://vvs.rpmhub.dev/sonar/slides/index.html#/"
     title="Sonar"
@@ -11,7 +13,7 @@ nav_order: 3
     </iframe>
 </center>
 
-# Análises estática: SonarLint
+## Resumo 📝
 
 O [SonarLint](https://www.sonarlint.org) é uma ferramenta de inspeção estática
 que auxilia um programador na identificação e correções de problemas de
@@ -31,7 +33,7 @@ corrijam esses problemas imediatamente, enquanto estão escrevendo o código,
 o que ajuda a reduzir o tempo e os custos associados à identificação e correção
 de problemas mais tarde no ciclo de desenvolvimento.
 
-## SonarLint no VSCode 🖥️
+### SonarLint no VSCode 🖥️
 
 Para instalar o SonarLint no VSCode, basta procurar o pacote no
 [Marketplace](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
@@ -102,7 +104,7 @@ O SonarLint possui um conjunto grande de [regras](https://rules.sonarsource.com/
  de 600 regras divididas entre as categorias vulnerabilidades, defeitos,
  segurança e boas práticas. ⬆️
 
-## Exemplos de regras do SonarLint para Java 🚀
+### Exemplos de regras do SonarLint para Java 🚀
 
 A seguir, listamos algumas das [regras](https://rules.sonarsource.com/java/) do
 SonarLint para Java:
