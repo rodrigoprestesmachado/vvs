@@ -1,8 +1,15 @@
 ---
 layout: default
-title: Análise estáticas Sonar
+title: Análise estática - Sonar
 nav_order: 3
 ---
+
+<center>
+    <iframe src="https://vvs.rpmhub.dev/sonar/slides/index.html#/"
+    title="Sonar"
+    width="90%" height="500" style="border:none;">
+    </iframe>
+</center>
 
 # Análises estática: SonarLint
 
