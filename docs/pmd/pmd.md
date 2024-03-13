@@ -39,7 +39,7 @@ próximas seções são dedicadas para mostrar o uso do PMD nesses dois contexto
 porém, existem muitas outras ferramentas capazes de fazer o mesmo tipo de
 análise, um exemplo disso é o [SonarLint](https://www.sonarlint.org), que
 também possui possui extensões para [Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode),
-Eclipse, IntelliJ, entre outros. Também cabe salientar que ferramentas de
+Eclipse, IntelliJ, entre outros. Também cabe reforçar que ferramentas de
 inspeção de código estático não são uma exclusividade de Java, ou seja, em
 praticamente todas as linguagens você encontrará sistemas desse tipo.
 
@@ -70,11 +70,6 @@ Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim,
 os exemplos abaixo mostram regras consideradas úteis por diversos programadores,
 são elas:
 
----
-**Nota:** as regras e explicações abaixo foram escritas de maneira colaborativa.
-
----
-
 1. Best Practices
 1. Code Style
 1. Design
@@ -83,8 +78,6 @@ são elas:
 1. Multithreading
 1. Performance
 1. Security
-1. Additional rulesets
-1. PMD com o Maven
 
 ### PMD no Maven
 
@@ -157,6 +150,11 @@ seção `<build>`, observe o exemplo:
 </build>
 ```
 
+---
+**Nota:** No exemplo acima utilize apenas um ruleset.
+
+---
+
 O exemplo acima faz com que o PMD seja executado durante o ciclo _default_
 durante a fase *verify* do Maven. O PMD irá verificar o código-fonte do projeto
 com base nas regras definidas no _plugin_. No exemplo acima, o _plugin_ do PMD
@@ -193,8 +191,6 @@ ciclo _default_, você pode adicionar o *goal* `pmd:pmd` dentro da seção de
     </executions>
     <configuration>
         <rulesets>
-            <ruleset>/category/java/bestpractices.xml</ruleset>
-            <ruleset>pmd.xml</ruleset>
             <ruleset>https://raw.githubusercontent.com/rodrigoprestesmachado/tpack/master/pmd.xml</ruleset>
         </rulesets>
     </configuration>
@@ -216,24 +212,41 @@ entre outros. Assim, o PMD pode ser executado durante o ciclo de *site* do
 Maven, por exemplo, para gerar um relatório HTML com os problemas encontrados
 no código-fonte.
 
+---
 **Nota:** Por padrão o Maven possui três ciclos principais, são eles: *clean*,
 *default* e *site*.
 
-### Checkstyle
+---
+
+## Checkstyle
 
 O [Checkstyle](https://checkstyle.org) é uma ferramenta que ajuda a garantir que
 o código Java de um projeto esteja em conformidade com um conjunto de regras
-pré-definidas. O Checkstyle é altamente configurável e pode ser feito para
-atender às necessidades específicas de um projeto. O Checkstyle pode ser
-integrado em um processo de *build* por meio de plugins para Maven, Ant, Gradle,
-entre outros.
+pré-definidas de estilo de código, como por exemplo, regras de formatação,
+regras de nomenclatura, regras de organização de código, entre outras. O padrão
+de estilo default do Checkstyle é baseado no guia de estilo de código Java da
+Sun Microsystems. Porém, o Checkstyle é altamente configurável e pode ser
+customizado para atender às necessidades específicas de um projeto.
 
 O Checkstyle possui um conjunto de regras [pré-definidas](https://checkstyle.sourceforge.io/checks.html)
 que podem ser utilizadas para verificar a qualidade do código. Além disso, o
-Checkstyle permite que regras personalizadas sejam criadas e utilizadas.
+Checkstyle permite que regras personalizadas sejam criadas.
+
+### Checkstyle no Vscode
+
+Para utilizar o Checkstyle no Vscode, é necessário instalar a extensão
+[Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle).
+A extensão permite que o Checkstyle seja executado diretamente no Vscode e
+fornece um relatório detalhado das violações do Checkstyle no código-fonte Java.
+
+### Checkstyle no Maven
+
+O Checkstyle pode ser integrado no ciclo default do Maven, Ant, Gradle, entre
+outros. No Maven, o Checkstyle pode ser integrado por meio do plugin
+[maven-checkstyle-plugin](https://maven.apache.org/plugins/maven-checkstyle-plugin/).
 
 Para configurar o Checkstyle em um projeto Java/Maven, temos que declarar o
-plugin do Checkstyle dentro da seção de plugins do pom.xml do projeto da
+plugin do Checkstyle dentro da seção de plugins do `pom.xml` do projeto da
 seguinte maneira:
 
 ```xml
@@ -256,8 +269,23 @@ Caso você não tenha um arquivo de configuração, o Checkstyle possui um conju
 de regras [pré-definidas](https://checkstyle.sourceforge.io/checks.html) que
 podem ser utilizadas para verificar a qualidade do código.
 
+O Checkstyle possui um conjunto de goals que podem ser utilizados para verificar
+a qualidade do código. Alguns exemplos de goals são:
+
+* `check`: Este goal executa a verificação do código-fonte Java em relação às
+  regras de estilo definidas pelo Checkstyle. Ele relata quaisquer violações
+  encontradas.
+* `checkstyle:check`: Este goal é uma forma alternativa de executar a
+  verificação do código-fonte Java em relação às regras de estilo definidas
+  pelo Checkstyle.
+* `checkstyle:checkstyle`: Este goal gera um relatório detalhado das violações
+  do Checkstyle no código-fonte Java, mas não falha a construção.
+* `checkstyle:help`: Este goal exibe a ajuda do plugin Checkstyle, incluindo a
+  lista de parâmetros de configuração disponíveis.
+* `checkstyle:version`: Este goal exibe a versão do plugin Checkstyle.
+
 Caso você deseje colocar fazer com que o Checkstyle execute automaticamente
-durante o ciclo de *build*, você pode adicionar o *goal* `checkstyle:check`
+durante o ciclo de *default*, você pode adicionar o *goal* `checkstyle:check`
 dentro da seção de `<executions>` do plugin do Checkstyle no `pom.xml` do
 projeto, observe o exemplo:
 
@@ -270,7 +298,7 @@ projeto, observe o exemplo:
         <execution>
             <phase>verify</phase>
             <goals>
-                <goal>check</goal>
+                <goal>checkstyle:check</goal>
             </goals>
         </execution>
     </executions>
@@ -280,11 +308,47 @@ projeto, observe o exemplo:
 </plugin>
 ```
 
+O exemplo acima mostra a configuração do plugin do Checkstyle no Maven. O *goal*
+`checkstyle:check` é executado automaticamente durante a fase `verify` do ciclo
+*default* do Maven.
+
+## Como interromper o ciclo *default* do Maven?
+
+Caso o PMD ou o Checkstyle encontre problemas no código-fonte, é possível
+configurar o Maven para falhar o processo de *build* caso problemas sejam
+encontrados. Para isso, basta adicionar as tags `failOnViolation` e
+`maxAllowedViolations` no plugin do PMD e/ou do Checkstyle na seção de
+`<configuration>` de cada plugin, observe o exemplo no PMD:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-pmd-plugin</artifactId>
+    <version>3.21.2</version>
+    <executions>
+        <execution>
+            <phase>verify</phase>
+            <goals>
+                <goal>pmd</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <failOnViolation>true</failOnViolation>
+        <maxAllowedViolations>5</maxAllowedViolations>
+        <rulesets>
+            <ruleset>https://raw.githubusercontent.com/rodrigoprestesmachado/tpack/master/pmd.xml</ruleset>
+        </rulesets>
+    </configuration>
+</plugin>
+```
+
 ## Exercício
 
 1. Crie um projeto Java/Maven e adicione o plugin do PMD no `pom.xml` do projeto.
 
-    Você pode criar um projeto Maven com o Quarkus ou por meio do comando abaixo:
+    Você pode criar um projeto Maven com o [Quarkus](https://quarkus.io) ou por
+    meio do comando abaixo:
 
     ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
@@ -295,11 +359,18 @@ projeto, observe o exemplo:
 4. Execute o Checkstyle no Maven e verifique o relatório gerado.
 5. Crie um arquivo de configuração para o Checkstyle e adicione regras
    personalizadas.
-6. Execute o PMD e o Checkstyle automaticamente durante o ciclo de *build* do
-   Maven com o comando:
+6. Execute o PMD e o Checkstyle automaticamente durante o ciclo *default* na
+   fase *verify* do Maven.
 
     ```bash
     mvn verify
+    ```
+7. Configure o Maven para falhar o processo de *build* caso problemas sejam
+   encontrados no código-fonte.
+
+    ```xml
+    <failOnViolation>true</failOnViolation>
+    <maxAllowedViolations>5</maxAllowedViolations>
     ```
 
 <center>

@@ -25,25 +25,8 @@ _bugs_, _code smells_ e violações de convenções de codificação.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
 
 
-<!-- .slide: data-background="#185449" data-transition="convex"  -->
-## PMD no Maven
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
-
-- Para utilizar o PMD no Maven, basta adicionar o plugin `maven-pmd-plugin` no
-  arquivo `pom.xml` do projeto.
-  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-
-- O plugin `maven-pmd-plugin` é responsável por executar o PMD durante o
-  ciclo de vida do Maven.
-  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-
-- O PMD gera um relatório com os problemas encontrados no código-fonte no diretório
-  `target/site/pmd.html`.
-  <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
-
-
 <!-- .slide: data-background="white" data-transition="convex"  -->
-## Instalação do plugin PMD no Maven
+## PMD no Maven
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```xml
@@ -51,10 +34,16 @@ _bugs_, _code smells_ e violações de convenções de codificação.
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>3.21.2</version>
+        <executions>
+            <execution>
+                <phase>verify</phase>
+                <goals>
+                    <goal>pmd</goal>
+                </goals>
+            </execution>
+        </executions>
         <configuration>
             <rulesets>
-                <ruleset>/category/java/bestpractices.xml</ruleset>
-                <ruleset>pmd.xml</ruleset>
                 <ruleset>https://raw.githubusercontent.com/rodrigoprestesmachado/tpack/master/pmd.xml</ruleset>
             </rulesets>
         </configuration>
@@ -63,8 +52,48 @@ _bugs_, _code smells_ e violações de convenções de codificação.
 <!-- .element: style="margin-bottom:50px; font-size: 20px; font-family: Courier New;" -->
 
 
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## O que é o Checkstyle?
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+ - O Checkstyle é uma ferramenta de análise estática de código.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+- Ajuda os desenvolvedores a escreverem código de melhor qualidade.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+- O Checkstyle verifica o código-fonte em busca de possíveis problemas, como
+formatação, documentação, convenções de codificação, entre outros.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: arial; color:#F5F5F5" -->
+
+
 <!-- .slide: data-background="white" data-transition="convex"  -->
-## Instalação do plugin PMD no Ciclo de _Build_
+## Checkstyle no Maven
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-checkstyle-plugin</artifactId>
+    <version>3.1.1</version>
+    <executions>
+        <execution>
+            <phase>verify</phase>
+            <goals>
+                <goal>checkstyle:check</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <configLocation>checkstyle.xml</configLocation>
+    </configuration>
+</plugin>
+```
+<!-- .element: style="margin-bottom:50px; font-size: 20px; font-family: Courier New;" -->
+
+
+<!-- .slide: data-background="white" data-transition="convex"  -->
+## Como interromper o ciclo *default* do Maven?
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```xml
@@ -81,9 +110,9 @@ _bugs_, _code smells_ e violações de convenções de codificação.
         </execution>
     </executions>
     <configuration>
+        <failOnViolation>true</failOnViolation>
+        <maxAllowedViolations>5</maxAllowedViolations>
         <rulesets>
-            <ruleset>/category/java/bestpractices.xml</ruleset>
-            <ruleset>pmd.xml</ruleset>
             <ruleset>https://raw.githubusercontent.com/rodrigoprestesmachado/tpack/master/pmd.xml</ruleset>
         </rulesets>
     </configuration>
