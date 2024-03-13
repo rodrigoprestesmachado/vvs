@@ -4,7 +4,7 @@ title: Análise estática - PMD e Checkstyle
 nav_order: 5
 ---
 
-# PMD e Checkstyle
+# PMD e Checkstyle 🧪
 
 <center>
     <iframe src="https://vvs.rpmhub.dev/pmd/slides/index.html#/"
@@ -45,7 +45,7 @@ praticamente todas as linguagens você encontrará sistemas desse tipo.
 
 ---
 
-### PMD no Vscode
+### PMD no Vscode 🛠️
 
 O vídeo abaixo mostra um exemplo simples de como podemos configurar e utilizar o
 PDM dentro do Vscode. O vídeo tem o foco em três pontos, são eles: (1) a
@@ -64,7 +64,7 @@ do VScode por intermédio do plugin
     </iframe>
 </center>
 
-### Regras do PMD
+### Regras do PMD 📜
 
 Como foi mostrado no vídeo, o PDM possui um conjunto grande de regras, assim,
 os exemplos abaixo mostram regras consideradas úteis por diversos programadores,
@@ -79,7 +79,7 @@ são elas:
 1. Performance
 1. Security
 
-### PMD no Maven
+### PMD no Maven 🛠️
 
 O PDM possui um [plugin](https://maven.apache.org/plugins/maven-pmd-plugin/)
 para Maven, ou seja, existe a possibilidade de se incorporar inspeções estáticas
@@ -218,7 +218,7 @@ no código-fonte.
 
 ---
 
-## Checkstyle
+## Checkstyle 📜
 
 O [Checkstyle](https://checkstyle.org) é uma ferramenta que ajuda a garantir que
 o código Java de um projeto esteja em conformidade com um conjunto de regras
@@ -232,14 +232,14 @@ O Checkstyle possui um conjunto de regras [pré-definidas](https://checkstyle.so
 que podem ser utilizadas para verificar a qualidade do código. Além disso, o
 Checkstyle permite que regras personalizadas sejam criadas.
 
-### Checkstyle no Vscode
+### Checkstyle no Vscode 🛠️
 
 Para utilizar o Checkstyle no Vscode, é necessário instalar a extensão
 [Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle).
 A extensão permite que o Checkstyle seja executado diretamente no Vscode e
 fornece um relatório detalhado das violações do Checkstyle no código-fonte Java.
 
-### Checkstyle no Maven
+### Checkstyle no Maven 🛠️
 
 O Checkstyle pode ser integrado no ciclo default do Maven, Ant, Gradle, entre
 outros. No Maven, o Checkstyle pode ser integrado por meio do plugin
@@ -312,7 +312,7 @@ O exemplo acima mostra a configuração do plugin do Checkstyle no Maven. O *goa
 `checkstyle:check` é executado automaticamente durante a fase `verify` do ciclo
 *default* do Maven.
 
-## Como interromper o ciclo *default* do Maven?
+## Como interromper o ciclo *default* do Maven? 💣
 
 Caso o PMD ou o Checkstyle encontre problemas no código-fonte, é possível
 configurar o Maven para falhar o processo de *build* caso problemas sejam
@@ -343,7 +343,7 @@ encontrados. Para isso, basta adicionar as tags `failOnViolation` e
 </plugin>
 ```
 
-## Exercício
+## Exercício Prático 🏋️
 
 1. Crie um projeto Java/Maven e adicione o plugin do PMD no `pom.xml` do projeto.
 

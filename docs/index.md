@@ -12,7 +12,7 @@ nav_order: 1
 
 * [Análises estática: SonarLint](sonar/sonar.md)  👓
 
-* [Análises estática: PMD](pmd/pmd.md) 💥
+* [Análises estática: PMD e Checkstyle](pmd/pmd.md) 💥
 
 * [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
 
