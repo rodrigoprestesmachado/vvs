@@ -150,11 +150,6 @@ seção `<build>`, observe o exemplo:
 </build>
 ```
 
----
-**Nota:** No exemplo acima utilize apenas um ruleset.
-
----
-
 O exemplo acima faz com que o PMD seja executado durante o ciclo _default_
 durante a fase *verify* do Maven. O PMD irá verificar o código-fonte do projeto
 com base nas regras definidas no _plugin_. No exemplo acima, o _plugin_ do PMD
@@ -298,13 +293,10 @@ projeto, observe o exemplo:
         <execution>
             <phase>verify</phase>
             <goals>
-                <goal>checkstyle:check</goal>
+                <goal>check</goal>
             </goals>
         </execution>
     </executions>
-    <configuration>
-        <configLocation>checkstyle.xml</configLocation>
-    </configuration>
 </plugin>
 ```
 
@@ -314,11 +306,12 @@ O exemplo acima mostra a configuração do plugin do Checkstyle no Maven. O *goa
 
 ## Como interromper o ciclo *default* do Maven? 💣
 
-Caso o PMD ou o Checkstyle encontre problemas no código-fonte, é possível
-configurar o Maven para falhar o processo de *build* caso problemas sejam
-encontrados. Para isso, basta adicionar as tags `failOnViolation` e
-`maxAllowedViolations` no plugin do PMD e/ou do Checkstyle na seção de
-`<configuration>` de cada plugin, observe o exemplo no PMD:
+Caso o PMD e/ou o Checkstyle encontre problemas no código-fonte, é possível
+configurar o Maven para falhar o processo de *build*. No caso do PMD, basta
+utilizar o _goal_ `pmd:check` e para fazer com que o Checkstyle interrompa o
+processo, porém, você poderá estimular um número máximo de violações,
+para isso, basta adicionar as tags `failOnViolation`, `maxAllowedViolations` e `violationSeverity` nas configurações do plugin do PMD e/ou do Checkstyle.
+Observe o exemplo abaixo:
 
 ```xml
 <plugin>
@@ -329,19 +322,23 @@ encontrados. Para isso, basta adicionar as tags `failOnViolation` e
         <execution>
             <phase>verify</phase>
             <goals>
-                <goal>pmd</goal>
+                <goal>check</goal>
             </goals>
         </execution>
     </executions>
     <configuration>
         <failOnViolation>true</failOnViolation>
-        <maxAllowedViolations>5</maxAllowedViolations>
+        <maxAllowedViolations>3</maxAllowedViolations>
+        <violationSeverity>warning</violationSeverity>
         <rulesets>
             <ruleset>https://raw.githubusercontent.com/rodrigoprestesmachado/tpack/master/pmd.xml</ruleset>
         </rulesets>
     </configuration>
 </plugin>
 ```
+
+No exemplo acima, o PMD irá falhar o processo de *build* caso encontre mais de
+3 violações no código-fonte. O PMD já irá considerar avisos (`warning`) como violações.
 
 ## Exercício Prático 🏋️
 

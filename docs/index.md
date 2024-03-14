@@ -22,6 +22,7 @@ nav_order: 1
     * [Teste de componente](componente/componente.md) 🔍
       * [Rest Assured](componente/restassured.md)
       * [K6](carga/carga.md)
+      * [JaCoCo](jacoco/jacoco.md)
 
     * [Teste de sistema Web: Cypress](cypress/cypress.md)
 
@@ -35,6 +36,8 @@ Comunidade da disciplina no [Discord](https://discord.com/invite/C29cqvm):
 canal `#vvs`
 
 ## Material de apoio 📒
+
+* [Maven](maven/maven.md)
 
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
