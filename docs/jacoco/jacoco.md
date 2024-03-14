@@ -1,10 +1,11 @@
 ---
 layout: default
-title: Jacoco
+title: JaCoCo
+parent: Teste de desenvolvimento
 nav_order: 12
 ---
 
-# Jacoco 📊
+# JaCoCo 📊
 
 O **JaCoCo** (_Java Code Coverage_) é uma ferramenta de análise de cobertura de
 código para Java. Ele é utilizado para medir a cobertura de código de um
