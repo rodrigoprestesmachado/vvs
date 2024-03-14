@@ -15,7 +15,8 @@ dos testes. O JaCoCo é um plugin do Maven e pode ser configurado no arquivo
 
 ## Configuração 🖥️
 
-Para configurar o JaCoCo no Maven, é necessário adicionar o plugin `jacoco-maven-plugin` no arquivo `pom.xml` do projeto. O plugin
+Para configurar o JaCoCo no Maven, é necessário adicionar o plugin
+`jacoco-maven-plugin` no arquivo `pom.xml` do projeto. O plugin
 `jacoco-maven-plugin` possui um goal `report` que gera um relatório de
 cobertura de código. Esse relatório é gerado na pasta `target/site/jacoco`
 do projeto.
