@@ -4,4 +4,4 @@ aux_links:
     - "https://vvs.rpmhub.dev"
 
 # Footer content appears at the bottom of every page's main content
-footer_content: "Copyright &copy; 2024 RPM Hub. Distributed by Apache 2.0 license."
+footer_content: "Copyright &copy; 2024 RPM Hub. Distributed by CC-BY-4.0 license."

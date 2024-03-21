@@ -120,6 +120,6 @@ melhorar a eficiência e aumentar a satisfação do cliente.
 </a>
 <br/>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
-    Creative Commons Atribuição 4.0 Internacional
+    CC BY 4.0 DEED
 </a>
 </center>
