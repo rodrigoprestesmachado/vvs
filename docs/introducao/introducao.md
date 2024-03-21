@@ -68,31 +68,32 @@ envolve a definição de estratégias, métodos e ferramentas para garantir que 
 produto atenda aos requisitos e expectativas do usuário. O planejamento de V&V
 pode incluir diversas atividades, abaixo estão algumas delas:
 
-- **Seleção de procedimentos:** Escolher as técnicas e
-  ferramentas mais adequadas para realizar as atividades de V&V, como inspeções,
-  testes de unidade, testes de integração, testes de sistema, testes de
-  aceitação do usuário, entre outros.
 
-- **Definição de ferramentas e requisitos para a execução de testes:**
+- **Seleção de procedimentos:** Escolher as técnicas mais adequadas para
+  realizar as atividades de V&V, como inspeções, testes de unidade, testes de
+  integração, testes de sistema, testes de aceitação do usuário, entre outros.
+  Aqui cabe estabelecer o equilíbrio entre abordagens estáticas e dinâmicas.
+
+- **Definição de requisitos para a execução de testes:**
   Estabelecer os requisitos necessários para a execução de testes, como
-  ambientes de teste, dados de teste, ferramentas de teste,
-  ambiente de gerenciamento de defeitos, entre outros.
+  ambientes de teste (_softwares_ e _hardware_), dados para a execução dos
+  testes, ferramentas de teste, sistema de gerenciamento de defeitos
+  (_bugtrack_), entre outros.
 
-- **Mapeamento de requisitos:** Mapear os requisitos do produto para as
+- **Rastreabilidade dos requisitos:** Mapear os requisitos do produto para as
   atividades de V&V, garantindo que cada requisito seja verificado e validado
   adequadamente.
 
-- **Definição de metas:** Estabelecer metas claras e mensuráveis para o
-  processo de V&V, como a cobertura de testes, a taxa de defeitos encontrados e
-  corrigidos, questões de padronização e conformidade, entre outros.
-
-- **Definição de critérios de aceitação:** Estabelecer critérios claros para
+- **Definição de metas e critérios de aceitação:** Estabelecer metas claras e
+  mensuráveis para o processo de V&V, como o grau de cobertura de testes, a taxa
+  de defeitos aceitável, questões de padronização e conformidade de código,
+  entre outros. Além disso, estabelecer critérios claros para
   aceitação do produto, como requisitos de desempenho, confiabilidade,
   segurança, usabilidade, entre outros.
 
 - **Elaboração de planos:** Criar planos detalhados para as atividades de V&V,
-  incluindo cronogramas, responsabilidades, procedimentos, métricas de
-  acompanhamento, entre outros.
+  incluindo cronogramas, responsabilidades, procedimentos, recursos, orçamentos,
+  entre outros.
 
 - **Avaliação de riscos:** Identificar e avaliar os riscos associados ao
   processo de V&V, como riscos técnicos, riscos de negócios, riscos de
