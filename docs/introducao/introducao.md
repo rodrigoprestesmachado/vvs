@@ -61,6 +61,48 @@ trabalho para identificar problemas, enquanto os testes se concentram na
 execução dinâmica do software para verificar seu comportamento e funcionalidade.
 Ambos são cruciais para garantir a qualidade do produto final.
 
+### Planejamento 📅
+
+O planejamento é uma parte essencial do processo de verificação e validação. Ele
+envolve a definição de estratégias, métodos e ferramentas para garantir que o
+produto atenda aos requisitos e expectativas do usuário. O planejamento de V&V
+pode incluir diversas atividades, abaixo estão algumas delas:
+
+- **Seleção de procedimentos:** Escolher as técnicas e
+  ferramentas mais adequadas para realizar as atividades de V&V, como inspeções,
+  testes de unidade, testes de integração, testes de sistema, testes de
+  aceitação do usuário, entre outros.
+
+- **Definição de ferramentas e requisitos para a execução de testes:**
+  Estabelecer os requisitos necessários para a execução de testes, como
+  ambientes de teste, dados de teste, ferramentas de teste,
+  ambiente de gerenciamento de defeitos, entre outros.
+
+- **Mapeamento de requisitos:** Mapear os requisitos do produto para as
+  atividades de V&V, garantindo que cada requisito seja verificado e validado
+  adequadamente.
+
+- **Definição de metas:** Estabelecer metas claras e mensuráveis para o
+  processo de V&V, como a cobertura de testes, a taxa de defeitos encontrados e
+  corrigidos, questões de padronização e conformidade, entre outros.
+
+- **Definição de critérios de aceitação:** Estabelecer critérios claros para
+  aceitação do produto, como requisitos de desempenho, confiabilidade,
+  segurança, usabilidade, entre outros.
+
+- **Elaboração de planos:** Criar planos detalhados para as atividades de V&V,
+  incluindo cronogramas, responsabilidades, procedimentos, métricas de
+  acompanhamento, entre outros.
+
+- **Avaliação de riscos:** Identificar e avaliar os riscos associados ao
+  processo de V&V, como riscos técnicos, riscos de negócios, riscos de
+  segurança, entre outros.
+
+O planejamento de V&V é uma atividade crítica que pode influenciar
+significativamente a qualidade e o sucesso do produto final. Um planejamento
+cuidadoso e bem estruturado pode ajudar a evitar problemas, reduzir custos,
+melhorar a eficiência e aumentar a satisfação do cliente.
+
 ## Exercícios 📝
 
 <center>
