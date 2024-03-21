@@ -1,0 +1,23 @@
+@startmindmap
+    title Ciclo de vida e Fases do Maven
+
+    * Maven
+    ** Ciclo de Vida Default
+        *** validate
+        *** compile
+        *** test
+        *** package
+        *** verify
+        *** install
+        *** deploy
+
+    ** Ciclo de Vida Clean
+        *** pre-clean
+        *** clean
+        *** post-clean
+
+    ** Ciclo de Vida Site
+        *** pre-site
+        *** site
+        *** post-site
+@endmindmap

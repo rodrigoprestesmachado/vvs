@@ -20,7 +20,8 @@ ciclo de vida. Um **ciclo de vida** é uma sequência de _fases_ que
 são executadas em ordem a fim de construir um projeto. Cada **fase** é
 responsável pela execução de uma ou mais tarefas específica.
 
-O principais ciclos de vida com suas respectivas fases no Maven são: _default_, _clean_ e _site_.
+O principais ciclos de vida com suas respectivas fases no Maven são: _default_,
+_clean_ e _site_.
 
 * O ciclo de vida _default_ compreende as fases: _validate_, _compile_,
   _test_, _package_, _verify_, _install_ e _deploy_.
@@ -28,6 +29,18 @@ O principais ciclos de vida com suas respectivas fases no Maven são: _default_,
   e _post-clean_.
 * Finalmente, o ciclo de vida _site_ inclui as fases _pre-site_, _site_
   e _post-site_.
+
+A [Figura 1](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml) a seguir mostra um mapa conceitual sobre os ciclos de
+vidas e as fases do Maven.
+
+<center>
+    <a href="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml" target="blanck">
+        <img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml" alt="Biblio" width="50%" height="50%"/>
+    </a>
+    <br/>
+    Figura 1 - Mapa conceitual sobre os ciclos de vidas e as fases do Maven
+</center>
+
 
 O ciclo de default é o mais utilizado e é o que será abordado neste material.
 
@@ -44,7 +57,8 @@ O ciclo de default é o mais utilizado e é o que será abordado neste material.
 * _deploy_: implanta o projeto.
 
 Cada fase pode utilizar um ou mais _plugins_. Um **plugin** do Maven
-adiciona funcionalidades na fase em que é executado. Por exemplo, o plugin `maven-pmd-plugin` adiciona a funcionalidade de análise estática de código na
+adiciona funcionalidades na fase em que é executado. Por exemplo, o plugin
+`maven-pmd-plugin` adiciona a funcionalidade de análise estática de código na
 fase `verify` do ciclo de vida _default_
 
 Um plugin pode ter um conjunto de _goals_. Um **goal** é uma tarefa específica
@@ -56,7 +70,10 @@ executados na fase `verify` do ciclo de vida _default_.
 ## Configuração 🖥️
 
 Para configurar o Maven em um projeto, é necessário criar um arquivo `pom.xml`
-(_Projeto Object Model_) na raiz do projeto. O arquivo `pom.xml` é um arquivo de configuração do Maven que contém informações sobre o projeto, como por exemplo, o nome do projeto, a versão, a descrição, as dependências, os plugins, entre outras informações.
+(_Projeto Object Model_) na raiz do projeto. O arquivo `pom.xml` é um arquivo de
+configuração do Maven que contém informações sobre o projeto, como por exemplo,
+o nome do projeto, a versão, a descrição, as dependências, os plugins, entre
+outras informações.
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>

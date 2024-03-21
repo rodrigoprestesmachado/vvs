@@ -13,32 +13,33 @@ nav_order: 5
     </iframe>
 </center>
 
-## PMD
+## PMD - An extensible cross-language static code analyzer 🛠️
 
-Todos os artefatos de um projeto podem ser inspecionados, como por exemplo:
-requisitos, modelos UML, trechos de código, etc. Os artefatos podem ser
-analisados manualmente por meio de revisões por pares e/ou *checklists*. Porém
-quando pensamos em inspeções em código fonte, atualmente contamos com um grande
-conjunto de ferramentas capazes de realizar esse tipo específico de análise.
+Em uma análise estática, todos os artefatos de um projeto podem ser
+inspecionados, como por exemplo: requisitos, modelos UML, trechos de código,
+etc. Os artefatos podem ser analisados manualmente por meio de revisões por
+pares e/ou *checklists*. Porém quando pensamos em inspeções em código fonte,
+atualmente contamos com um grande conjunto de ferramentas capazes de realizar
+esse tipo específico de análise.
 
-Nesse sentido, o [PMD](https://pmd.github.io) é uma ferramenta capaz de analisar
-códigos fonte normalmente escritos em Java. O PDM possui um conjunto grande de
-[regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html) de análise que
-são capazes de apurar desde o estilo do código até questões mais complexas como
-segurança e desempenho. Além disso, existe a possibilidade de se criar novas
-regras no PMD, ou seja, essa característica garante uma boa flexibilidade e,
-consequentemente, uma possibilidade de adaptar seu uso em diferentes tipos de
-projeto Java.
+O [PMD](https://pmd.github.io) é uma dessas ferramenta capaz de analisar
+códigos fonte de sistemas, normalmente escritos em Java. O PDM possui um
+conjunto grande de [regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html)
+de análise que são capazes de apurar desde o estilo do código até questões mais
+complexas como segurança e desempenho. Além disso, existe a possibilidade de se
+criar novas regras no PMD, ou seja, essa característica garante uma boa
+flexibilidade e, consequentemente, uma possibilidade de adaptar seu uso em
+diferentes tipos de projeto Java.
 
 Uma ferramenta como o PMD pode ser utilizada durante a fase de desenvolvimento
 e/ou fazer parte das etapas de construção e instalação de um sistema, assim, as
 próximas seções são dedicadas para mostrar o uso do PMD nesses dois contextos.
 
 ---
-**Para saber mais:** O PMD está sendo utilizado como um exemplo nesse documento,
-porém, existem muitas outras ferramentas capazes de fazer o mesmo tipo de
-análise, um exemplo disso é o [SonarLint](https://www.sonarlint.org), que
-também possui possui extensões para [Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode),
+**Para saber mais:** Existem muitas outras ferramentas capazes de fazer o mesmo
+tipo de análise do PMD, um exemplo disso é o [SonarLint](https://www.sonarlint.org),
+que também possui possui extensões para
+[Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode),
 Eclipse, IntelliJ, entre outros. Também cabe reforçar que ferramentas de
 inspeção de código estático não são uma exclusividade de Java, ou seja, em
 praticamente todas as linguagens você encontrará sistemas desse tipo.
@@ -127,7 +128,14 @@ Uma curiosidade, testes de integração e um teste de cobertura de código podem
 ser executados durante a fase *verify* do ciclo _default_ do Maven.
 Assim, na fase de *verify* é possível encadear uma série de *goals* e,
 consequentemente, ferramentas de análise estática de código, teste de cobertura
-de código, testes de integração, entre outros.
+de código, testes de integração.
+
+---
+**Para saber mais:**  Caso você necessite compreender melhor os conceitos e comandos
+do Maven, uma documentação específica sobre esse assunto pode ser
+encontrada [neste endereço.](https://vvs.rpmhub.dev/maven/maven.html)
+
+---
 
 Assim, para configurar o PMD em um projeto Java/Maven, podemos que declarar o
 _plugin_ do PMD dentro da seção de *plugins* do `pom.xml`, localizado na
