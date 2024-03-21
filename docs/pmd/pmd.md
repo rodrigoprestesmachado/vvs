@@ -13,7 +13,7 @@ nav_order: 5
     </iframe>
 </center>
 
-## PMD - An extensible cross-language static code analyzer 🛠️
+## PMD 🛠️
 
 Em uma análise estática, todos os artefatos de um projeto podem ser
 inspecionados, como por exemplo: requisitos, modelos UML, trechos de código,
@@ -22,9 +22,9 @@ pares e/ou *checklists*. Porém quando pensamos em inspeções em código fonte,
 atualmente contamos com um grande conjunto de ferramentas capazes de realizar
 esse tipo específico de análise.
 
-O [PMD](https://pmd.github.io) é uma dessas ferramenta capaz de analisar
-códigos fonte de sistemas, normalmente escritos em Java. O PDM possui um
-conjunto grande de [regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html)
+O [PMD](https://pmd.github.io) (_An extensible cross-language static code
+analyzer_) é uma dessas ferramenta capaz de analisar códigos fonte de sistemas.
+O PDM possui um conjunto grande de [regras](https://pmd.github.io/pmd-6.27.0/pmd_rules_java.html)
 de análise que são capazes de apurar desde o estilo do código até questões mais
 complexas como segurança e desempenho. Além disso, existe a possibilidade de se
 criar novas regras no PMD, ou seja, essa característica garante uma boa
@@ -37,12 +37,12 @@ próximas seções são dedicadas para mostrar o uso do PMD nesses dois contexto
 
 ---
 **Para saber mais:** Existem muitas outras ferramentas capazes de fazer o mesmo
-tipo de análise do PMD, um exemplo disso é o [SonarLint](https://www.sonarlint.org),
+tipo de análise do PMD, um exemplo é o [SonarLint](https://www.sonarlint.org),
 que também possui possui extensões para
 [Vscode](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode),
-Eclipse, IntelliJ, entre outros. Também cabe reforçar que ferramentas de
-inspeção de código estático não são uma exclusividade de Java, ou seja, em
-praticamente todas as linguagens você encontrará sistemas desse tipo.
+Eclipse, IntelliJ, entre outros. Também cabe reforçar que muitas ferramentas de
+analise estática de código, como o PMD e Sonar, são capazes de realizar análises
+em diversas linguagens de programação.
 
 ---
 
