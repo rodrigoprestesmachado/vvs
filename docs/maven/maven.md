@@ -30,12 +30,12 @@ _clean_ e _site_.
 * Finalmente, o ciclo de vida _site_ inclui as fases _pre-site_, _site_
   e _post-site_.
 
-A [Figura 1](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml) a seguir mostra um mapa conceitual sobre os ciclos de
+A [Figura 1](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml) a seguir mostra um mapa conceitual sobre os ciclos de
 vidas e as fases do Maven.
 
 <center>
-    <a href="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml" target="blanck">
-        <img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/maps.puml" alt="Biblio" width="50%" height="50%"/>
+    <a href="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml" target="blanck">
+        <img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml" alt="Biblio" width="50%" height="50%"/>
     </a>
     <br/>
     Figura 1 - Mapa conceitual sobre os ciclos de vidas e as fases do Maven
