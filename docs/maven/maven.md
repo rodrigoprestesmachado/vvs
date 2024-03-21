@@ -35,7 +35,7 @@ vidas e as fases do Maven.
 
 <center>
     <a href="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml" target="blanck">
-        <img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml" alt="Biblio" width="50%" height="50%"/>
+        <img src="http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rodrigoprestesmachado/vvs/dev/docs/maven/map.puml" alt="Maven" width="35%" height="35%"/>
     </a>
     <br/>
     Figura 1 - Mapa conceitual sobre os ciclos de vidas e as fases do Maven
