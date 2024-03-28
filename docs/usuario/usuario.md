@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Teste de lançamento e de usuário
+title: Teste de lançamento
 parent: Teste de lançamento e integração contínua
 nav_order: 19
 ---
 
-# Teste de lançamento e de usuário 🔍
+# Teste de lançamento 🔍
 
 Coming soon
 {: .label .label-yellow }

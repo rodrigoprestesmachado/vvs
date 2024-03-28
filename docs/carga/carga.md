@@ -2,6 +2,7 @@
 layout: default
 title: Teste de estresse - K6
 parent: Teste de componente
+grand_parent: Teste de desenvolvimento
 nav_order: 13
 ---
 
