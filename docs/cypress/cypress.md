@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Cypress
-parent: Teste de Sistema
+parent: Teste de sistema
 nav_order: 16
 ---
 

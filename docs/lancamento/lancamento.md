@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Teste de lançamento e integração contínua
-parent: Teste de desenvolvimento
 has_children: true
 nav_order: 18
 ---

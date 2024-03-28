@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Selenium
-parent: Teste de desenvolvimento
+parent: Teste de sistema
 nav_order: 17
 ---
 

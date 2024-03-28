@@ -1,12 +1,14 @@
 ---
 layout: default
-title: Recursos sobre temas periféricos
-nav_order: 17
+title: Temas relacionados
+nav_order: 20
 ---
 
-# Recursos sobre temas periféricos
+# Temas relacionados 📚
 
-O presente documento reúne um conjunto de cursos/recursos gratuitos sobre temas periféricos ao tópico de Verificação e Validação de Sistemas e/ou Integração Contínua.
+O presente documento reúne um conjunto de cursos/recursos gratuitos sobre temas
+relacionados ao tópico de Verificação e Validação de Sistemas e/ou Integração
+Contínua.
 
 ## Maven
 
@@ -54,7 +56,6 @@ O presente documento reúne um conjunto de cursos/recursos gratuitos sobre temas
 * [Docker Essentials](https://www.udemy.com/course/docker-essentials/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-pVpMJIJW0cArZP_Sfhi1jA&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
 
 * [Understanding Docker and using it for Selenium automation](https://www.udemy.com/course/understanding-docker-performing-selenium-automation/?LSNPUBID=JVFxdTr9V80&ranEAID=JVFxdTr9V80&ranMID=39197&ranSiteID=JVFxdTr9V80-m9ORi_E7gZgHCcyTspD3og&utm_medium=udemyads&utm_source=aff-campaign) - em inglês
-
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>

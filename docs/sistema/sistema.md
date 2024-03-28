@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Teste de Sistema
+title: Teste de sistema
 parent: Teste de desenvolvimento
 has_children: true
 nav_order: 15

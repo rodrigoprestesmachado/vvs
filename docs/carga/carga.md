@@ -1,18 +1,19 @@
 ---
 layout: default
-title: K6
+title: Teste de estresse - K6
 parent: Teste de componente
 nav_order: 13
 ---
 
-# Teste de estresse: K6
+# Teste de estresse - K6
 
-## Sobre o K6
-
-O [K6](https://k6.io/) é uma ferramenta de teste de carga de código aberto
-construída para fazer testes de desempenho escaláveis, automatizados e de baixo
-custo. Usando o K6, você pode testar a capacidade de resposta de seus back-ends
-e APIs sob carga pesada.
+Um teste de stresse é um teste de software que avalia a capacidade de um sistema
+ou aplicativo de lidar com condições extremas de carga. O objetivo de um teste
+de estresse é determinar o limite de capacidade de um sistema e identificar
+possíveis problemas de desempenho sob carga pesada. O [K6](https://k6.io/) é uma
+ferramenta de teste de carga de código aberto construída para fazer testes de
+desempenho escaláveis, automatizados e de baixo custo. Usando o K6, você pode
+testar a capacidade de resposta de seus back-ends e APIs sob carga pesada.
 
 ## Instalação do K6 com snap
 
