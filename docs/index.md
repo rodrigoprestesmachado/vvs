@@ -6,29 +6,13 @@ nav_order: 1
 
 # Verificação e Validação de Sistemas 🧪
 
-* [Configuração do ambiente](ambiente/ambiente.md) 🖥️
-
-* [Introdução](introducao/introducao.md) 🚀
-
-* [Análises estática: SonarLint](sonar/sonar.md)  👓
-
-* [Análises estática: PMD e Checkstyle](pmd/pmd.md) 💥
-
-* [Teste de desenvolvimento](desenvolvimento/teste.md) 🧪
-
-    * [Teste unitários](unitario/junit.md)
-      * [Mock](unitario/mock.md)
-
-    * [Teste de componente](componente/componente.md) 🔍
-      * [Rest Assured](componente/restassured.md)
-      * [K6](carga/carga.md)
-      * [JaCoCo](jacoco/jacoco.md)
-
-    * [Teste de sistema Web: Cypress](cypress/cypress.md)
-
-    * [Teste de sistema Web: Selenium](selenium/selenium.md)
-
-* [Teste de lançamento e de usuário](usuario/usuario.md) 🔍
+Conteúdo da disciplina de Verificação e Validação de Sistemas do curso de
+Sistemas para Internet do [IFRS](http://ifrs.edu.br) em
+[Porto Alegre](https://poa.ifrs.edu.br). A disciplina aborda conceitos e
+técnicas de verificação e validação de software, incluindo análise estática,
+teste unitário, teste de componente, teste de sistema e de lançamento.
+Além disso, diversas ferramentas e técnicas de integração contínua são
+apresentadas durante a disciplina.
 
 ## Comunidade da disciplina 📢
 
