@@ -2,7 +2,7 @@
 layout: default
 title: Selenium
 parent: Teste de desenvolvimento
-nav_order: 14
+nav_order: 17
 ---
 
 # Selenium IDE, Side Runner e integração com o Junit/Manven

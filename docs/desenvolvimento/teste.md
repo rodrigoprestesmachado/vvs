@@ -2,13 +2,21 @@
 layout: default
 title: Teste de desenvolvimento
 has_children: true
-nav_order: 6
+nav_order: 8
 ---
 
 # Teste de desenvolvimento
 
+Teste de desenvolvimento em um sistema engloba a execução de testes unitários,
+testes de componentes e testes de sistema. Além disso, atividade como teste de
+estresse e análise da cobertura de código são importantes para garantir a
+qualidade do software.
+
 <center>
-<iframe src="https://vvs.rpmhub.dev/desenvolvimento/slides/index.html" title="Teste de desenvolvimento" width="90%" height="500" style="border:none;"></iframe>
+    <iframe src="https://vvs.rpmhub.dev/desenvolvimento/slides/index.html"
+        title="Teste de desenvolvimento"
+        width="90%" height="500" style="border:none;">
+    </iframe>
 </center>
 
 <center>

@@ -1,7 +1,8 @@
 ---
 layout: default
-title: Análise estática - Sonar
-nav_order: 3
+title: Sonar
+parent: Análise estática
+nav_order: 5
 ---
 
 # Sonar
@@ -12,8 +13,6 @@ nav_order: 3
     width="90%" height="500" style="border:none;">
     </iframe>
 </center>
-
-## Resumo 📝
 
 O [SonarLint](https://www.sonarlint.org) é uma ferramenta de inspeção estática
 que auxilia um programador na identificação e correções de problemas de

@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Cypress
-parent: Teste de desenvolvimento
-nav_order: 13
+parent: Teste de Sistema
+nav_order: 16
 ---
 
 # Cypress

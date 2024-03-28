@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Mock
-parent: Teste de desenvolvimento
-nav_order: 8
+parent: Teste Unitário
+nav_order: 10
 ---
 
-# Mock
+# Mock 🧪
 
 A ideia por trás dos objetos mock está na possibilidade de simular o comportamento de uma ou mais dependências (acoplamentos) que por ventura possa existir em um método. Uma vez que conseguimos simular e, consequentemente, controlar o comportamento das dependências, podemos então testar de forma segura um trecho de código do nosso interesse.
 

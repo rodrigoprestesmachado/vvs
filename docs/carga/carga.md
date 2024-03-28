@@ -1,8 +1,8 @@
 ---
 layout: default
 title: K6
-parent: Teste de desenvolvimento
-nav_order: 11
+parent: Teste de componente
+nav_order: 13
 ---
 
 # Teste de estresse: K6

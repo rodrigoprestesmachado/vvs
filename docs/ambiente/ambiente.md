@@ -9,7 +9,7 @@ nav_order: 2
 Essa página tem o objetivo de orientar sobre a instalação das ferramentas que
 serão utilizadas na disciplina de Verificação e Validação de Sistemas.
 
-### Java ♨️
+## Java ♨️
 
 Antes de iniciarmos, se faz necessário verificar se você possui uma JVM
 (*Java Virtual Maquine*) e um JDK (*Java Development Kit*) 11 ou superior
@@ -41,7 +41,7 @@ de se utilizar o SDKMAN é que ele alterar a versão do Java que está sendo
 utilizada na sua máquina de maneira descomplicada. Para saber mais sobre o
 SDKMAN, por favor, consulte a [documentação](https://sdkman.io) da ferramenta.
 
-### Maven 🌐
+## Maven 🌐
 
 O Maven é uma ferramenta de automação de compilação utilizada principalmente
 para projetos Java. Ele é utilizado para gerar um artefato (geralmente um
@@ -148,19 +148,19 @@ quando utilizarmos uma composição de container com a ferramenta
 
 ___
 **Para saber mais:** Todos os comandos relacionados com o Docker podem ser
-utilizados por meio de ferramentas com interface de usuário gráfica. O Docker 
+utilizados por meio de ferramentas com interface de usuário gráfica. O Docker
 possui um [dashboard](https://docs.docker.com/desktop/dashboard/) para Window
 e Mac que facilita bastante a tarefa de trabalhar com imagens e containers do
 Docker. Outra dica de ferramenta é a
 [extensão](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
 do Docker para [VS Code](https://code.visualstudio.com) feita pela Microsoft.
 A extensão possui todas as funcionalidades do dashboard com a vantagem de poder
- ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar
-  integrada a um ambiente de desenvolvimento.
+ser utilizadas em todos os sistemas operacionais (Windows, Linux e Mac) e estar
+integrada a um ambiente de desenvolvimento.
 
 ---
 
-# Referências 📚
+## Referências 📚
 
 JEFERSON FERNANDO NORONHA VITALINO, Marcus André Nunes Castro. [Descomplicando o Docker](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5033249&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU3NDUyOTAyOA==&label=acesso%20restrito) - 2ª Edição. Editora Brasport 152, cap. 1, ISBN 9788574529028.
 

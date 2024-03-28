@@ -1,10 +1,14 @@
 ---
 layout: default
 title: Teste de lançamento e de usuário
-nav_order: 15
+parent: Teste de lançamento e integração contínua
+nav_order: 19
 ---
 
 # Teste de lançamento e de usuário 🔍
+
+Coming soon
+{: .label .label-yellow }
 
 <center>
 <iframe src="https://vvs.rpmhub.dev/usuario/slides/index.html#/" title="Teste de lançamento e usuário" width="90%" height="500" style="border:none;"></iframe>

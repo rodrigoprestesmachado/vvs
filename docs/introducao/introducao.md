@@ -13,8 +13,6 @@ nav_order: 3
     </iframe>
 </center>
 
-## Resumo 📝
-
 A verificação e validação (V&V) é um processo fundamental no desenvolvimento de
 software e em outras áreas, como engenharia e ciência, que envolve a confirmação
 de que um produto, sistema ou processo atende aos requisitos especificados e

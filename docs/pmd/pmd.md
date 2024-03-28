@@ -1,7 +1,8 @@
 ---
 layout: default
-title: Análise estática - PMD e Checkstyle
-nav_order: 5
+title: PMD e Checkstyle
+parent: Análise Estática
+nav_order: 6
 ---
 
 # PMD e Checkstyle 🧪
@@ -131,8 +132,8 @@ consequentemente, ferramentas de análise estática de código, teste de cobertu
 de código, testes de integração.
 
 ---
-**Para saber mais:**  Caso você necessite compreender melhor os conceitos e comandos
-do Maven, uma documentação específica sobre esse assunto pode ser
+**Para saber mais:**  Caso você necessite compreender melhor os conceitos e
+comandos do Maven, uma documentação específica sobre esse assunto pode ser
 encontrada [neste endereço.](https://vvs.rpmhub.dev/maven/maven.html)
 
 ---

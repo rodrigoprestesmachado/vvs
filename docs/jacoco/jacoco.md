@@ -1,8 +1,8 @@
 ---
 layout: default
 title: JaCoCo
-parent: Teste de desenvolvimento
-nav_order: 12
+parent: Teste de componente
+nav_order: 14
 ---
 
 # JaCoCo 📊

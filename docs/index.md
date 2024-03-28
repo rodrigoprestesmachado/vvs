@@ -30,7 +30,7 @@ nav_order: 1
 
 * [Teste de lançamento e de usuário](usuario/usuario.md) 🔍
 
-# Comunidade da disciplina 📢
+## Comunidade da disciplina 📢
 
 Comunidade da disciplina no [Discord](https://discord.com/invite/C29cqvm):
 canal `#vvs`
@@ -41,7 +41,7 @@ canal `#vvs`
 
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
 
-# Referências 📚
+## Referências 📚
 
 SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergamum_ifrs/biblioteca_s/acesso_login.php?cod_acervo_acessibilidade=5030950&acesso=aHR0cHM6Ly9taWRkbGV3YXJlLWJ2LmFtNC5jb20uYnIvU1NPL2lmcnMvOTc4ODU0MzAyNDk3NA==&label=acesso%20restrito), 10ª ed. Editora Pearson 768, cap. 8 ISBN 9788543024974.
 

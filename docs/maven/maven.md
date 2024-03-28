@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Maven
-nav_order: 16
+parent: Análise estática
+nav_order: 7
 ---
 
 # Maven 🧰
