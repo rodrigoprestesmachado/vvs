@@ -138,7 +138,7 @@ ao nosso projeto:
 1. Inclua as três classes abaixo no projeto.
 1. Execute a fase verify do Maven para identificar possíveis problemas no código.
 
-```Java
+```java
 package br.com.exemplo.modelo;
 
 import java.util.Date;
