@@ -2,7 +2,7 @@
 layout: default
 title: PMD e Checkstyle
 parent: Análise Estática
-nav_order: 7
+nav_order: 6
 ---
 
 # PMD e Checkstyle 🧪
