@@ -147,7 +147,7 @@ Os testes devem cobrir os seguintes cenários:
 
 ### Dicas para resolver o exercício com IA:
 
-* Pergunte por explicaçoes conceituais.
+* Pergunte por explicações conceituais.
 * Peça exemplos simples onde esse conceito é aplicado em outros problemas.
 * Solicite analogias para entender melhor.
 * Peça exemplos de código com explicações.
