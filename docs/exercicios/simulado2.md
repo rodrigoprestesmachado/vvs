@@ -1,8 +1,10 @@
 ---
 layout: default
-title: Simulado 1
-nav_order: 21
+title: Segunda Avaliação
+parent: Simulados
+nav_order: 22
 ---
+
 
 # Segunda Avaliação 📝
 

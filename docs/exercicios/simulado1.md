@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Simulado 1
+title: Primeira Avaliação
+parent: Simulados
 nav_order: 21
 ---
 
