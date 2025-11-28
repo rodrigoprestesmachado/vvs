@@ -32,21 +32,6 @@ Use o padrão given() / when() / then() e envie o corpo:
 * No teste, faça o método repository.contarUsuarios() retornar o valor 5 e verifique se o serviço retorna esse mesmo valor ao chamar service.totalUsuarios().
 {: .fs-3 }
 
-## Questões práticas
-
-1. Crie um teste unitário em JUnit 5 que verifique se o método multiplicar(int a, int b)
-da classe Calculadora retorna corretamente o resultado da multiplicação de dois números.
-{: .fs-3 }
-
-2. Implemente um teste unitário em JUnit 5 para o método contarCaracteres(String texto) da classe UtilTexto.
-   * O teste deve verificar se, ao passar a string "java", o método retorna o valor 4.
-{: .fs-3 }
-
-3. Implemente um teste em JUnit 5 para a classe CarrinhoDeCompras.
-   * Antes de cada teste, deve ser criada uma nova instância de CarrinhoDeCompras usando o método anotado com @BeforeEach.
-   * Escreva um teste que adicione dois produtos ao carrinho e verifique se o tamanho da lista de produtos é igual a 2.
-{: .fs-3 }
-
 ## Questões teóricas
 
 1. Qual é a principal diferença entre um teste de componente e um teste unitário?
