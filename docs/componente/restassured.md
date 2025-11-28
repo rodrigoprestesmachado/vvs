@@ -110,7 +110,7 @@ No exemplo acima:
 - Executa a requisição
 - Valida o status 200
 - Verifica se o cookie 'session_cookie' está presente
-- Verifica se o cookie 'user_id' tem o valor '123'
+- Verifica se o cookie 'user_id' tem o valor '123'  
 
 ### Testando autenticação básica
 
