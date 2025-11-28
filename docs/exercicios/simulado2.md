@@ -5,7 +5,6 @@ parent: Simulados
 nav_order: 22
 ---
 
-
 # Segunda Avaliação 📝
 
 1. Utilizando Mockito, crie um teste unitário em que você simula (mocka) um repositório chamado UsuarioRepository.
