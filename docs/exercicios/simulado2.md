@@ -7,6 +7,8 @@ nav_order: 22
 
 # Segunda Avaliação 📝
 
+## Questões práticas
+
 1. Utilizando Mockito, crie um teste unitário em que você simula (mocka) um repositório chamado UsuarioRepository.
 O mock deve retornar um objeto Usuario quando o método buscarPorId(1) for chamado.
 {: .fs-3 }
