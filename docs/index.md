@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 ---
 
-# Verificação e Validação de Sistemas
+# Verificação e Validação de Sistemas (2026/1)
 
 [![Static Badge](https://img.shields.io/badge/Discord%20-%20%23vvs%20-%20%237792C8)](https://discord.gg/u2cCc2dVhj)
 
