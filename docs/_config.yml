@@ -1,6 +1,12 @@
-title: VVS
-description: Disciplina de Validação e Verificação de Sistemas
-show_downloads: false
-plugins:
-  - jekyll-mentions
-theme: jekyll-theme-hacker
+remote_theme: pmarsceill/just-the-docs
+
+favicon_ico: "/imgs/fav.png"
+
+aux_links:
+  "Moodle":
+    - "https://moodle.poa.ifrs.edu.br/course/view.php?id=11359"
+  "Github":
+    - "https://github.com/rodrigoprestesmachado/vvs"
+
+# Footer content appears at the bottom of every page's main content
+footer_content: "Copyright &copy; 2026 <a href='https://rpmhub.dev'>RPM Hub</a>. Distributed by CC-BY-4.0 license."

@@ -1,3 +1,11 @@
+---
+layout: default
+title: Selenium
+parent: Teste de sistema
+grand_parent: Teste de desenvolvimento
+nav_order: 17
+---
+
 # Selenium IDE, Side Runner e integração com o Junit/Manven
 
 O [Selenium](https://www.selenium.dev) fornece ferramentas par criação e reprodução de testes funcionais. Entre as principais ferramentas do Selenium são o Selenium IDE e o Selenium Side Runner. O IDE é uma ferramenta que funciona como um plugin do Chrome e Firefox capaz de gravar, editar, depurar testes funcionais na Web. Outra característica interessante do Selenium IDE é a possibilidade de exportar o testes na linguagem em Java/Junit, facilitando assim, a integração dentro do processo de integração contínua com o Maven. Por outro lado, o Side Runner é uma *software* baseado em [Nodejs](https://nodejs.org/en/) preparado para executar, por meio do interpretador de comandos, testes que foram previamente exportados pelo Selenium IDE. Assim, esse documento mostra aspectos da instalação e uso dessas ferramentas bastante conhecidas dentro do assunto de teste funcionais.
@@ -143,5 +151,5 @@ Sistemas para Internet possui um coordenador. Veja o código:
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Atribuição 4.0 Internacional</a>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0 DEED</a>
 </center>
