@@ -12,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^9.1.1",
-    "start-server-and-test": "^1.14.0"
+    "start-server-and-test": "^2.0.3"
   },
   "dependencies": {
     "http-server": "^14.0.0"
