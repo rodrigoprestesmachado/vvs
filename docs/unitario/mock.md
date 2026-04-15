@@ -8,90 +8,98 @@ nav_order: 10
 
 # Mock 🧪
 
-A ideia por trás dos objetos mock está na possibilidade de simular o
-comportamento de uma ou mais dependências (acoplamentos) que por ventura possa
-existir em um método. Uma vez que conseguimos simular e, consequentemente,
-controlar o comportamento das dependências, podemos então testar de forma
-segura um trecho de código do nosso interesse.
+Imagine que você quer testar uma classe que envia e-mails, consulta um banco
+de dados ou consome uma API externa. Se essas dependências fizerem parte do
+teste, o resultado pode variar conforme o ambiente, a conexão ou o estado do
+sistema, tornando o teste lento, imprevisível e difícil de reproduzir.
+Objetos *mock* resolvem esse problema: eles simulam o comportamento das
+dependências para que você teste apenas o trecho de código que realmente
+importa.
 {: .fs-3 }
 
-A grande maioria de linguagens de programação possui *frameworks* para construir
-objetos mock. Em Java, por exemplo, existe uma série de ferramentas capazes de
-realizar essa tarefa, entre elas: [Mockito](https://site.mockito.org),
-[EasyMock](https://easymock.org), [JMock](https://jmock.org).
+Em Java, o [Mockito](https://site.mockito.org) é o *framework* mais utilizado
+para construir objetos *mock*. Também existem alternativas como
+[EasyMock](https://easymock.org) e [JMock](https://jmock.org), mas o Mockito
+se destaca pela legibilidade e pela integração com o JUnit.
 {: .fs-3 }
 
-Possivelmente, o [Mockito](https://site.mockito.org) seja o *framework* em Java
-mais utilizado na construção de objetos *mock*. Nesse sentido, observe trecho de
-código do exemplo abaixo que ilustra a utilização de objetos _mock_ em um teste
-unitário: 😃
+Um conceito central no Mockito é o *stub*: por meio de
+`when(...).thenReturn(...)` você combina com antecedência qual resposta a
+dependência simulada deve dar durante o teste, tornando o comportamento
+completamente previsível.
+{: .fs-3 }
+
+## Anotações do Mockito
+
+O Mockito oferece quatro anotações que aparecem com frequência em testes
+unitários: `@Mock`, `@Spy`, `@InjectMocks` e `@Captor`. Cada uma atende a
+um cenário diferente, e combiná-las bem é o que torna os testes expressivos
+e fáceis de manter.
+{: .fs-3 }
+
+### `@Mock`
+
+Pense em um dublê de cinema: ele substitui o ator real e executa exatamente
+o que o diretor planejou para aquela cena. A anotação
+[`@Mock`](https://frontbackend.com/java/mockito-mock-annotation) faz o mesmo
+com dependências: cria uma instância simulada de uma classe ou interface e
+permite que você defina, via *stub*, o que cada chamada de método deve
+retornar ou lançar. Use-a sempre que sua classe depender de um recurso
+externo (repositório, API, gateway de pagamento etc.) e você quiser isolar
+esse recurso do teste.
 {: .fs-3 }
 
 ```java
-// 1 - Estende o Junit para suportar, por exemplo, injeção de dependência de objetos Mock
+// Estende o JUnit para suportar injeção de dependências com Mockito
 @ExtendWith(MockitoExtension.class)
 public class AppTest {
 
-    // 2 - Cria um objeto mock da interface (ou classe) DataBase
+    // Cria um objeto mock da interface DataBase
     @Mock
     DataBase base;
 
     @Test
     public void create() {
-        // 3 - define o comportamento do método createUser (stub)
+        // Define o comportamento esperado do método createUser (stub)
         when(base.createUser("Rodrigo")).thenReturn("Rodrigo");
-
-        // TODO ... código do método de teste
-
         assertEquals("Rodrigo", base.createUser("Rodrigo"));
     }
 
     @Test
     public void delete() {
         when(base.deleteUser(5L)).thenReturn(false);
-
-        // TODO ... código do método de teste
-
         assertEquals(false, base.deleteUser(5L));
     }
 
     @Test
     public void deleteProblem() {
-        // 4 - define que o método deleteUser irá lançar uma exceção se receber um valor negativo
+        // Configura o mock para lançar exceção com argumento inválido
         when(base.deleteUser(-1L)).thenThrow(new IllegalArgumentException());
 
-        // TODO ... código do método de teste
-
-        // 5 - verifica se a exceção lançada é igual a esperada
+        // Verifica se a exceção lançada é a esperada
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             base.deleteUser(-1L);
         });
     }
 }
-
 ```
 
-Como pode ser visto no item (3) do exemplo acima, utilizamos o comando `when`
-para criar um *stub*. Um stub faz com que uma chamada de método sempre retorne
-o mesmo valor, ou seja, com essa técnica podemos prever o comportamento das
-dependências e testar de forma segura um trecho de código.
+Sem um *stub* configurado, o Mockito retorna valores padrão (`null` para
+objetos, `0` para números, `false` para booleanos), o que pode não
+representar seu caso de teste. Além disso, evite criar mocks em excesso:
+testes com muitas dependências simuladas tendem a ficar frágeis e difíceis
+de entender.
 {: .fs-3 }
 
-## Principais anotações do Mockito
+### `@Spy`
 
-O Mockito possui algumas anotações úteis que nos auxiliam no momento de
-construir objetos mock, não elas: `@Mock`, `@Spy`, `@InjectMocks` e `@Captor`.
-{: .fs-3 }
-
-A anotação mais usada no Mockito é a [`@Mock`](https://frontbackend.com/java/mockito-mock-annotation). Por meio desta anotação podemos criar e injetar instâncias de classes/interfaces
-simuladas e, por meio da operação de *stub*, podemos definir os valores de
-retorno para as chamadas dos métodos. O exemplo acima demostra a utilização da
-anotação `@Mock`.
-{: .fs-3 }
-
-Já a anotação [`@Spy`](https://www.studytonight.com/java-examples/spy-in-mockito)
-é usada para adicionar um mecanismo de rastreamento em um objeto real, por essa
-razão, trata-se de um mock "parcial", vejamos um exemplo:
+Se `@Mock` substitui completamente a dependência, a anotação
+[`@Spy`](https://www.studytonight.com/java-examples/spy-in-mockito) faz algo
+diferente: ela envolve um objeto real e registra todas as interações com ele,
+como um instrutor de autoescola ao lado do aluno, observando cada manobra
+sem interferir. Os métodos continuam executando o código real, mas você pode
+verificar quantas vezes foram chamados, com quais argumentos, e ainda
+sobrescrever comportamentos pontuais com *stub* quando necessário.
 {: .fs-3 }
 
 ```java
@@ -103,27 +111,24 @@ public class MockitoSpyTest {
 
     @Test
     public void shouldAddItemsToListSuccessfully() {
-        // 1 - estamos fazendo algumas operações no objeto que estamos espionando
-        // onde cada chamada é rastreada pelo Mockito.
+        // Cada chamada ao objeto espionado é rastreada pelo Mockito
         list.add("one");
         list.add("two");
 
-        // 2- o método verify analisa se algumas das condições especificadas
-        // foram atendidas
+        // Verifica se o método add foi chamado duas vezes com qualquer String
         verify(list, times(2)).add(anyString());
 
-        // 3 - verificando se o método add foi chamado com o valor esperado
+        // Verifica se add foi chamado com os valores esperados
         verify(list).add("one");
         verify(list).add("two");
 
-        // 4 - a assertiva prova que o método add foi chamado na instância real
+        // O objeto real foi modificado, portanto size() retorna 2
         Assert.assertEquals(2, list.size());
     }
 }
 ```
 
-Podemos configurar os objetos que estamos espionando de forma que os métodos
-selecionados retornem um valor específico (*stub*), veja o exemplo abaixo:
+Também é possível sobrescrever comportamentos pontuais no objeto espionado:
 {: .fs-3 }
 
 ```java
@@ -136,29 +141,41 @@ public class MockitoSpyStubTest {
     @Test
     public void shouldReturnDifferentSizeWhenStubbed() {
 
-        // 1 - Estamos sobrescrevendo o comportamento original do método size()
-        // (stub)
+        // Sobrescreve o comportamento real de size() com um stub
         when(list.size()).thenReturn(100);
 
         list.add("one");
         list.add("two");
 
         verify(list, times(2)).add(anyString());
-
         verify(list).add("one");
         verify(list).add("two");
 
-        // 2- Nesse caso, não podemos mais esperar que o método size retorne 2
+        // size() agora retorna 100, não 2
         Assertions.assertEquals(100, list.size());
     }
 
 }
 ```
 
-A anotação [`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation)
-permite injetar objetos Mock em um objeto real. Vejamos um exemplo, imagine uma
-interface chama `Network` e uma classe `Communication` que utiliza essa
-interface:
+Prefira `@Spy` quando o comportamento real do objeto contribui para o teste
+e você só precisa monitorar ou ajustar partes específicas. Misturar muitos
+*stubs* com `@Spy` pode gerar confusão entre o que é real e o que é
+simulado.
+{: .fs-3 }
+
+### `@InjectMocks`
+
+Ao escrever testes, montar manualmente um objeto que possui diversas
+dependências pode ser trabalhoso. A anotação
+[`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation)
+automatiza esse processo: ela cria uma instância da classe testada e injeta
+nela os mocks declarados no mesmo teste. Funciona como encaixar peças em um
+quebra-cabeça, onde o Mockito encontra o lugar certo para cada peça simulada.
+{: .fs-3 }
+
+No exemplo abaixo, a interface `Network` é uma dependência da classe
+`Communication`:
 {: .fs-3 }
 
 ```java
@@ -191,28 +208,45 @@ public class Communication {
 @ExtendWith(MockitoExtension.class)
 public class MockitoInjectMocksTest {
 
-    // 1 - a interface Network, que é uma dependência da classe Communication, será simulada
+    // A interface Network será simulada
     @Mock
     Network network;
 
-    // 2 - a anotação @InjectMocks permite criar um mock da classe Communication e resolver
-    // a dependência Network
+    // O Mockito cria Communication e injeta o mock de Network automaticamente
     @InjectMocks
     Communication communication;
 
     @Test
     public void injectMocksTest() {
-        when(communication.send("message")).thenReturn(true);
+        when(network.send("message")).thenReturn(true);
         Assertions.assertEquals(true, communication.send("message"));
     }
 
 }
 ```
 
-Outra anotação interessante é a [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation), utilizada em conjunto com a classe `ArgumentCaptor`, permite  capturar os
-argumentos passados para um método que queremos inspecionar. A captura de
-parâmetros pode ser útil na construção de alguns tipos de testes, por
-[exemplo](https://www.baeldung.com/mockito-argumentcaptor):
+Lembre-se de que `@InjectMocks` depende dos mocks declarados com `@Mock` no
+mesmo arquivo de teste: não declare apenas `@InjectMocks` e espere que as
+dependências apareçam sozinhas. Valide sempre o comportamento da classe
+testada, não apenas os retornos das dependências simuladas.
+{: .fs-3 }
+
+### `@Captor`
+
+Às vezes o método que você quer testar não retorna o objeto de interesse:
+ele simplesmente o repassa para outra dependência. Nesses casos, é como
+querer verificar o conteúdo de um pacote depois de entregá-lo: você precisa
+interceptar o pacote antes do envio para conferir o que está dentro. A
+anotação [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation),
+usada em conjunto com `ArgumentCaptor`, faz exatamente isso: captura o
+argumento passado para um método de uma dependência simulada para que você
+possa inspecioná-lo.
+{: .fs-3 }
+
+No exemplo abaixo, `EmailService` constrói um objeto `Email` internamente e
+o passa para `platform.deliver()`. O teste não tem acesso direto a esse
+objeto, mas com `@Captor` é possível recuperá-lo e verificar se foi montado
+corretamente:
 {: .fs-3 }
 
 ```java
@@ -247,7 +281,6 @@ public class EmailServiceUnitTest {
     @InjectMocks
     EmailService emailService;
 
-    // 1 - utilizando a anotação @Captor em conjunto da classe ArgumentCaptor
     @Captor
     ArgumentCaptor<Email> emailCaptor;
 
@@ -255,27 +288,32 @@ public class EmailServiceUnitTest {
     public void whenDoesSupportHtml_expectHTMLEmailFormat() {
         String to = "info@baeldung.com";
         String subject = "Using ArgumentCaptor";
-        String body = "Hey, let'use ArgumentCaptor";
+        String body = "Hey, let's use ArgumentCaptor";
 
-        // 2 - invocando o método send da classe EmailServices
-        // note que foi criado um objeto mock chamado platform
+        // Invoca o método que constrói e entrega o e-mail internamente
         emailService.send(to, subject, body, true);
 
-        // 3 - capturando o argumento do método deliver do objeto platform
+        // Captura o argumento passado para platform.deliver()
         verify(platform).deliver(emailCaptor.capture());
 
-        // 4 - recuperando o último valor capturado por meio do método getValue
+        // Recupera o objeto capturado
         Email value = emailCaptor.getValue();
 
-        // 5 - verificando se o e-mail foi enviado no formato HTML
+        // Verifica se o formato foi definido corretamente
         assertEquals(Format.HTML, value.getFormat());
     }
 }
 ```
 
-## Exemplos
+O `@Captor` é especialmente útil para inspecionar objetos complexos que são
+construídos internamente e repassados a dependências. Combine sempre com
+`verify(...)` para confirmar que a interação de fato ocorreu antes de
+inspecionar o argumento capturado.
+{: .fs-3 }
 
-Para se obter o código completo dos exemplos dos Mocks acima, por favor acesse:
+## Código completo e repositório
+
+Para obter o código completo dos exemplos apresentados:
 {: .fs-3 }
 
     git clone -b dev https://github.com/rodrigoprestesmachado/vvs
