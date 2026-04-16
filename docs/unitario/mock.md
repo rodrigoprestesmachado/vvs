@@ -41,7 +41,7 @@ e fáceis de manter.
 
 Pense em um dublê de cinema: ele substitui o ator real e executa exatamente
 o que o diretor planejou para aquela cena. A anotação
-[`@Mock`](https://frontbackend.com/java/mockito-mock-annotation) faz o mesmo
+[`@Mock`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mock.html) faz o mesmo
 com dependências: cria uma instância simulada de uma classe ou interface e
 permite que você defina, via *stub*, o que cada chamada de método deve
 retornar ou lançar. Use-a sempre que sua classe depender de um recurso
@@ -93,42 +93,74 @@ de entender.
 
 ### `@Spy`
 
-Se `@Mock` substitui completamente a dependência, a anotação
-[`@Spy`](https://www.studytonight.com/java-examples/spy-in-mockito) faz algo
-diferente: ela envolve um objeto real e registra todas as interações com ele,
-como um instrutor de autoescola ao lado do aluno, observando cada manobra
-sem interferir. Os métodos continuam executando o código real, mas você pode
-verificar quantas vezes foram chamados, com quais argumentos, e ainda
-sobrescrever comportamentos pontuais com *stub* quando necessário.
+Se `@Mock` substitui completamente a dependência por uma versão simulada, a
+anotação
+[`@Spy`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Spy.html)
+funciona de forma diferente: ela usa o objeto **real**, mas envolve esse
+objeto com uma camada de monitoramento. É como colocar uma câmera de
+segurança em uma sala — tudo continua funcionando normalmente, mas cada
+movimento fica registrado.
+{: .fs-3 }
+
+Com `@Spy` você consegue, ao mesmo tempo:
+{: .fs-3 }
+
+- executar o código real do objeto (sem simular nada);
+- verificar quantas vezes um método foi chamado e com quais argumentos;
+- sobrescrever o comportamento de métodos pontuais via *stub*, se necessário.
+{: .fs-3 }
+
+**Exemplo 1 — monitorando chamadas sem alterar o comportamento real**
+{: .fs-3 }
+
+No exemplo abaixo, `list` é uma `ArrayList` real. O `@Spy` não muda nada no
+funcionamento dela: `add` de fato adiciona os itens e `size` de fato retorna
+o tamanho correto. O que muda é que o Mockito registra cada chamada,
+permitindo usar `verify` para confirmar que as interações aconteceram como
+esperado:
 {: .fs-3 }
 
 ```java
 @ExtendWith(MockitoExtension.class)
 public class MockitoSpyTest {
 
+    // list é uma ArrayList real — @Spy apenas a monitora
     @Spy
     private final List<String> list = new ArrayList<>();
 
     @Test
     public void shouldAddItemsToListSuccessfully() {
-        // Cada chamada ao objeto espionado é rastreada pelo Mockito
+
+        // Executa o código real: os itens são de fato adicionados à lista
         list.add("one");
         list.add("two");
 
-        // Verifica se o método add foi chamado duas vezes com qualquer String
+        // verify confirma que add() foi chamado 2 vezes com qualquer String
         verify(list, times(2)).add(anyString());
 
-        // Verifica se add foi chamado com os valores esperados
+        // verify confirma que add() foi chamado com cada valor específico
         verify(list).add("one");
         verify(list).add("two");
 
-        // O objeto real foi modificado, portanto size() retorna 2
+        // assertEquals confirma o estado real da lista — size() retorna 2
+        // porque os itens foram de fato adicionados (código real executado)
         Assert.assertEquals(2, list.size());
     }
 }
 ```
 
-Também é possível sobrescrever comportamentos pontuais no objeto espionado:
+**Exemplo 2 — sobrescrevendo um método pontual com *stub***
+{: .fs-3 }
+
+Às vezes o comportamento real de um método específico atrapalha o teste —
+por exemplo, um método que acessa o banco de dados ou que retorna um valor
+difícil de controlar. Com `@Spy` é possível sobrescrever apenas esse método
+via `when(...).thenReturn(...)`, mantendo o comportamento real dos demais.
+{: .fs-3 }
+
+No exemplo abaixo, `add` continua funcionando de verdade (os itens são
+adicionados), mas `size` é substituído por um *stub* que sempre retorna
+`100`:
 {: .fs-3 }
 
 ```java
@@ -141,34 +173,39 @@ public class MockitoSpyStubTest {
     @Test
     public void shouldReturnDifferentSizeWhenStubbed() {
 
-        // Sobrescreve o comportamento real de size() com um stub
+        // Sobrescreve size() com um stub — apenas este método é simulado
         when(list.size()).thenReturn(100);
 
+        // add() continua usando o código real — os itens são de fato inseridos
         list.add("one");
         list.add("two");
 
+        // verify confirma as interações com add(), que executou normalmente
         verify(list, times(2)).add(anyString());
         verify(list).add("one");
         verify(list).add("two");
 
-        // size() agora retorna 100, não 2
+        // size() retorna 100 (stub), não 2 (valor real)
+        // isso permite simular cenários sem depender do estado interno da lista
         Assertions.assertEquals(100, list.size());
     }
-
 }
 ```
 
-Prefira `@Spy` quando o comportamento real do objeto contribui para o teste
-e você só precisa monitorar ou ajustar partes específicas. Misturar muitos
-*stubs* com `@Spy` pode gerar confusão entre o que é real e o que é
-simulado.
+A diferença fundamental entre os dois exemplos é: no primeiro, **tudo é
+real**; no segundo, **apenas `size` é simulado**, enquanto o restante
+continua executando código real. Prefira `@Spy` quando o comportamento real
+do objeto é importante para o teste e você só precisa monitorar ou ajustar
+partes específicas. Se você se pegar substituindo muitos métodos via *stub*,
+considere usar `@Mock` diretamente — isso é um sinal de que o objeto real
+não contribui para o teste.
 {: .fs-3 }
 
 ### `@InjectMocks`
 
 Ao escrever testes, montar manualmente um objeto que possui diversas
 dependências pode ser trabalhoso. A anotação
-[`@InjectMocks`](https://frontbackend.com/java/mockito-injectmocks-annotation)
+[`@InjectMocks`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/InjectMocks.html)
 automatiza esse processo: ela cria uma instância da classe testada e injeta
 nela os mocks declarados no mesmo teste. Funciona como encaixar peças em um
 quebra-cabeça, onde o Mockito encontra o lugar certo para cada peça simulada.
@@ -237,16 +274,17 @@ testada, não apenas os retornos das dependências simuladas.
 ele simplesmente o repassa para outra dependência. Nesses casos, é como
 querer verificar o conteúdo de um pacote depois de entregá-lo: você precisa
 interceptar o pacote antes do envio para conferir o que está dentro. A
-anotação [`@Captor`](https://frontbackend.com/java/mockito-captor-annotation),
+anotação [`@Captor`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Captor.html),
 usada em conjunto com `ArgumentCaptor`, faz exatamente isso: captura o
 argumento passado para um método de uma dependência simulada para que você
 possa inspecioná-lo.
 {: .fs-3 }
 
-No exemplo abaixo, `EmailService` constrói um objeto `Email` internamente e
-o passa para `platform.deliver()`. O teste não tem acesso direto a esse
-objeto, mas com `@Captor` é possível recuperá-lo e verificar se foi montado
-corretamente:
+Para entender o problema que `@Captor` resolve, considere a classe abaixo.
+O método `send` recebe dados simples (destinatário, assunto, corpo e um
+sinalizador HTML), monta um objeto `Email` internamente e o entrega à
+plataforma. O objeto `Email` nunca é retornado — ele simplesmente some para
+dentro de `platform.deliver()`:
 {: .fs-3 }
 
 ```java
@@ -263,6 +301,7 @@ public class EmailService {
         if (html) {
             format = Format.HTML;
         }
+        // Email é construído internamente — o teste não tem acesso a ele
         Email email = new Email(to, subject, body);
         email.setFormat(format);
         platform.deliver(email);
@@ -271,44 +310,110 @@ public class EmailService {
 }
 ```
 
+O que queremos testar é se o `Email` foi montado corretamente antes de ser
+entregue — em especial, se o formato foi definido como `HTML` quando o
+parâmetro `html` for `true`. Sem `@Captor`, não há como acessar esse objeto
+no teste. Com `@Captor`, o Mockito intercepta a chamada a `deliver()` e
+guarda o argumento para que possamos inspecioná-lo:
+{: .fs-3 }
+
 ```java
 @ExtendWith(MockitoExtension.class)
 public class EmailServiceUnitTest {
 
+    // Simula a plataforma de entrega — não queremos enviar e-mails de verdade
     @Mock
     DeliveryPlatform platform;
 
+    // Cria EmailService e injeta o mock de platform automaticamente
     @InjectMocks
     EmailService emailService;
 
+    // Declara um captor tipado: vai interceptar argumentos do tipo Email
     @Captor
     ArgumentCaptor<Email> emailCaptor;
 
     @Test
     public void whenDoesSupportHtml_expectHTMLEmailFormat() {
-        String to = "info@baeldung.com";
-        String subject = "Using ArgumentCaptor";
-        String body = "Hey, let's use ArgumentCaptor";
 
-        // Invoca o método que constrói e entrega o e-mail internamente
-        emailService.send(to, subject, body, true);
+        // Passo 1: executa o método que queremos testar
+        emailService.send("info@baeldung.com", "Assunto", "Corpo", true);
 
-        // Captura o argumento passado para platform.deliver()
+        // Passo 2: usa verify para confirmar que deliver() foi chamado e,
+        // ao mesmo tempo, captura o Email que foi passado como argumento
         verify(platform).deliver(emailCaptor.capture());
 
-        // Recupera o objeto capturado
-        Email value = emailCaptor.getValue();
+        // Passo 3: recupera o objeto Email capturado
+        Email emailEnviado = emailCaptor.getValue();
 
-        // Verifica se o formato foi definido corretamente
-        assertEquals(Format.HTML, value.getFormat());
+        // Passo 4: inspeciona o objeto — o formato deve ser HTML
+        assertEquals(Format.HTML, emailEnviado.getFormat());
     }
 }
 ```
 
-O `@Captor` é especialmente útil para inspecionar objetos complexos que são
-construídos internamente e repassados a dependências. Combine sempre com
-`verify(...)` para confirmar que a interação de fato ocorreu antes de
-inspecionar o argumento capturado.
+O fluxo segue três responsabilidades bem separadas: `@InjectMocks` monta o
+objeto testado, `verify` + `emailCaptor.capture()` confirmam que a interação
+ocorreu e guardam o argumento, e `assertEquals` valida o conteúdo do objeto
+capturado. Remover qualquer uma dessas etapas enfraquece o teste: sem
+`verify`, o captor nunca é acionado; sem `assertEquals`, você confirma que
+`deliver` foi chamado mas não verifica se o e-mail estava correto.
+{: .fs-3 }
+
+## `verify` vs. `assert`
+
+Nos testes com Mockito aparecem dois tipos de verificação que têm propósitos
+distintos e complementares: `assert` e `verify`. Confundi-los é um erro comum
+que leva a testes que passam sem realmente validar o que deveriam.
+{: .fs-3 }
+
+O **`assert`** (JUnit) verifica o **resultado**: ele compara o valor retornado
+por um método com o valor esperado. A pergunta que responde é *"o método
+devolveu o que eu esperava?"*
+{: .fs-3 }
+
+O **`verify`** (Mockito) verifica o **comportamento**: ele confirma que um
+determinado método de um *mock* foi chamado, quantas vezes e com quais
+argumentos. A pergunta que responde é *"a interação com a dependência ocorreu
+como planejado?"*
+{: .fs-3 }
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class OrderServiceTest {
+
+    @Mock
+    PaymentGateway gateway;
+
+    @InjectMocks
+    OrderService orderService;
+
+    @Test
+    public void shouldChargeAndReturnConfirmation() {
+        when(gateway.charge(150.0)).thenReturn("TX-001");
+
+        String confirmation = orderService.placeOrder(150.0);
+
+        // assert: verifica o RESULTADO retornado pelo método testado
+        assertEquals("TX-001", confirmation);
+
+        // verify: verifica o COMPORTAMENTO — se o gateway foi chamado
+        // com o valor correto, exatamente uma vez
+        verify(gateway, times(1)).charge(150.0);
+    }
+}
+```
+
+Use `assert` quando o método testado retorna um valor que você pode comparar
+diretamente. Use `verify` quando o método não retorna o dado de interesse, mas
+você precisa garantir que a dependência foi acionada corretamente — por
+exemplo, que um e-mail foi enviado, que um log foi registrado ou que um
+repositório foi chamado para persistir um objeto.
+{: .fs-3 }
+
+Evite substituir um pelo outro: um teste que só usa `verify` não checa o
+resultado produzido; um teste que só usa `assert` pode passar mesmo que a
+dependência nunca tenha sido chamada.
 {: .fs-3 }
 
 ## Código completo e repositório
