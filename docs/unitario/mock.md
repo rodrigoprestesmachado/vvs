@@ -98,7 +98,7 @@ anotação
 [`@Spy`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Spy.html)
 funciona de forma diferente: ela usa o objeto **real**, mas envolve esse
 objeto com uma camada de monitoramento. É como colocar uma câmera de
-segurança em uma sala — tudo continua funcionando normalmente, mas cada
+segurança em uma sala: tudo continua funcionando normalmente, mas cada
 movimento fica registrado.
 {: .fs-3 }
 
@@ -110,7 +110,7 @@ Com `@Spy` você consegue, ao mesmo tempo:
 - sobrescrever o comportamento de métodos pontuais via *stub*, se necessário.
 {: .fs-3 }
 
-**Exemplo 1 — monitorando chamadas sem alterar o comportamento real**
+**Exemplo 1: monitorando chamadas sem alterar o comportamento real**
 {: .fs-3 }
 
 No exemplo abaixo, `list` é uma `ArrayList` real. O `@Spy` não muda nada no
@@ -149,11 +149,11 @@ public class MockitoSpyTest {
 }
 ```
 
-**Exemplo 2 — sobrescrevendo um método pontual com *stub***
+**Exemplo 2: sobrescrevendo um método pontual com *stub***
 {: .fs-3 }
 
-Às vezes o comportamento real de um método específico atrapalha o teste —
-por exemplo, um método que acessa o banco de dados ou que retorna um valor
+Às vezes o comportamento real de um método específico atrapalha o teste,
+por exemplo um método que acessa o banco de dados ou que retorna um valor
 difícil de controlar. Com `@Spy` é possível sobrescrever apenas esse método
 via `when(...).thenReturn(...)`, mantendo o comportamento real dos demais.
 {: .fs-3 }
@@ -197,7 +197,7 @@ real**; no segundo, **apenas `size` é simulado**, enquanto o restante
 continua executando código real. Prefira `@Spy` quando o comportamento real
 do objeto é importante para o teste e você só precisa monitorar ou ajustar
 partes específicas. Se você se pegar substituindo muitos métodos via *stub*,
-considere usar `@Mock` diretamente — isso é um sinal de que o objeto real
+considere usar `@Mock` diretamente, pois isso é um sinal de que o objeto real
 não contribui para o teste.
 {: .fs-3 }
 
@@ -283,7 +283,7 @@ possa inspecioná-lo.
 Para entender o problema que `@Captor` resolve, considere a classe abaixo.
 O método `send` recebe dados simples (destinatário, assunto, corpo e um
 sinalizador HTML), monta um objeto `Email` internamente e o entrega à
-plataforma. O objeto `Email` nunca é retornado — ele simplesmente some para
+plataforma. O objeto `Email` nunca é retornado; ele simplesmente some para
 dentro de `platform.deliver()`:
 {: .fs-3 }
 
@@ -406,7 +406,7 @@ public class OrderServiceTest {
 
 Use `assert` quando o método testado retorna um valor que você pode comparar
 diretamente. Use `verify` quando o método não retorna o dado de interesse, mas
-você precisa garantir que a dependência foi acionada corretamente — por
+você precisa garantir que a dependência foi acionada corretamente, por
 exemplo, que um e-mail foi enviado, que um log foi registrado ou que um
 repositório foi chamado para persistir um objeto.
 {: .fs-3 }
