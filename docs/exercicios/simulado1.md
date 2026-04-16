@@ -21,7 +21,13 @@ da classe Calculadora retorna corretamente o resultado da multiplicação de doi
 3. Crie um teste unitário em JUnit 5 que verifique se o método ehPositivo(int numero) da classe Verificador retorna true quando recebe o valor 5 e false quando recebe o valor -3.
 {: .fs-3 }
 
-4. Utilizando Mockito e JUnit 5, crie uma classe de teste com a anotação @ExtendWith(MockitoExtension.class). Declare um mock da interface Repositorio com @Mock e configure o método buscarNome(1) para retornar "Maria" usando when(...).thenReturn(...). Verifique o resultado com assertEquals.
+4. Crie um teste unitário em JUnit 5 que verifique se o método dividir(int a, int b) da classe Calculadora lança uma exceção do tipo ArithmeticException quando o valor de b é igual a zero. Utilize assertThrows para validar o lançamento da exceção.
+{: .fs-3 }
+
+5. Crie um teste unitário em JUnit 5 que verifique se o método buscar(String id) da classe Repositorio lança uma exceção do tipo IllegalArgumentException quando recebe uma string nula. Utilize assertThrows e verifique se a mensagem da exceção é "ID não pode ser nulo".
+{: .fs-3 }
+
+6. Utilizando Mockito e JUnit 5, crie uma classe de teste com a anotação @ExtendWith(MockitoExtension.class). Declare um mock da interface Repositorio com @Mock e configure o método buscarNome(1) para retornar "Maria" usando when(...).thenReturn(...). Verifique o resultado com assertEquals.
 {: .fs-3 }
 
 ## Questões teóricas
