@@ -5,55 +5,61 @@ parent: Teste de desenvolvimento
 nav_order: 18
 ---
 
-# Exercício sobre Junit
+# Exercícios sobre JUnit e Mockito
 
-Abaixo, temos um exercício para praticar a criação de testes unitários com o
-framework Junit. O exercício consiste em criar testes para um sistema de
-logística que gerencia veículos e cargas.
+Neste exercício você vai praticar a criação de testes unitários com JUnit e
+Mockito. O cenário é um sistema de logística que gerencia veículos e cargas.
+O exercício está dividido em duas partes: na primeira, você escreve testes
+usando apenas o JUnit; na segunda, você utiliza o Mockito para simular uma
+dependência externa.
 {: .fs-3 }
 
-## Logistics
+## Parte 1 — Testes com JUnit
 
-Você foi designado para criar testes unitários para a classe `Vehicle`, que
-representa um veículo capaz de transportar cargas até um limite máximo de peso.
-A classe `Vehicle` já está implementada, mas agora é necessário garantir que
-todas as funcionalidades do veículo estejam corretas por meio de testes
-unitários.
+### Contexto
+
+A classe `Vehicle` representa um veículo capaz de transportar cargas até um
+limite máximo de peso. A classe já está implementada e possui os seguintes
+membros:
 {: .fs-3 }
 
-### Instruções:
-
-Examine a classe `Vehicle` fornecida no projeto logistics. Ela possui três
-métodos: `addWeight`, `checkWeightLimit`, e um construtor. Crie uma classe de
-teste chamada `VehicleTest` para testar os métodos da classe `Vehicle`. Utilize
-o framework JUnit para escrever seus testes.
-Implemente pelo menos três cenários de teste para cada método da classe
-`Vehicle`. Considere os seguintes casos:
+| Membro | Descrição |
+|---|---|
+| `Vehicle(int weightLimit)` | Construtor que define o limite máximo de peso do veículo. |
+| `addWeight(Load load)` | Adiciona uma carga ao veículo. |
+| `checkWeightLimit()` | Retorna `true` se o peso total das cargas estiver dentro do limite, `false` caso contrário. |
 {: .fs-3 }
 
+### O que fazer
 
-- Adição de cargas ao veículo.
-- Verificação do limite de peso com diferentes cargas.
-- Verificação do limite de peso com um veículo vazio.
-- Garanta que seus testes cubram todos os possíveis cenários e que os métodos da
-classe `Vehicle` estejam funcionando conforme o esperado.
+1. Abra o projeto `logistics` (veja como obter o código abaixo).
+2. Crie uma classe de teste chamada `VehicleTest`.
+3. Implemente **pelo menos três cenários de teste** que cubram as situações
+   descritas a seguir.
 {: .fs-3 }
 
-Execute os testes e verifique se todos eles passam com sucesso. Caso algum teste
-falhe, depure o código da classe `Vehicle` para corrigir o problema e execute os
-testes novamente até que todos passem.
+### Cenários sugeridos
+
+* **Adicionar cargas** — adicione uma ou mais cargas ao veículo e verifique se
+  a lista de cargas contém a quantidade esperada.
+* **Peso dentro do limite** — adicione cargas cujo peso total não exceda o
+  limite e verifique se `checkWeightLimit()` retorna `true`.
+* **Peso acima do limite** — adicione cargas cujo peso total ultrapasse o
+  limite e verifique se `checkWeightLimit()` retorna `false`.
+* **Veículo vazio** — sem adicionar nenhuma carga, verifique se
+  `checkWeightLimit()` retorna `true`.
 {: .fs-3 }
 
-Certifique-se de que seus testes abranjam uma variedade de casos de uso para
-garantir que o `Vehicle` funcione corretamente em todas as situações. Isso
-inclui testar diferentes combinações de cargas e verificar se o limite de peso
-é respeitado. Certifique-se de que os nomes dos testes sejam descritivos e
-explicativos.
+### Dicas
+
+* Dê nomes descritivos aos seus métodos de teste (por exemplo,
+  `deveRetornarTrueQuandoPesoDentroDoLimite`).
+* Execute os testes e, caso algum falhe, depure o código até que todos passem.
 {: .fs-3 }
 
 ### Código do projeto
 
-Para obter um código inicial para o projeto, acesse o repositório do GitHub:
+Para obter o código inicial, clone o repositório e abra o projeto:
 {: .fs-3 }
 
 ```bash
@@ -61,21 +67,23 @@ git clone -b dev https://github.com/rodrigoprestesmachado/vvs
 code exemplos/logistics
 ```
 
-## Continuação do Logistics com Mockito
+---
 
-Imagine que o projeto evoluiu e você decidiu extrair a lógica de validação de
-peso para um serviço externo chamado `WeightService`. Agora, a classe `Vehicle`
-dependerá desse serviço para validar se o peso total é aceitável. Essa
-dependência será mockada com Mockito nos testes.
+## Parte 2 — Testes com Mockito
+
+### Contexto
+
+Imagine que o projeto evoluiu e a lógica de validação de peso foi extraída
+para um serviço externo chamado `WeightService`. Agora, a classe `Vehicle`
+**depende** desse serviço para verificar se o peso total é aceitável. Como
+não queremos depender da implementação real do serviço durante os testes,
+vamos usar o **Mockito** para simulá-lo.
 {: .fs-3 }
 
-Nova interface WeightService.java:
+A interface `WeightService` possui o seguinte método:
 {: .fs-3 }
 
 ```java
-/**
- * Serviço responsável por validar regras de peso.
- */
 public interface WeightService {
     /**
      * Verifica se o total de peso está dentro do limite permitido.
@@ -85,8 +93,7 @@ public interface WeightService {
 ```
 {: .fs-3 }
 
-
-Classe Vehicle.java modificada para usar o serviço:
+A classe `Vehicle` foi modificada para receber o serviço como dependência:
 {: .fs-3 }
 
 ```java
@@ -107,7 +114,6 @@ public class Vehicle {
 
     public boolean checkWeightLimit() {
         int total = loads.stream().mapToInt(Load::getWeight).sum();
-        // delega a verificação ao serviço externo
         return weightService.isWeightAllowed(total, maximumWeightLimit);
     }
 
@@ -119,40 +125,51 @@ public class Vehicle {
         return loads;
     }
 }
-````
+```
 {: .fs-3 }
 
-Assim, você deve criar testes unitários para a classe `Vehicle` usando Mockito
-para simular o comportamento de `WeightService`.
+### O que fazer
+
+Crie uma classe de teste que utilize `@ExtendWith(MockitoExtension.class)` e
+declare um mock de `WeightService` com `@Mock`. Implemente testes que cubram
+os três cenários abaixo:
 {: .fs-3 }
 
-Os testes devem cobrir os seguintes cenários:
+**Cenário 1 — ✅ Peso dentro do limite**
+* Configure o mock para que `isWeightAllowed(...)` retorne `true`.
+* Adicione cargas ao veículo e chame `checkWeightLimit()`.
+* Verifique se o método retorna `true`.
+* Use `verify(...)` para confirmar que o mock foi chamado com os valores
+  esperados.
 {: .fs-3 }
 
-* ✅ Peso dentro do limite
-  * O serviço retorna true para isWeightAllowed(...).
-  * O método checkWeightLimit() deve retornar true.
-  * Verifique que o mock foi chamado com os valores esperados.
+**Cenário 2 — ❌ Peso acima do limite**
+* Configure o mock para que `isWeightAllowed(...)` retorne `false`.
+* Adicione cargas ao veículo e chame `checkWeightLimit()`.
+* Verifique se o método retorna `false`.
 {: .fs-3 }
 
-* ❌ Peso acima do limite
-  * O serviço retorna false.
-  * O método checkWeightLimit() deve retornar false.
+**Cenário 3 — ⚠️ Serviço lança exceção**
+* Configure o mock para que `isWeightAllowed(...)` lance uma
+  `RuntimeException` usando `when(...).thenThrow(...)`.
+* Verifique se a exceção é propagada corretamente ao chamar
+  `checkWeightLimit()`, utilizando `assertThrows`.
 {: .fs-3 }
 
-* ⚠️ Serviço lança exceção
-  * Simule que isWeightAllowed(...) lança uma exceção (RuntimeException).
-  * Verifique que a exceção é propagada corretamente.
+---
+
+## Dicas para resolver o exercício com IA
+
+Se estiver utilizando uma IA como apoio, experimente as seguintes abordagens:
 {: .fs-3 }
 
-### Dicas para resolver o exercício com IA:
-{: .fs-3 }
-
-* Pergunte por explicações conceituais.
-* Peça exemplos simples onde esse conceito é aplicado em outros problemas.
-* Solicite analogias para entender melhor.
-* Peça exemplos de código com explicações.
-* Solicite ajuda para depuração de código.
+1. **Peça explicações conceituais** — por exemplo, "O que é um mock e por que
+   ele é útil em testes unitários?"
+2. **Solicite analogias** — analogias ajudam a fixar conceitos abstratos.
+3. **Peça exemplos simples** — peça que o conceito seja aplicado em um
+   problema diferente do exercício.
+4. **Solicite exemplos de código comentados** — para entender cada linha.
+5. **Peça ajuda para depuração** — cole o erro e pergunte o que ele significa.
 {: .fs-3 }
 
 <center>
