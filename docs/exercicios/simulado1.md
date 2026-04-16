@@ -18,9 +18,10 @@ da classe Calculadora retorna corretamente o resultado da multiplicação de doi
    * O teste deve verificar se, ao passar a string "java", o método retorna o valor 4.
 {: .fs-3 }
 
-3. Implemente um teste em JUnit 5 para a classe CarrinhoDeCompras.
-   * Antes de cada teste, deve ser criada uma nova instância de CarrinhoDeCompras usando o método anotado com @BeforeEach.
-   * Escreva um teste que adicione dois produtos ao carrinho e verifique se o tamanho da lista de produtos é igual a 2.
+3. Crie um teste unitário em JUnit 5 que verifique se o método ehPositivo(int numero) da classe Verificador retorna true quando recebe o valor 5 e false quando recebe o valor -3.
+{: .fs-3 }
+
+4. Utilizando Mockito e JUnit 5, crie uma classe de teste com a anotação @ExtendWith(MockitoExtension.class). Declare um mock da interface Repositorio com @Mock e configure o método buscarNome(1) para retornar "Maria" usando when(...).thenReturn(...). Verifique o resultado com assertEquals.
 {: .fs-3 }
 
 ## Questões teóricas
@@ -58,6 +59,7 @@ da classe Calculadora retorna corretamente o resultado da multiplicação de doi
 * B) Rastrear os autores dos requisitos para responsabilização.
 * C) Medir a quantidade de requisitos alterados durante o desenvolvimento.
 * D) Registrar cada requisito em uma ferramenta de versionamento de código.
+{: .fs-3 }
 
 6. Em que momento a validação deve ocorrer no ciclo de vida do software?
 * A) Apenas após a entrega final ao cliente
@@ -143,27 +145,46 @@ da classe Calculadora retorna corretamente o resultado da multiplicação de doi
 * D) @Execute
 {: .fs-3 }
 
-
-18. Qual anotação do JUnit é utilizada para executar um método antes de cada teste?
-* A) @BeforeAll
-* B) @BeforeEach
-* C) @InitTest
-* D) @Setup
-{: .fs-3 }
-
-
-19. O que acontece quando uma asserção falha em um teste JUnit?
+18. O que acontece quando uma asserção falha em um teste JUnit?
 * A) O teste continua normalmente até o fim.
 * B) O compilador ignora o erro.
 * C) O resultado do teste é marcado como “inconclusivo”.
 * D) O teste é interrompido e marcado como falho.
 {: .fs-3 }
 
-20. Qual anotação do JUnit 5 deve ser usada para indicar que um método de teste não deve ser executado?
+19. Qual anotação do JUnit 5 deve ser usada para indicar que um método de teste não deve ser executado?
 * A) @Disabled
 * B) @IgnoreTest
 * C) @Skip
 * D) @NoRun
+{: .fs-3 }
+
+20. Qual é a principal finalidade de um objeto mock em testes unitários?
+* A) Substituir o banco de dados de produção durante o desenvolvimento.
+* B) Simular o comportamento de dependências externas para isolar o código em teste.
+* C) Gerar relatórios de cobertura de código automaticamente.
+* D) Compilar o código-fonte antes da execução dos testes.
+{: .fs-3 }
+
+21. No Mockito, qual é a função da construção when(...).thenReturn(...)?
+* A) Executar um método real e armazenar o resultado em cache.
+* B) Definir o valor que um método simulado deve retornar quando chamado com determinados argumentos.
+* C) Verificar se um método foi chamado durante o teste.
+* D) Criar automaticamente uma instância real da classe testada.
+{: .fs-3 }
+
+22. Qual anotação deve ser utilizada em uma classe de teste JUnit 5 para habilitar o uso de anotações do Mockito como @Mock?
+* A) @RunWith(Mockito.class)
+* B) @ExtendWith(MockitoExtension.class)
+* C) @EnableMocks
+* D) @MockitoSettings
+{: .fs-3 }
+
+23. No Mockito, qual é a diferença entre @Mock e @Spy?
+* A) @Mock cria um objeto real e @Spy cria um objeto simulado.
+* B) @Mock cria um objeto totalmente simulado, enquanto @Spy envolve um objeto real permitindo monitorar e sobrescrever comportamentos pontuais.
+* C) @Spy serve apenas para verificar exceções, enquanto @Mock serve para todos os cenários.
+* D) Não há diferença; ambas as anotações possuem a mesma funcionalidade.
 {: .fs-3 }
 
 <center>
