@@ -2,7 +2,7 @@
 layout: default
 title: Exercícios
 parent: Teste de desenvolvimento
-nav_order: 18
+nav_order: 19
 ---
 
 # Exercícios sobre JUnit e Mockito

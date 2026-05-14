@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitetura Hexagonal — Objeto de Aprendizagem</title>
+<style>
+  :root {
+    --hex: #6366f1; --hex-light: #818cf8; --hex-dark: #4338ca;
+    --domain: #10b981; --port: #f59e0b;
+    --adp-in: #3b82f6; --adp-out: #8b5cf6;
+    --bg: #0f172a; --surface: #1e293b; --surface2: #273548;
+    --text: #e2e8f0; --muted: #94a3b8; --border: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* NAV */
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-weight: 700; font-size: 1rem; color: var(--hex-light); padding: 1rem 1.5rem 1rem 0; border-right: 1px solid var(--border); margin-right: 1rem; white-space: nowrap; }
+  nav button { background: none; border: none; color: var(--muted); cursor: pointer; padding: .75rem 1rem; font-size: .9rem; transition: color .2s; border-bottom: 2px solid transparent; white-space: nowrap; }
+  nav button:hover { color: var(--text); }
+  nav button.active { color: var(--hex-light); border-bottom-color: var(--hex-light); }
+
+  /* PAGES */
+  .page { display: none; max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  .page.visible { display: block; }
+
+  h1 { font-size: 2rem; color: var(--hex-light); margin-bottom: .5rem; }
+  h2 { font-size: 1.4rem; color: var(--hex-light); margin: 2rem 0 .75rem; }
+  h3 { font-size: 1.05rem; color: var(--port); margin: 1.5rem 0 .5rem; }
+  p  { color: var(--muted); margin-bottom: 1rem; }
+  strong { color: var(--text); }
+  .subtitle { color: var(--muted); font-size: 1.05rem; margin-bottom: 2rem; }
+  code { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: .1em .4em; font-size: .88em; font-family: 'Consolas', monospace; color: #f1fa8c; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; }
+  .card.domain  { border-color: #10b98135; }
+  .card.port    { border-color: #f59e0b35; }
+  .card.adapter { border-color: #3b82f635; }
+  .card-icon { font-size: 1.75rem; margin-bottom: .5rem; }
+  .card h4 { color: var(--text); margin-bottom: .3rem; font-size: .92rem; }
+  .card p  { font-size: .84rem; margin: 0; }
+
+  /* HEX DIAGRAM */
+  .hex-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; display: flex; justify-content: center; overflow-x: auto; }
+  svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  /* LAYERS */
+  .layer { border-left: 3px solid var(--border); padding: .7rem 1.2rem; margin: .6rem 0; background: var(--surface); border-radius: 0 8px 8px 0; }
+  .layer.domain    { border-color: var(--domain); }
+  .layer.port      { border-color: var(--port); }
+  .layer.adp-in    { border-color: var(--adp-in); }
+  .layer.adp-out   { border-color: var(--adp-out); }
+  .layer.config    { border-color: #475569; }
+  .layer h4 { font-size: .92rem; margin-bottom: .2rem; }
+  .layer.domain  h4 { color: var(--domain); }
+  .layer.port    h4 { color: var(--port); }
+  .layer.adp-in  h4 { color: #60a5fa; }
+  .layer.adp-out h4 { color: #a78bfa; }
+  .layer.config  h4 { color: var(--muted); }
+  .layer p { font-size: .86rem; margin: 0; }
+
+  /* BADGES */
+  .badge { display: inline-block; font-size: .73rem; padding: .2rem .6rem; border-radius: 100px; font-weight: 600; letter-spacing: .03em; }
+  .badge.domain    { background: #10b98128; color: var(--domain); }
+  .badge.port      { background: #f59e0b28; color: var(--port); }
+  .badge.adp-in    { background: #3b82f628; color: #60a5fa; }
+  .badge.adp-out   { background: #8b5cf628; color: #c4b5fd; }
+  .badge.outside   { background: #47556928; color: #94a3b8; }
+
+  /* CODE */
+  pre { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; overflow-x: auto; font-size: .8rem; line-height: 1.75; margin: .75rem 0; font-family: 'Consolas', 'Fira Code', monospace; }
+  .kw  { color: #ff79c6; }
+  .ty  { color: #8be9fd; }
+  .str { color: #f1fa8c; }
+  .cmt { color: #6272a4; font-style: italic; }
+  .fn  { color: #50fa7b; }
+  .nm  { color: #bd93f9; }
+  .ann { color: #ffb86c; }
+
+  /* TIP */
+  .tip { background: #6366f112; border: 1px solid #6366f138; border-radius: 8px; padding: .75rem 1rem; font-size: .87rem; color: var(--muted); margin: 1rem 0; }
+  .tip strong { color: var(--hex-light); }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; overflow-x: auto; padding: 1rem 0; margin: .5rem 0; gap: 0; }
+  .fb { flex-shrink: 0; padding: .55rem .9rem; border-radius: 8px; font-size: .76rem; font-weight: 600; text-align: center; min-width: 95px; line-height: 1.3; }
+  .fa { flex-shrink: 0; color: var(--border); font-size: 1.2rem; padding: 0 .2rem; }
+  .fb-out    { background: #47556918; border: 1px solid #475569; color: #94a3b8; }
+  .fb-adpin  { background: #3b82f618; border: 1px solid #3b82f6; color: #60a5fa; }
+  .fb-port   { background: #f59e0b18; border: 1px solid #f59e0b; color: #fbbf24; }
+  .fb-domain { background: #10b98118; border: 1px solid #10b981; color: #34d399; }
+  .fb-adpout { background: #8b5cf618; border: 1px solid #8b5cf6; color: #c4b5fd; }
+  .fb-db     { background: #47556918; border: 1px solid #475569; color: #94a3b8; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: .86rem; margin: 1rem 0; }
+  th { background: var(--surface2); color: var(--hex-light); padding: .65rem 1rem; text-align: left; border-bottom: 2px solid var(--border); }
+  td { padding: .6rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ─── SIMULATOR ─── */
+  .sim-wrap { margin: 1.5rem 0; }
+  .sim-layout { display: grid; grid-template-columns: 195px 1fr; gap: 1.25rem; }
+  @media (max-width: 640px) { .sim-layout { grid-template-columns: 1fr; } }
+
+  .sim-arch { display: flex; flex-direction: column; }
+  .sim-node {
+    border: 2px solid var(--border); border-radius: 8px;
+    padding: .45rem .7rem; font-size: .74rem; background: var(--surface);
+    transition: all .3s; line-height: 1.3; cursor: default;
+  }
+  .sim-node strong { display: block; font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: #475569; margin-bottom: 1px; }
+  .sim-node em     { color: var(--text); font-style: normal; font-weight: 500; display: block; }
+  .sim-node small  { color: #475569; font-size: .65rem; }
+
+  .sim-node.glow-outside  { border-color: #64748b; background: #64748b18; box-shadow: 0 0 8px #64748b30; }
+  .sim-node.glow-adp-in   { border-color: var(--adp-in);  background: #3b82f618; box-shadow: 0 0 10px #3b82f640; }
+  .sim-node.glow-port     { border-color: var(--port);    background: #f59e0b15; box-shadow: 0 0 10px #f59e0b40; }
+  .sim-node.glow-domain   { border-color: var(--domain);  background: #10b98115; box-shadow: 0 0 12px #10b98148; }
+  .sim-node.glow-adp-out  { border-color: var(--adp-out); background: #8b5cf618; box-shadow: 0 0 10px #8b5cf640; }
+  .sim-node.glow-db       { border-color: #64748b;        background: #64748b18; box-shadow: 0 0 8px #64748b30; }
+
+  .sim-conn { width: 2px; height: 13px; background: var(--border); margin: 0 auto; transition: background .3s; border-radius: 1px; }
+  .sim-conn.lit { background: var(--hex-light); box-shadow: 0 0 5px var(--hex); }
+
+  .sim-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: .9rem; min-height: 340px; }
+  .sim-panel-top { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  .sim-step-num { font-size: .75rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: .15rem .65rem; }
+  .sim-title { font-size: 1rem; color: var(--text); font-weight: 600; margin: 0; }
+  .sim-desc  { font-size: .85rem; color: var(--muted); line-height: 1.65; margin: 0; }
+
+  .sim-file { background: var(--surface2); border: 1px solid var(--border); border-bottom: none; border-radius: 6px 6px 0 0; padding: .3rem .9rem; font-size: .72rem; color: var(--muted); font-family: 'Consolas', monospace; }
+  .sim-panel pre { margin: 0; border-top-left-radius: 0; border-top-right-radius: 0; font-size: .76rem; max-height: 310px; overflow-y: auto; flex: 1; padding: .6rem 0; }
+
+  /* Code lines with debugger-style breakpoint highlight */
+  .cl     { display: block; white-space: pre; padding: 0 1rem 0 .5rem; line-height: 1.7; }
+  .cl.hl  { background: #fbbf2416; border-left: 3px solid #fbbf24; padding-left: calc(.5rem - 3px); }
+  .cl-bp  { display: inline-block; width: 1.1em; font-size: .65rem; color: transparent; }
+  .cl.hl .cl-bp { color: #fbbf24; }
+  .cl-ln  { display: inline-block; width: 2em; text-align: right; margin-right: .75rem; color: #3d5068; font-size: .7rem; user-select: none; }
+
+  .sim-controls { display: flex; gap: .5rem; align-items: center; justify-content: center; margin: .75rem 0 .25rem; }
+  .sim-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: .4rem 1rem; border-radius: 7px; cursor: pointer; font-size: .86rem; transition: all .2s; }
+  .sim-btn:hover:not(:disabled) { border-color: var(--hex); color: var(--hex-light); }
+  .sim-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .sim-btn.playing { border-color: var(--domain); color: var(--domain); }
+  .sim-counter { font-size: .8rem; color: var(--muted); min-width: 70px; text-align: center; }
+
+  .prog-wrap { background: var(--surface2); border-radius: 100px; height: 5px; margin: .3rem 0 0; }
+  .prog-bar  { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--hex), var(--hex-light)); transition: width .3s; }
+
+  /* ─── REFERENCES ─── */
+  .ref-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; margin: .6rem 0; display: flex; gap: .9rem; align-items: flex-start; }
+  .ref-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .1rem; }
+  .ref-card h4 { color: var(--text); margin-bottom: .25rem; font-size: .92rem; }
+  .ref-card p  { font-size: .84rem; margin: 0 0 .4rem; }
+  .ref-card a  { color: var(--hex-light); font-size: .84rem; text-decoration: none; word-break: break-all; }
+  .ref-card a:hover { text-decoration: underline; }
+
+  .tech-row { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0 1.5rem; }
+  .tech { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: .28rem .8rem; font-size: .8rem; color: var(--text); }
+  .tech.java    { border-color: #f59e0b50; color: #fbbf24; }
+  .tech.quarkus { border-color: #6366f150; color: #818cf8; }
+  .tech.mysql   { border-color: #10b98150; color: #34d399; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">&#9112; Hexagonal</div>
+  <button class="active" onclick="go('conceitos')">Conceitos</button>
+  <button onclick="go('simulador')">Simulador Interativo</button>
+  <button onclick="go('referencias')">Referências</button>
+</nav>
+
+<!-- ══════════════════════════════ CONCEITOS ══════════════════════════════ -->
+<div id="page-conceitos" class="page visible">
+  <h1>Arquitetura Hexagonal</h1>
+  <p class="subtitle">Ports &amp; Adapters — Alistair Cockburn (2005)</p>
+
+  <h2>Definição</h2>
+  <p>A <strong>Arquitetura Hexagonal</strong> — também chamada de <strong>Ports &amp; Adapters</strong> — organiza o software em torno de um <strong>núcleo de domínio isolado</strong>. Seu princípio central é que a <strong>lógica de negócio nunca deve depender de detalhes de infraestrutura</strong>: banco de dados, frameworks web, serviços de e-mail, filas de mensagens, etc.</p>
+  <p>A ideia foi publicada por Alistair Cockburn em 2005 e tornou-se a base para Clean Architecture (Martin) e Onion Architecture (Palermo) — todas variações do mesmo princípio fundamental: <strong>inversão de dependência em favor do domínio</strong>.</p>
+
+  <div class="tip">
+    <strong>Por que "hexagonal"?</strong> O hexágono não tem significado geométrico especial. Cockburn o escolheu por ter lados suficientes para representar múltiplas portas, sem remeter visualmente à arquitetura em camadas convencional (que usa retângulos empilhados verticalmente).
+  </div>
+
+  <h2>Objetivos</h2>
+  <div class="card-grid">
+    <div class="card domain">
+      <div class="card-icon">🏛️</div>
+      <h4>Isolar o Domínio</h4>
+      <p>A lógica de negócio fica em Java puro — sem <code>@Entity</code>, sem <code>@Inject</code>, sem imports de frameworks.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔀</div>
+      <h4>Substituição Livre</h4>
+      <p>Trocar MySQL por MongoDB, REST por eventos? Basta trocar o adaptador. O domínio permanece intocado.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧪</div>
+      <h4>Testabilidade Máxima</h4>
+      <p>O serviço pode ser testado com <code>new BooksService(fakeRepo, fakeNotify)</code> — zero CDI, zero banco.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📐</div>
+      <h4>Fronteiras Explícitas</h4>
+      <p>Cada componente tem uma responsabilidade clara. Adaptadores traduzem; o domínio decide.</p>
+    </div>
+  </div>
+
+  <h2>O Hexágono — Diagrama</h2>
+  <div class="hex-diagram">
+    <svg width="530" height="345" viewBox="0 0 530 345">
+      <!-- outer ring: adapters -->
+      <polygon points="265,18 478,112 478,232 265,326 52,232 52,112" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+      <!-- middle ring: ports -->
+      <polygon points="265,58 428,138 428,208 265,288 102,208 102,138" fill="#0f172a" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+      <!-- inner: domain -->
+      <polygon points="265,100 382,162 382,182 265,244 148,182 148,162" fill="#10b98112" stroke="#10b981" stroke-width="2"/>
+      <!-- domain text -->
+      <text x="265" y="165" text-anchor="middle" fill="#10b981" font-size="12" font-weight="700">DOMÍNIO</text>
+      <text x="265" y="181" text-anchor="middle" fill="#6ee7b7" font-size="10">Book · BooksService</text>
+      <!-- port ring label -->
+      <text x="265" y="52" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">PORTAS (interfaces)</text>
+      <!-- port labels inside ring -->
+      <text x="265" y="116" text-anchor="middle" fill="#f59e0b80" font-size="8">AddBookUseCase</text>
+      <text x="375" y="178" text-anchor="middle" fill="#f59e0b80" font-size="8">BookRepository</text>
+      <text x="152" y="178" text-anchor="middle" fill="#f59e0b80" font-size="8">EmailNotification</text>
+      <!-- ADAPTERS IN (blue) -->
+      <rect x="195" y="22" width="70" height="26" rx="5" fill="#3b82f618" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="230" y="39" text-anchor="middle" fill="#93c5fd" font-size="9.5" font-weight="600">BookResource</text>
+      <rect x="118" y="52" width="56" height="24" rx="5" fill="#3b82f618" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="146" y="68" text-anchor="middle" fill="#93c5fd" font-size="9">CLI / Tests</text>
+      <rect x="352" y="48" width="72" height="24" rx="5" fill="#3b82f618" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="388" y="64" text-anchor="middle" fill="#93c5fd" font-size="9">gRPC / Events</text>
+      <!-- ADAPTERS OUT (purple) -->
+      <rect x="414" y="150" width="58" height="30" rx="5" fill="#8b5cf618" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="443" y="163" text-anchor="middle" fill="#c4b5fd" font-size="9" font-weight="600">Panache</text>
+      <text x="443" y="176" text-anchor="middle" fill="#c4b5fd" font-size="9">BookRepo</text>
+      <rect x="58" y="150" width="58" height="30" rx="5" fill="#8b5cf618" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="87" y="163" text-anchor="middle" fill="#c4b5fd" font-size="9">LogEmail</text>
+      <text x="87" y="176" text-anchor="middle" fill="#c4b5fd" font-size="9">Notif.</text>
+      <rect x="118" y="264" width="62" height="24" rx="5" fill="#8b5cf618" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="149" y="280" text-anchor="middle" fill="#c4b5fd" font-size="9">Cache</text>
+      <rect x="348" y="264" width="70" height="24" rx="5" fill="#8b5cf618" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="383" y="280" text-anchor="middle" fill="#c4b5fd" font-size="9">Mensageria</text>
+      <!-- Composition Root -->
+      <rect x="216" y="308" width="98" height="22" rx="5" fill="#10b98118" stroke="#10b981" stroke-width="1.5"/>
+      <text x="265" y="323" text-anchor="middle" fill="#6ee7b7" font-size="9.5">ApplicationBeans</text>
+      <!-- legend -->
+      <rect x="38" y="311" width="10" height="10" rx="2" fill="#10b981"/>
+      <text x="52" y="320" fill="#94a3b8" font-size="8.5">Domínio</text>
+      <rect x="98" y="311" width="10" height="10" rx="2" fill="#f59e0b"/>
+      <text x="112" y="320" fill="#94a3b8" font-size="8.5">Portas</text>
+      <rect x="155" y="311" width="10" height="10" rx="2" fill="#3b82f6"/>
+      <text x="169" y="320" fill="#94a3b8" font-size="8.5">Adapt. Entrada</text>
+      <rect x="270" y="311" width="10" height="10" rx="2" fill="#8b5cf6"/>
+      <text x="284" y="320" fill="#94a3b8" font-size="8.5">Adapt. Saída</text>
+    </svg>
+  </div>
+
+  <h2>Componentes em Detalhe</h2>
+
+  <h3>1. Domínio <span class="badge domain">core</span></h3>
+  <div class="layer domain">
+    <h4>Núcleo da aplicação — Java puro</h4>
+    <p>Contém: a entidade <code>Book</code> (com fábrica estática <code>Book.of()</code> que valida ISBN, campos obrigatórios e exemplares), as interfaces de porta (<code>AddBookUseCase</code>, <code>BookRepository</code>, <code>EmailNotification</code>…) e o serviço <code>BooksService</code>. Zero imports de Quarkus, JPA ou CDI.</p>
+  </div>
+
+  <h3>2. Portas de Entrada <span class="badge port">driving ports</span></h3>
+  <div class="layer port">
+    <h4>O que o domínio oferece</h4>
+    <p>Interfaces definidas no domínio que expõem as operações disponíveis: <code>AddBookUseCase</code>, <code>ListBookUseCase</code>, <code>UpdateBookUseCase</code>, <code>DeleteBookUseCase</code>. Todos os adaptadores de entrada dependem dessas interfaces — nunca de <code>BooksService</code> diretamente.</p>
+  </div>
+
+  <h3>3. Portas de Saída <span class="badge port">driven ports</span></h3>
+  <div class="layer port">
+    <h4>O que o domínio precisa</h4>
+    <p>Interfaces que o domínio define e os adaptadores implementam: <code>BookRepository</code> (persistência) e <code>EmailNotification</code> (notificação). <code>BooksService</code> depende dessas interfaces — nunca de <code>PanacheBookRepository</code> diretamente.</p>
+  </div>
+
+  <h3>4. Adaptadores de Entrada <span class="badge adp-in">driving adapters</span></h3>
+  <div class="layer adp-in">
+    <h4>Conduzem o domínio a partir do mundo externo</h4>
+    <p><code>BookResource</code> (JAX-RS): recebe a requisição HTTP, deserializa o JSON para <code>BookRequest</code>, cria o objeto <code>Book</code> via <code>Book.of()</code> e chama a porta de entrada. Todas as anotações <code>@Path</code>, <code>@POST</code>, <code>@Inject</code> ficam aqui — o domínio não as conhece.</p>
+  </div>
+
+  <h3>5. Adaptadores de Saída <span class="badge adp-out">driven adapters</span></h3>
+  <div class="layer adp-out">
+    <h4>São acionados pelo domínio através das portas</h4>
+    <p><code>PanacheBookRepository</code>: implementa <code>BookRepository</code> com Hibernate Reactive (Panache) e MySQL. Usa <code>BookMapper</code> (MapStruct) para converter <code>Book ↔ BookEntity</code>. <code>LogEmailNotification</code>: implementa <code>EmailNotification</code> simulando e-mail via log.</p>
+  </div>
+
+  <h3>6. Composition Root <span class="badge outside">config</span></h3>
+  <div class="layer config">
+    <h4>O único ponto de conexão entre domínio e adaptadores</h4>
+    <p><code>ApplicationBeans</code>: instancia <code>BooksService</code> com <code>new</code> (Java puro), recebendo os adaptadores via <code>@Inject</code> CDI, e expõe cada instância como porta de entrada via <code>@Produces</code>. O domínio não tem nenhuma anotação CDI e não sabe que esse arquivo existe.</p>
+  </div>
+
+  <h2>Regra de Dependência</h2>
+  <div class="tip">
+    <strong>Todas as setas de import apontam para dentro do hexágono.</strong>
+    <code>BookResource</code> importa <code>AddBookUseCase</code> (domínio). <code>PanacheBookRepository</code> importa <code>BookRepository</code> (domínio). O domínio não importa nada dos adaptadores. Esta é a <strong>Inversão de Dependência (DIP)</strong> — o princípio SOLID que fundamenta toda a arquitetura.
+  </div>
+
+  <h2>Fluxo — POST /books</h2>
+  <div class="flow">
+    <div class="fb fb-out">① POST /books<br/><small>HTTP JSON</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-adpin">② BookResource<br/><small>Adaptador In</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-port">③ AddBookUseCase<br/><small>Porta Entrada</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-domain">④ BooksService<br/><small>Domínio</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-port">⑤ BookRepository<br/><small>Porta Saída</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-adpout">⑥ Panache<br/>BookRepository<br/><small>Adaptador Out</small></div>
+    <div class="fa">→</div>
+    <div class="fb fb-db">MySQL<br/><small>infra</small></div>
+  </div>
+
+  <h2>Vantagens e Quando Usar</h2>
+  <table>
+    <tr><th>Vantagem</th><th>Contexto ideal</th><th>Custo</th></tr>
+    <tr><td>Domínio 100% testável sem banco ou servidor</td><td>Lógica de negócio complexa</td><td>Mais arquivos e interfaces</td></tr>
+    <tr><td>Troca de tecnologia sem reescrita do domínio</td><td>Múltiplos canais (REST + CLI + eventos)</td><td>Curva de aprendizado inicial</td></tr>
+    <tr><td>Fronteiras explícitas entre módulos</td><td>Times grandes e projetos de longo prazo</td><td>Disciplina da equipe necessária</td></tr>
+    <tr><td>Facilita DDD, CQRS e Event Sourcing</td><td>Microsserviços com domínio rico</td><td>Excesso em CRUDs simples</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════ SIMULADOR ══════════════════════════════ -->
+<div id="page-simulador" class="page">
+  <h1>Simulador Interativo</h1>
+  <p class="subtitle">Operação: Adicionar Livro — <code>POST /books</code></p>
+  <p style="margin-bottom:0">Avance passo a passo pelo fluxo de execução real. Observe como cada componente é ativado e em qual camada da arquitetura estamos.</p>
+
+  <div class="sim-wrap">
+    <div class="sim-layout">
+      <!-- LEFT: architecture stack -->
+      <div class="sim-arch">
+        <div class="sim-node" id="sn-client">
+          <strong>Fora do Hexágono</strong>
+          <em>Cliente HTTP</em>
+          <small>curl / Postman</small>
+        </div>
+        <div class="sim-conn" id="sc-0"></div>
+        <div class="sim-node" id="sn-resource">
+          <strong>Adaptador de Entrada</strong>
+          <em>BookResource</em>
+          <small>JAX-RS @Path("/books")</small>
+        </div>
+        <div class="sim-conn" id="sc-1"></div>
+        <div class="sim-node" id="sn-port-in">
+          <strong>Porta de Entrada</strong>
+          <em>AddBookUseCase</em>
+          <small>interface do domínio</small>
+        </div>
+        <div class="sim-conn" id="sc-2"></div>
+        <div class="sim-node" id="sn-service">
+          <strong>Domínio — Serviço</strong>
+          <em>BooksService</em>
+          <small>Java puro, sem CDI</small>
+        </div>
+        <div class="sim-conn" id="sc-3"></div>
+        <div class="sim-node" id="sn-port-out">
+          <strong>Porta de Saída</strong>
+          <em>BookRepository</em>
+          <small>+ EmailNotification</small>
+        </div>
+        <div class="sim-conn" id="sc-4"></div>
+        <div class="sim-node" id="sn-adp-out">
+          <strong>Adaptador de Saída</strong>
+          <em>PanacheBookRepo</em>
+          <small>+ LogEmailNotif.</small>
+        </div>
+        <div class="sim-conn" id="sc-5"></div>
+        <div class="sim-node" id="sn-db">
+          <strong>Infraestrutura</strong>
+          <em>MySQL</em>
+          <small>banco de dados</small>
+        </div>
+      </div>
+
+      <!-- RIGHT: step detail -->
+      <div class="sim-panel">
+        <div>
+          <div class="sim-panel-top">
+            <span class="sim-step-num" id="sim-step-num">Passo 1 / 13</span>
+            <span id="sim-layer-badge"></span>
+          </div>
+          <h3 class="sim-title" id="sim-title" style="margin-top:.4rem">—</h3>
+          <p class="sim-desc" id="sim-desc">—</p>
+        </div>
+        <div>
+          <div class="sim-file" id="sim-file"></div>
+          <pre id="sim-code"></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim-controls">
+      <button class="sim-btn" id="sim-prev" onclick="simStep(-1)">← Anterior</button>
+      <span class="sim-counter" id="sim-counter">1 / 13</span>
+      <button class="sim-btn" id="sim-play" onclick="simTogglePlay()">▶ Auto</button>
+      <button class="sim-btn" id="sim-next" onclick="simStep(1)">Próximo →</button>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="sim-pbar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ REFERÊNCIAS ══════════════════════════════ -->
+<div id="page-referencias" class="page">
+  <h1>Referências e Código</h1>
+  <p class="subtitle">Repositório, execução e materiais de aprofundamento</p>
+
+  <h2>Repositório do Projeto</h2>
+  <div class="ref-card">
+    <div class="ref-icon">📦</div>
+    <div>
+      <h4>pw2 — exemplos/hexagonal</h4>
+      <p>Implementação completa em Java 25 + Quarkus 3.x com MySQL, JAX-RS, Hibernate Reactive (Panache), MapStruct e CDI. Inclui todos os componentes discutidos neste objeto de aprendizagem.</p>
+      <a href="https://github.com/rodrigoprestesmachado/pw2/tree/dev/exemplos/hexagonal" target="_blank">github.com/rodrigoprestesmachado/pw2/tree/dev/exemplos/hexagonal</a>
+    </div>
+  </div>
+
+  <h2>Stack de Tecnologias</h2>
+  <div class="tech-row">
+    <span class="tech java">Java 25</span>
+    <span class="tech quarkus">Quarkus 3.x</span>
+    <span class="tech mysql">MySQL</span>
+    <span class="tech">JAX-RS</span>
+    <span class="tech">Hibernate Reactive (Panache)</span>
+    <span class="tech">MapStruct</span>
+    <span class="tech">CDI</span>
+    <span class="tech">Mutiny (Reactive)</span>
+    <span class="tech">Maven</span>
+  </div>
+
+  <h2>Como Executar</h2>
+  <h3>Pré-requisitos</h3>
+  <ul style="color:var(--muted);font-size:.88rem;padding-left:1.5rem;margin-bottom:1rem;line-height:2">
+    <li>Java 21+ (recomendado Java 25 para corresponder ao projeto)</li>
+    <li>Maven 3.8+</li>
+    <li>Docker e Docker Compose (para o MySQL)</li>
+  </ul>
+
+  <pre><span class="cmt"># 1. Clone o repositório</span>
+git clone https://github.com/rodrigoprestesmachado/pw2.git
+cd pw2/exemplos/hexagonal
+
+<span class="cmt"># 2. Inicie o MySQL com Docker Compose</span>
+docker compose up -d
+
+<span class="cmt"># 3. Execute em modo desenvolvimento (live reload ativo)</span>
+./mvnw quarkus:dev
+
+<span class="cmt"># A API estará disponível em:</span>
+<span class="str">http://localhost:8080/books</span>
+<span class="cmt"># Swagger UI (documentação interativa):</span>
+<span class="str">http://localhost:8080/q/swagger-ui</span></pre>
+
+  <h3>Testando com curl</h3>
+  <pre><span class="cmt"># Adicionar um livro (POST)</span>
+curl -X POST http://localhost:8080/books \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "isbn":            "9780132350884",
+    "title":           "Clean Code",
+    "author":          "Robert C. Martin",
+    "publicationYear": 2008,
+    "copiesAvailable": 3
+  }'</span>
+<span class="cmt"># → HTTP 201 Created</span>
+
+<span class="cmt"># Listar todos os livros (GET)</span>
+curl http://localhost:8080/books
+<span class="cmt"># → HTTP 200 OK  [ { "isbn": "...", "title": "..." }, ... ]</span></pre>
+
+  <h2>Estrutura de Pastas</h2>
+  <pre><span class="cmt">src/main/java/dev/ifrs/hexagonal/
+├── domain/                                  ← Java puro, zero framework
+│   ├── model/
+│   │   └── Book.java                        ← Entidade + Book.of() (validação)
+│   ├── ports/
+│   │   ├── in/
+│   │   │   ├── AddBookUseCase.java           ← Porta de entrada
+│   │   │   ├── ListBookUseCase.java
+│   │   │   ├── UpdateBookUseCase.java
+│   │   │   └── DeleteBookUseCase.java
+│   │   └── out/
+│   │       ├── BookRepository.java           ← Porta de saída (persistência)
+│   │       └── EmailNotification.java        ← Porta de saída (notificação)
+│   ├── service/
+│   │   └── BooksService.java                ← Use Case (Java puro, sem CDI)
+│   └── exception/
+│       ├── BookAlreadyRegisteredException.java
+│       ├── BookNotFoundException.java
+│       └── InvalidBookException.java
+│
+└── adapters/
+    ├── in/rest/
+    │   ├── BookResource.java                 ← Adaptador JAX-RS (entrada)
+    │   ├── BookRequest.java                  ← DTO de entrada
+    │   ├── BookResponse.java                 ← DTO de saída
+    │   └── BookExceptionMapper.java          ← Exceções de domínio → HTTP status
+    ├── out/
+    │   ├── persistence/
+    │   │   ├── PanacheBookRepository.java    ← Adaptador de persistência (saída)
+    │   │   ├── BookEntity.java               ← @Entity JPA (separada do domínio)
+    │   │   └── BookMapper.java               ← MapStruct: Book ↔ BookEntity
+    │   └── notification/
+    │       └── LogEmailNotification.java     ← Adaptador de notificação (saída)
+    └── config/
+        └── ApplicationBeans.java             ← Composition Root (wiring CDI)</span></pre>
+
+  <h2>Materiais de Aprofundamento</h2>
+
+  <div class="ref-card">
+    <div class="ref-icon">📄</div>
+    <div>
+      <h4>Artigo Original — Alistair Cockburn (2005)</h4>
+      <p>O texto fundacional que definiu a arquitetura Ports &amp; Adapters, com a motivação original e exemplos.</p>
+      <a href="https://alistair.cockburn.us/hexagonal-architecture/" target="_blank">alistair.cockburn.us/hexagonal-architecture/</a>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-icon">📘</div>
+    <div>
+      <h4>Clean Architecture — Robert C. Martin</h4>
+      <p>Livro que expande os princípios hexagonais com "círculos concêntricos" (Entities → Use Cases → Interface Adapters → Frameworks). Excelente complemento teórico.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-icon">📗</div>
+    <div>
+      <h4>Domain-Driven Design — Eric Evans</h4>
+      <p>O livro fundacional do DDD. A arquitetura hexagonal é frequentemente combinada com DDD para modelar domínios ricos com Entities, Value Objects e Aggregates.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-icon">🔗</div>
+    <div>
+      <h4>Quarkus — Guia CDI e Producers</h4>
+      <p>Documentação oficial do Quarkus sobre CDI, <code>@Produces</code>, <code>@ApplicationScoped</code> e wiring de componentes — essencial para entender o <code>ApplicationBeans</code>.</p>
+      <a href="https://quarkus.io/guides/cdi-reference" target="_blank">quarkus.io/guides/cdi-reference</a>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-icon">🔗</div>
+    <div>
+      <h4>MapStruct — Mapeamento de Objetos</h4>
+      <p>Biblioteca de geração de código em tempo de compilação usada no projeto para converter <code>Book ↔ BookEntity</code> sem reflexão em runtime.</p>
+      <a href="https://mapstruct.org" target="_blank">mapstruct.org</a>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-icon">🔗</div>
+    <div>
+      <h4>Mutiny — Programação Reativa no Quarkus</h4>
+      <p>Guia sobre o modelo reativo (<code>Uni</code>, <code>Multi</code>) usado no <code>BookResource</code> para integrar <code>CompletableFuture</code> com JAX-RS.</p>
+      <a href="https://quarkus.io/guides/mutiny-primer" target="_blank">quarkus.io/guides/mutiny-primer</a>
+    </div>
+  </div>
+
+  <h2>Conceitos Relacionados</h2>
+  <table>
+    <tr><th>Conceito</th><th>Relação com Hexagonal</th></tr>
+    <tr><td><strong>Clean Architecture</strong></td><td>Mesmos princípios — terminologia diferente (<em>boundaries</em> vs <em>ports</em>)</td></tr>
+    <tr><td><strong>Onion Architecture</strong></td><td>Ênfase em DDD; concêntricamente equivalente ao hexagonal</td></tr>
+    <tr><td><strong>DIP (Dependency Inversion)</strong></td><td>Princípio SOLID que fundamenta portas e adaptadores</td></tr>
+    <tr><td><strong>DDD (Domain-Driven Design)</strong></td><td>Complementar: DDD define o modelo; hexagonal isola-o da infra</td></tr>
+    <tr><td><strong>CQRS</strong></td><td>Portas separadas para leitura/escrita encaixam naturalmente</td></tr>
+    <tr><td><strong>Inversão de Controle (IoC)</strong></td><td>CDI / Spring são os mecanismos que viabilizam o wiring em runtime</td></tr>
+  </table>
+</div>
+
+<script>
+// ─── NAV ───────────────────────────────────────────────────────────────────
+function go(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('visible'));
+  document.getElementById('page-' + page).classList.add('visible');
+  const tabs = ['conceitos', 'simulador', 'referencias'];
+  document.querySelectorAll('nav button').forEach((b, i) => b.classList.toggle('active', tabs[i] === page));
+  if (page === 'simulador') renderStep();
+}
+
+// ─── RENDER HELPERS ────────────────────────────────────────────────────────
+function renderCode(code, hlLines) {
+  return code.split('\n').map((line, i) => {
+    const n   = i + 1;
+    const act = hlLines && hlLines.includes(n);
+    const cls = act ? 'cl hl' : 'cl';
+    const bp  = act ? '▶' : ' ';
+    return `<span class="${cls}"><span class="cl-bp">${bp}</span><span class="cl-ln">${String(n).padStart(3,' ')}</span> ${hl(line)}</span>`;
+  }).join('');
+}
+
+// ─── SIMULATOR DATA ────────────────────────────────────────────────────────
+const STEPS = [
+  // ① HTTP CLIENT
+  {
+    nodes: ['sn-client'], conns: [],
+    layer: 'Fora do Hexágono', lc: 'outside',
+    title: '① Cliente envia POST /books',
+    desc: 'O cliente (curl, Postman ou front-end) envia uma requisição HTTP POST com os dados do livro em formato JSON. O Quarkus está escutando na porta 8080. Nenhuma lógica de negócio é executada ainda — o sistema ainda não foi ativado.',
+    file: 'HTTP Request',
+    hl: [3, 7, 8, 9, 10, 11, 12, 13],
+    code:
+`// Requisição do cliente — ainda fora do hexágono
+// O servidor Quarkus escuta na porta 8080
+POST /books HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "isbn":            "9780132350884",  // ISBN-10 (dígito verificador incluído)
+  "title":           "Clean Code",    // título do livro
+  "author":          "Robert C. Martin", // autor
+  "publicationYear": 2008,            // ano de publicação
+  "copiesAvailable": 3                // quantidade de exemplares
+}`
+  },
+
+  // ② BOOKRESOURCE RECEIVES
+  {
+    nodes: ['sn-resource'], conns: ['sc-0'],
+    layer: 'Adaptador de Entrada', lc: 'adp-in',
+    title: '② BookResource.addBook() — adaptador JAX-RS',
+    desc: 'O Quarkus roteia a requisição para BookResource, o único ponto de contato entre o mundo HTTP e o domínio. O método addBook() é chamado e o Jackson já desserializou o corpo JSON para um BookRequest automaticamente.',
+    file: 'adapters/in/rest/BookResource.java',
+    hl: [16, 17, 18, 19, 20],
+    code:
+`// adapters/in/rest/BookResource.java
+// ADAPTADOR DE ENTRADA — único arquivo com anotações JAX-RS
+// O domínio (Book, BooksService) não sabe que este arquivo existe.
+@Path("/books")                       // rota base da API REST
+@Produces(APPLICATION_JSON)           // resposta sempre em JSON
+@Consumes(APPLICATION_JSON)           // aceita corpo JSON
+public class BookResource {
+
+    // CDI injeta as implementações concretas das portas de entrada
+    // BookResource NUNCA importa BooksService diretamente
+    @Inject AddBookUseCase    addBookUseCase;
+    @Inject ListBookUseCase   listBookUseCase;
+    @Inject UpdateBookUseCase updateBookUseCase;
+    @Inject DeleteBookUseCase deleteBookUseCase;
+
+    // ← PONTO DE ENTRADA: requisição POST /books entra aqui
+    @POST
+    public Uni<Response> addBook(BookRequest request) {
+        // Jackson desserializou o JSON → BookRequest automaticamente
+        // request: { isbn, title, author, publicationYear, copiesAvailable }
+        Book book = Book.of(
+            request.isbn(),
+            request.title(),
+            request.author(),
+            request.publicationYear(),
+            request.copiesAvailable()
+        );
+        // Mutiny: converte CompletableFuture → Uni (modelo reativo Quarkus)
+        return Uni.createFrom()
+            .completionStage(addBookUseCase.add(book))
+            .map(saved -> Response.status(201)
+                .entity(BookResponse.from(saved)).build());
+    }
+
+    // GET /books — lista todos os livros cadastrados
+    @GET
+    public Uni<Response> listBooks() {
+        return Uni.createFrom()
+            .completionStage(listBookUseCase.listAll())
+            .map(books -> Response.ok(
+                books.stream().map(BookResponse::from).toList())
+                .build());
+    }
+
+    // DELETE /books/{isbn} — remove livro por ISBN
+    @DELETE @Path("/{isbn}")
+    public Uni<Response> deleteBook(@PathParam("isbn") String isbn) {
+        return Uni.createFrom()
+            .completionStage(deleteBookUseCase.delete(isbn))
+            .map(v -> Response.noContent().build());
+    }
+}`
+  },
+
+  // ③ BOOK.OF() DOMAIN VALIDATION
+  {
+    nodes: ['sn-resource'], conns: ['sc-0'],
+    layer: 'Domínio — Modelo', lc: 'domain',
+    title: '③ Book.of() — validação no núcleo do domínio',
+    desc: 'BookResource chama Book.of(), a fábrica estática da entidade de domínio. Ela valida todas as invariantes: ISBN-10 com checksum módulo-11, título e autor não vazios, ano de publicação entre 1 e o ano atual, e copiesAvailable ≥ 0. Se qualquer regra falhar, lança InvalidBookException.',
+    file: 'domain/model/Book.java',
+    hl: [23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+    code:
+`// domain/model/Book.java
+// ENTIDADE DE DOMÍNIO — Java puro, zero anotações de framework
+// Toda validação de regras de negócio fica encapsulada nesta classe.
+public class Book {
+
+    // Campos imutáveis — a entidade não pode ser alterada após criação
+    private final String isbn;
+    private final String title;
+    private final String author;
+    private final int    publicationYear;
+    private final int    copiesAvailable;
+
+    // Construtor privado — somente Book.of() e builder() instanciam Book
+    private Book(String isbn, String title, String author,
+                 int publicationYear, int copiesAvailable) {
+        this.isbn            = isbn;
+        this.title           = title;
+        this.author          = author;
+        this.publicationYear = publicationYear;
+        this.copiesAvailable = copiesAvailable;
+    }
+
+    // ← FÁBRICA COM VALIDAÇÃO — único caminho de criação com dados externos
+    public static Book of(String isbn, String title, String author,
+                          int publicationYear, int copiesAvailable) {
+        validateIsbn(isbn);              // ISBN-10: checksum módulo-11
+        validateTitle(title);            // não nulo, não vazio
+        validateAuthor(author);          // não nulo, não vazio
+        validateYear(publicationYear);   // entre 1 e o ano atual
+        validateCopies(copiesAvailable); // deve ser >= 0
+        return new Book(isbn, title, author, publicationYear, copiesAvailable);
+    }                                    // lança InvalidBookException se inválido
+
+    // Builder SEM validação — usado pelo BookMapper ao reconstruir do banco
+    // Os dados já foram validados quando foram originalmente persistidos
+    public static BookBuilder builder() { return new BookBuilder(); }
+
+    // Getters — sem setters: entidade imutável após criação
+    public String getIsbn()            { return isbn; }
+    public String getTitle()           { return title; }
+    public String getAuthor()          { return author; }
+    public int    getPublicationYear() { return publicationYear; }
+    public int    getCopiesAvailable() { return copiesAvailable; }
+
+    // Builder interno — permite reconstruir Book sem re-validar (BookMapper)
+    public static class BookBuilder {
+        private String isbn, title, author;
+        private int    publicationYear, copiesAvailable;
+        public BookBuilder isbn(String v)          { this.isbn = v; return this; }
+        public BookBuilder title(String v)         { this.title = v; return this; }
+        public BookBuilder author(String v)        { this.author = v; return this; }
+        public BookBuilder publicationYear(int v)  { this.publicationYear = v; return this; }
+        public BookBuilder copiesAvailable(int v)  { this.copiesAvailable = v; return this; }
+        public Book build() {
+            return new Book(isbn, title, author, publicationYear, copiesAvailable);
+        }
+    }
+}`
+  },
+
+  // ④ PORT IN CROSSING
+  {
+    nodes: ['sn-resource', 'sn-port-in'], conns: ['sc-0', 'sc-1'],
+    layer: 'Porta de Entrada', lc: 'port',
+    title: '④ addBookUseCase.add(book) — cruzando a fronteira do hexágono',
+    desc: 'BookResource cruza a fronteira do hexágono chamando AddBookUseCase.add(). Esta interface é a Porta de Entrada: definida no domínio, chamada pelo adaptador. O CDI resolve em runtime para BooksService, mas o adaptador não sabe disso — depende apenas da interface.',
+    file: 'domain/ports/in/AddBookUseCase.java',
+    hl: [5, 9, 19, 20, 21, 22, 24],
+    code:
+`// domain/ports/in/AddBookUseCase.java
+// PORTA DE ENTRADA — interface definida NO DOMÍNIO
+// BookResource depende DESTA interface; BooksService a implementa.
+// Se amanhã houver adaptador CLI, ele também dependerá desta interface.
+public interface AddBookUseCase {
+
+    // Retorna CompletableFuture para suporte a execução assíncrona/reativa
+    // BooksService implementa este método sem nenhuma anotação de framework
+    CompletableFuture<Book> add(Book book);
+}
+
+// -------------------------------------------------------------------
+// adapters/in/rest/BookResource.java  (trecho: cruzando a fronteira)
+
+    @POST
+    public Uni<Response> addBook(BookRequest request) {
+        Book book = Book.of(...);  // dados já validados (passo anterior)
+
+        // ← AQUI A FRONTEIRA DO HEXÁGONO É CRUZADA
+        // addBookUseCase é do tipo AddBookUseCase (interface do domínio)
+        // CDI resolve em runtime → BooksService (implementação concreta)
+        // BookResource nunca importa BooksService diretamente
+        return Uni.createFrom()
+            .completionStage(addBookUseCase.add(book))  // ← porta de entrada
+            .map(saved -> Response.status(201)
+                .entity(BookResponse.from(saved))
+                .build());
+    }`
+  },
+
+  // ⑤ APPLICATIONBEANS (COMPOSITION ROOT)
+  {
+    nodes: ['sn-service'], conns: ['sc-0', 'sc-1', 'sc-2'],
+    layer: 'Config — Composition Root', lc: 'outside',
+    title: '⑤ ApplicationBeans — como BooksService é conectado ao CDI',
+    desc: 'ApplicationBeans é o Composition Root: o único lugar que conhece tanto BooksService quanto seus adaptadores. Instancia BooksService com new (Java puro) e usa @Produces para expô-lo via CDI como cada interface de porta de entrada. O domínio não tem nenhuma anotação CDI.',
+    file: 'adapters/config/ApplicationBeans.java',
+    hl: [14, 15, 16, 17, 18, 19, 20, 23, 24],
+    code:
+`// adapters/config/ApplicationBeans.java
+// COMPOSITION ROOT — único ponto de conexão entre domínio e adaptadores
+// É a única classe que conhece BooksService E suas dependências concretas.
+// O domínio (BooksService) não tem nenhuma anotação CDI.
+@ApplicationScoped
+public class ApplicationBeans {
+
+    // CDI injeta as implementações concretas das portas de saída
+    @Inject BookRepository    repository; // → PanacheBookRepository
+    @Inject EmailNotification notifier;   // → LogEmailNotification
+
+    private BooksService service;         // instância única, compartilhada
+
+    // ← EXECUTADO APÓS TODAS AS INJEÇÕES ACIMA ESTAREM PRONTAS
+    @PostConstruct
+    void init() {
+        // JAVA PURO: instancia com new, sem @Inject no domínio
+        // BooksService não sabe que existe CDI, Quarkus ou qualquer framework
+        service = new BooksService(repository, notifier);
+    }
+
+    // Expõe a instância como AddBookUseCase para o CDI injetar em BookResource
+    @Produces @ApplicationScoped
+    public AddBookUseCase addBookUseCase() { return service; }
+
+    // Expõe a mesma instância como ListBookUseCase
+    @Produces @ApplicationScoped
+    public ListBookUseCase listBookUseCase() { return service; }
+
+    // Expõe a mesma instância como UpdateBookUseCase
+    @Produces @ApplicationScoped
+    public UpdateBookUseCase updateBookUseCase() { return service; }
+
+    // Expõe a mesma instância como DeleteBookUseCase
+    @Produces @ApplicationScoped
+    public DeleteBookUseCase deleteBookUseCase() { return service; }
+}`
+  },
+
+  // ⑥ BOOKSSERVICE.ADD() STARTS
+  {
+    nodes: ['sn-service'], conns: ['sc-0', 'sc-1', 'sc-2'],
+    layer: 'Domínio — Serviço', lc: 'domain',
+    title: '⑥ BooksService.add() — use case inicia',
+    desc: 'BooksService é o Use Case: Java puro, sem anotações de framework. Implementa as 4 interfaces de porta de entrada e depende apenas de BookRepository e EmailNotification (interfaces). O primeiro passo do add() é verificar se o ISBN já está cadastrado.',
+    file: 'domain/service/BooksService.java',
+    hl: [21, 22, 23, 24, 25, 26, 27],
+    code:
+`// domain/service/BooksService.java
+// USE CASE — Java puro, zero anotações de framework
+// Implementa as 4 interfaces de porta de entrada.
+// Depende APENAS de interfaces (BookRepository e EmailNotification).
+public class BooksService
+        implements AddBookUseCase, ListBookUseCase,
+                   UpdateBookUseCase, DeleteBookUseCase {
+
+    private final BookRepository    repository; // porta de saída: persistência
+    private final EmailNotification notifier;   // porta de saída: notificação
+
+    // Construtor simples — sem @Inject, sem anotações de framework
+    // ApplicationBeans chama este construtor passando as implementações
+    // Em testes: new BooksService(new FakeRepo(), new FakeNotify())
+    public BooksService(BookRepository repository,
+                        EmailNotification notifier) {
+        this.repository = repository; // em produção: PanacheBookRepository
+        this.notifier   = notifier;   // em produção: LogEmailNotification
+    }
+
+    // ← ADD BOOK: orquestra toda a lógica de cadastro
+    @Override
+    public CompletableFuture<Book> add(Book book) {
+        // 1. Verifica se o ISBN já está cadastrado (chama porta de saída)
+        return repository.findByIsbn(book.getIsbn())
+            .thenCompose(opt -> { /* → ver próximo passo */ });
+    }
+
+    @Override
+    public CompletableFuture<List<Book>> listAll() {
+        // Delega diretamente ao repositório sem lógica adicional
+        return repository.findAllBooks();
+    }
+
+    @Override
+    public CompletableFuture<Book> update(Book book) {
+        return repository.findByIsbn(book.getIsbn())
+            .thenCompose(opt -> {
+                if (opt.isEmpty())                              // livro não existe
+                    return CompletableFuture.failedFuture(
+                        new BookNotFoundException(book.getIsbn()));
+                return repository.update(book);
+            });
+    }
+
+    @Override
+    public CompletableFuture<Void> delete(String isbn) {
+        return repository.findByIsbn(isbn)
+            .thenCompose(opt -> {
+                if (opt.isEmpty())
+                    return CompletableFuture.failedFuture(
+                        new BookNotFoundException(isbn));
+                return repository.deleteByIsbn(isbn);
+            });
+    }
+}`
+  },
+
+  // ⑦ BOOKREPOSITORY PORT OUT
+  {
+    nodes: ['sn-service', 'sn-port-out'], conns: ['sc-0', 'sc-1', 'sc-2', 'sc-3'],
+    layer: 'Porta de Saída', lc: 'port',
+    title: '⑦ repository.findByIsbn() — cruzando a porta de saída',
+    desc: 'BooksService chama repository.findByIsbn() através da interface BookRepository (Porta de Saída). O serviço não sabe se a implementação é Panache, MongoDB ou um repositório em memória para testes — depende apenas do contrato da interface.',
+    file: 'domain/ports/out/BookRepository.java',
+    hl: [5, 7, 8, 28, 29, 30, 31, 32],
+    code:
+`// domain/ports/out/BookRepository.java
+// PORTA DE SAÍDA — contrato de persistência DEFINIDO pelo domínio
+// BooksService depende DESTA interface, não de PanacheBookRepository.
+// Em testes: substituída por FakeBookRepository (em memória, sem banco).
+public interface BookRepository {
+
+    // Busca por ISBN — Optional.empty() se livro não encontrado
+    CompletableFuture<Optional<Book>> findByIsbn(String isbn);
+
+    // Persiste novo livro e retorna o objeto salvo
+    CompletableFuture<Book> save(Book book);
+
+    // Lista todos os livros cadastrados
+    CompletableFuture<List<Book>> findAllBooks();
+
+    // Atualiza dados de um livro existente
+    CompletableFuture<Book> update(Book book);
+
+    // Remove um livro pelo ISBN
+    CompletableFuture<Void> deleteByIsbn(String isbn);
+}
+
+// -------------------------------------------------------------------
+// domain/service/BooksService.java  (trecho: chamando a porta de saída)
+
+    @Override
+    public CompletableFuture<Book> add(Book book) {
+        // ← CRUZANDO A PORTA DE SAÍDA
+        // repository é BookRepository (interface do domínio)
+        // CDI resolve em runtime → PanacheBookRepository
+        // Em testes → FakeBookRepository (sem banco de dados)
+        return repository.findByIsbn(book.getIsbn())
+            .thenCompose(opt -> { /* continua no próximo passo... */ });
+    }`
+  },
+
+  // ⑧ PANACHEBOOKREPOSITORY.FINDBYISBN
+  {
+    nodes: ['sn-adp-out', 'sn-db'], conns: ['sc-0','sc-1','sc-2','sc-3','sc-4','sc-5'],
+    layer: 'Adaptador de Saída', lc: 'adp-out',
+    title: '⑧ PanacheBookRepository.findByIsbn() — consulta ao banco',
+    desc: 'O adaptador de persistência executa a query SQL usando Hibernate Reactive (Panache). O resultado (BookEntity) é convertido para Book (domínio) pelo BookMapper gerado pelo MapStruct. O domínio nunca enxerga BookEntity.',
+    file: 'adapters/out/persistence/PanacheBookRepository.java',
+    hl: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    code:
+`// adapters/out/persistence/PanacheBookRepository.java
+// ADAPTADOR DE SAÍDA — implementa BookRepository com Hibernate Reactive
+// Esta classe conhece Panache, JPA e MySQL. O domínio não conhece nada disso.
+@ApplicationScoped
+public class PanacheBookRepository implements BookRepository {
+
+    // ← CONSULTA AO BANCO: busca livro por ISBN
+    @Override
+    public CompletableFuture<Optional<Book>> findByIsbn(String isbn) {
+        return BookEntity
+            .find("isbn", isbn)                       // WHERE isbn = ?
+            .<BookEntity>firstResultOptional()         // → Optional<BookEntity>
+            .map(opt -> opt.map(BookMapper::toDomain)) // BookEntity → Book
+            .subscribeAsCompletionStage();             // Mutiny → CompletableFuture
+        // SQL: SELECT * FROM books WHERE isbn = '9780132350884'
+        // Resultado: Optional.empty() — ISBN não encontrado ✓
+    }
+
+    // Persiste novo livro — Book → BookEntity → INSERT → BookEntity → Book
+    @Override
+    public CompletableFuture<Book> save(Book book) {
+        BookEntity entity = BookMapper.toEntity(book);  // Book → BookEntity
+        return Panache
+            .withTransaction(() -> entity.persist())    // INSERT com transação
+            .map(v -> BookMapper.toDomain(entity))      // BookEntity → Book
+            .subscribeAsCompletionStage();
+    }
+
+    // Lista todos os livros — converte cada BookEntity para Book
+    @Override
+    public CompletableFuture<List<Book>> findAllBooks() {
+        return BookEntity.<BookEntity>listAll()
+            .map(list -> list.stream()
+                .map(BookMapper::toDomain).toList())
+            .subscribeAsCompletionStage();
+    }
+
+    // Atualiza livro existente — UPDATE via Panache
+    @Override
+    public CompletableFuture<Book> update(Book book) {
+        return Panache
+            .withTransaction(() -> BookEntity.update(
+                "title=?1, author=?2, publicationYear=?3," +
+                " copiesAvailable=?4 WHERE isbn=?5",
+                book.getTitle(), book.getAuthor(),
+                book.getPublicationYear(), book.getCopiesAvailable(),
+                book.getIsbn()))
+            .map(v -> book)
+            .subscribeAsCompletionStage();
+    }
+
+    // Remove livro pelo ISBN — DELETE via Panache
+    @Override
+    public CompletableFuture<Void> deleteByIsbn(String isbn) {
+        return Panache
+            .withTransaction(() -> BookEntity.delete("isbn", isbn))
+            .map(v -> null)
+            .subscribeAsCompletionStage();
+    }
+}`
+  },
+
+  // ⑨ THENCOMPOSE — OPTIONAL CHECK
+  {
+    nodes: ['sn-service'], conns: ['sc-0', 'sc-1', 'sc-2'],
+    layer: 'Domínio — Serviço', lc: 'domain',
+    title: '⑨ Optional.empty() — ISBN disponível, prosseguindo para save()',
+    desc: 'O thenCompose recebe o Optional retornado. Como o ISBN não existe, a execução segue para repository.save(). Se existisse, retornaria um CompletableFuture falhado com BookAlreadyRegisteredException, que o BookExceptionMapper converte para HTTP 409.',
+    file: 'domain/service/BooksService.java  (método add — fluxo completo)',
+    hl: [10, 12, 13, 14, 20, 21, 22],
+    code:
+`// domain/service/BooksService.java  (método add — fluxo completo)
+// DOMÍNIO: toda a lógica de orquestração fica aqui.
+// Nenhum detalhe de banco, HTTP ou notificação vaza para este método.
+
+    @Override
+    public CompletableFuture<Book> add(Book book) {
+        // CompletableFuture encadeia operações assíncronas sem bloquear
+        return repository.findByIsbn(book.getIsbn())
+            // thenCompose: recebe o resultado e decide o próximo passo
+            .thenCompose(opt -> {
+
+                // ← REGRA DE NEGÓCIO: ISBN não pode ser duplicado
+                if (opt.isPresent()) {
+                    // opt.isPresent() = true → ISBN JÁ EXISTE
+                    return CompletableFuture.failedFuture(
+                        new BookAlreadyRegisteredException(book.getIsbn()));
+                    // BookExceptionMapper intercepta → HTTP 409 Conflict
+                }
+
+                // opt.isPresent() = false → ISBN DISPONÍVEL ✓
+                // Prossegue: salva o livro e depois notifica
+                return repository.save(book)      // ← chama porta de saída
+                    .thenApply(saved -> {
+                        notifier.notifyRegistration(saved); // efeito colateral
+                        return saved;             // Book retorna para BookResource
+                    });
+            });
+    }`
+  },
+
+  // ⑩ PANACHEBOOKREPOSITORY.SAVE
+  {
+    nodes: ['sn-adp-out', 'sn-db'], conns: ['sc-0','sc-1','sc-2','sc-3','sc-4','sc-5'],
+    layer: 'Adaptador de Saída', lc: 'adp-out',
+    title: '⑩ PanacheBookRepository.save() — persiste no banco',
+    desc: 'O adaptador converte Book (domínio) → BookEntity (JPA) com BookMapper (MapStruct), persiste dentro de uma transação reativa e converte de volta BookEntity → Book. O domínio nunca vê @Entity, @Column ou qualquer anotação JPA.',
+    file: 'adapters/out/persistence/PanacheBookRepository.java  +  BookMapper.java',
+    hl: [5, 6, 7, 8, 9, 11, 12, 13, 16, 17, 18, 19],
+    code:
+`// adapters/out/persistence/PanacheBookRepository.java  (método save)
+// ADAPTADOR DE SAÍDA: persiste Book no banco MySQL via Hibernate Reactive
+// Fluxo: Book (domínio) → BookEntity (@Entity JPA) → INSERT → Book (domínio)
+
+    // ← PERSISTE O LIVRO NO BANCO
+    @Override
+    public CompletableFuture<Book> save(Book book) {
+        // 1. Converte entidade de domínio → entidade JPA (via MapStruct)
+        BookEntity entity = BookMapper.toEntity(book);
+
+        // 2. Executa INSERT dentro de uma transação reativa
+        return Panache
+            .withTransaction(() -> entity.persist())
+            // SQL: INSERT INTO books (isbn, title, author, ...) VALUES (...)
+
+            // 3. Converte entidade JPA → entidade de domínio para retorno
+            .map(v -> BookMapper.toDomain(entity))
+            .subscribeAsCompletionStage(); // Mutiny → CompletableFuture
+    }
+
+// -------------------------------------------------------------------
+// adapters/out/persistence/BookMapper.java
+// MAPPER — converte entre as representações de domínio e JPA
+// Book       = entidade de domínio (Java puro, sem @Entity)
+// BookEntity = entidade JPA        (com @Entity, usada pelo Panache)
+// O mapper fica no adaptador: única camada que conhece ambas as classes.
+@Mapper(componentModel = "cdi")   // MapStruct gera o código em compile time
+interface BookMapper {
+
+    // Book → BookEntity (antes do persist — ignora o id gerenciado pelo banco)
+    @Mapping(target = "id", ignore = true)
+    BookEntity toEntity(Book book);
+
+    // BookEntity → Book (após buscar do banco — usa Book.builder() sem validação)
+    @BeanMapping(builder = @Builder(disableBuilder = false))
+    Book toDomain(BookEntity entity);
+}`
+  },
+
+  // ⑪ NOTIFIER PORT + ADAPTER
+  {
+    nodes: ['sn-service', 'sn-port-out', 'sn-adp-out'], conns: ['sc-0','sc-1','sc-2','sc-3','sc-4'],
+    layer: 'Porta de Saída → Adaptador de Saída', lc: 'adp-out',
+    title: '⑪ notifier.notifyRegistration() — porta e adaptador de notificação',
+    desc: 'Após salvar, BooksService chama a segunda porta de saída: EmailNotification. O CDI resolve para LogEmailNotification, que simula o envio de e-mail com um log. Em produção, poderia ser trocado por SMTP, SendGrid ou fila — sem alterar uma linha do domínio.',
+    file: 'domain/ports/out/EmailNotification.java  →  adapters/out/notification/LogEmailNotification.java',
+    hl: [4, 7, 21, 22, 27, 28, 29, 30, 31, 32, 33],
+    code:
+`// domain/ports/out/EmailNotification.java
+// PORTA DE SAÍDA — contrato de notificação DEFINIDO pelo domínio
+// BooksService usa ESTA interface, sem saber como a notificação é enviada.
+public interface EmailNotification {
+
+    // Chamada por BooksService após cadastrar um livro com sucesso
+    void notifyRegistration(Book book);
+
+    // Chamada por BooksService após atualizar um livro
+    void notifyUpdate(Book book);
+
+    // Chamada por BooksService após remover um livro
+    void notifyDeletion(String isbn);
+}
+
+// -------------------------------------------------------------------
+// adapters/out/notification/LogEmailNotification.java
+// ADAPTADOR DE SAÍDA — implementa EmailNotification simulando e-mail com log
+// Para trocar para SMTP/SendGrid/RabbitMQ: criar nova classe @ApplicationScoped
+// que implemente EmailNotification. O domínio não muda.
+@ApplicationScoped
+public class LogEmailNotification implements EmailNotification {
+
+    private static final Logger LOG =
+        Logger.getLogger(LogEmailNotification.class);
+
+    // ← CHAMADO APÓS SALVAR COM SUCESSO
+    @Override
+    public void notifyRegistration(Book book) {
+        // Simula envio de e-mail registrando no log do servidor
+        LOG.infof("Book registered: %s (ISBN: %s)",
+            book.getTitle(), book.getIsbn());
+    }
+
+    @Override
+    public void notifyUpdate(Book book) {
+        LOG.infof("Book updated: %s (ISBN: %s)",
+            book.getTitle(), book.getIsbn());
+    }
+
+    @Override
+    public void notifyDeletion(String isbn) {
+        LOG.infof("Book deleted: ISBN %s", isbn);
+    }
+}`
+  },
+
+  // ⑫ BOOKEXCEPTIONMAPPER
+  {
+    nodes: ['sn-adp-out'], conns: ['sc-0','sc-1','sc-2','sc-3','sc-4'],
+    layer: 'Adaptador de Entrada', lc: 'adp-in',
+    title: '⑫ BookExceptionMapper — exceções de domínio → status HTTP',
+    desc: 'O BookExceptionMapper é um @Provider JAX-RS que intercepta exceções de domínio e as converte em respostas HTTP adequadas. Ele percorre a cadeia de causas (desempacota CompletionException) para encontrar a exceção de domínio original.',
+    file: 'adapters/in/rest/BookExceptionMapper.java',
+    hl: [9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27],
+    code:
+`// adapters/in/rest/BookExceptionMapper.java
+// ADAPTADOR DE ENTRADA — converte exceções do domínio em respostas HTTP
+// @Provider: o JAX-RS registra este mapper automaticamente
+// Nenhum try-catch espalhado pelo código — toda tradução centralizada aqui.
+@Provider
+public class BookExceptionMapper
+        implements ExceptionMapper<RuntimeException> {
+
+    // ← INTERCEPTA RuntimeException antes que o Quarkus retorne HTTP 500
+    @Override
+    public Response toResponse(RuntimeException exception) {
+        // CompletableFuture envolve exceções em CompletionException
+        // Precisa desempacotar para encontrar a exceção de domínio original
+        Throwable cause = unwrap(exception);
+
+        // Mapeia cada exceção de domínio para o status HTTP correto
+        if (cause instanceof BookAlreadyRegisteredException)
+            return Response.status(409)       // Conflict: ISBN duplicado
+                .entity(cause.getMessage()).build();
+
+        if (cause instanceof BookNotFoundException)
+            return Response.status(404)       // Not Found: livro inexistente
+                .entity(cause.getMessage()).build();
+
+        if (cause instanceof InvalidBookException)
+            return Response.status(400)       // Bad Request: dados inválidos
+                .entity(cause.getMessage()).build();
+
+        // Qualquer outra exceção não mapeada → 500 Internal Server Error
+        return Response.status(500).entity("Internal error").build();
+    }
+
+    // Percorre a cadeia de causas até encontrar a exceção de domínio
+    private Throwable unwrap(Throwable t) {
+        while (t.getCause() != null && t != t.getCause())
+            t = t.getCause();   // desce na cadeia de CompletionException
+        return t;               // retorna a exceção de domínio original
+    }
+}`
+  },
+
+  // ⑬ HTTP 201 RESPONSE
+  {
+    nodes: ['sn-resource', 'sn-client'], conns: ['sc-0'],
+    layer: 'Adaptador de Entrada', lc: 'adp-in',
+    title: '⑬ HTTP 201 Created — resposta ao cliente',
+    desc: 'O Book salvo retorna ao BookResource via a cadeia de CompletableFuture. O adaptador converte Book → BookResponse (DTO de saída) e constrói a resposta HTTP 201 Created. O ciclo está completo: a lógica de negócio executou no domínio; os adaptadores cuidaram da tradução nas duas extremidades.',
+    file: 'adapters/in/rest/BookResource.java  →  BookResponse.java',
+    hl: [12, 13, 14, 15, 16, 17, 18, 19],
+    code:
+`// adapters/in/rest/BookResource.java  (retorno da execução)
+// Toda a cadeia de CompletableFuture completou — resultado volta aqui.
+
+    @POST
+    public Uni<Response> addBook(BookRequest request) {
+        Book book = Book.of(...);         // passo 3: validação do domínio
+
+        return Uni.createFrom()
+            .completionStage(
+                addBookUseCase.add(book)  // passos 4–12: toda a execução
+            )
+            // ← RESULTADO CHEGA AQUI: Book salvo retorna da cadeia
+            .map(saved -> {
+                // Converte Book (domínio) → BookResponse (DTO de saída)
+                BookResponse dto = BookResponse.from(saved);
+                return Response.status(201)   // HTTP 201 Created
+                    .entity(dto)              // corpo: JSON do livro salvo
+                    .build();
+            });
+    }
+
+// -------------------------------------------------------------------
+// adapters/in/rest/BookResponse.java
+// DTO DE SAÍDA — converte Book (domínio) para JSON da resposta HTTP
+public record BookResponse(
+    String isbn,            // identificador do livro
+    String title,           // título
+    String author,          // autor
+    int    publicationYear, // ano de publicação
+    int    copiesAvailable  // exemplares disponíveis
+) {
+    // Fábrica estática: converte Book → BookResponse
+    public static BookResponse from(Book book) {
+        return new BookResponse(
+            book.getIsbn(), book.getTitle(), book.getAuthor(),
+            book.getPublicationYear(), book.getCopiesAvailable());
+    }
+}`
+  }
+];
+
+// ─── SIMULATOR STATE ───────────────────────────────────────────────────────
+let currentStep = 0;
+let playInterval = null;
+
+const ALL_NODES = ['sn-client','sn-resource','sn-port-in','sn-service','sn-port-out','sn-adp-out','sn-db'];
+const ALL_CONNS = ['sc-0','sc-1','sc-2','sc-3','sc-4','sc-5'];
+
+function renderStep() {
+  const s = STEPS[currentStep];
+  const n = STEPS.length;
+
+  // reset nodes & conns
+  ALL_NODES.forEach(id => { const el = document.getElementById(id); if (el) el.className = 'sim-node'; });
+  ALL_CONNS.forEach(id => { const el = document.getElementById(id); if (el) el.className = 'sim-conn'; });
+
+  // activate
+  s.nodes.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('glow-' + s.lc); });
+  s.conns.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('lit'); });
+
+  // update panel
+  document.getElementById('sim-step-num').textContent = `Passo ${currentStep + 1} / ${n}`;
+  document.getElementById('sim-layer-badge').innerHTML = `<span class="badge ${s.lc}">${s.layer}</span>`;
+  document.getElementById('sim-title').textContent = s.title;
+  document.getElementById('sim-desc').textContent = s.desc;
+  document.getElementById('sim-file').textContent = s.file;
+  const codeEl = document.getElementById('sim-code');
+  codeEl.innerHTML = renderCode(s.code, s.hl);
+  requestAnimationFrame(() => {
+    const first = codeEl.querySelector('.hl');
+    if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+
+  // controls
+  document.getElementById('sim-counter').textContent = `${currentStep + 1} / ${n}`;
+  document.getElementById('sim-prev').disabled = currentStep === 0;
+  document.getElementById('sim-next').disabled = currentStep === n - 1;
+  document.getElementById('sim-pbar').style.width = `${((currentStep + 1) / n) * 100}%`;
+}
+
+function simStep(dir) {
+  const next = currentStep + dir;
+  if (next >= 0 && next < STEPS.length) { currentStep = next; renderStep(); }
+}
+
+function simTogglePlay() {
+  const btn = document.getElementById('sim-play');
+  if (playInterval) {
+    clearInterval(playInterval); playInterval = null;
+    btn.textContent = '▶ Auto'; btn.classList.remove('playing');
+  } else {
+    btn.textContent = '⏸ Pausar'; btn.classList.add('playing');
+    playInterval = setInterval(() => {
+      if (currentStep >= STEPS.length - 1) {
+        clearInterval(playInterval); playInterval = null;
+        btn.textContent = '▶ Auto'; btn.classList.remove('playing');
+      } else { currentStep++; renderStep(); }
+    }, 3000);
+  }
+}
+
+// ─── SYNTAX HIGHLIGHTING ───────────────────────────────────────────────────
+function hl(code) {
+  // Escape HTML first
+  let s = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Single-pass replacement — higher-priority patterns (comments, strings) win
+  // and their content is never re-processed by later patterns.
+  const KW = 'public|private|protected|final|static|class|interface|implements|extends|return|new|void|if|else|throws|throw|this|null|true|false|var|try|catch|import|package|record|super|default|override|Override';
+  const TY = 'Book|BookResource|BooksService|BookRepository|BookRequest|BookResponse|BookEntity|BookMapper|BookExceptionMapper|AddBookUseCase|ListBookUseCase|DeleteBookUseCase|UpdateBookUseCase|EmailNotification|LogEmailNotification|PanacheBookRepository|ApplicationBeans|InvalidBookException|BookNotFoundException|BookAlreadyRegisteredException|CompletableFuture|Optional|List|String|Response|Uni|Logger|RuntimeException|Exception|Throwable|Map|HashMap|ExceptionMapper';
+  const re = new RegExp(
+    '(\/\/[^\\n]*)|("(?:[^"\\\\]|\\\\.)*")|(@[A-Z]\\w*)' +
+    `|\\b(${KW})\\b|\\b(${TY})\\b|(\\b\\d+\\b)`, 'g'
+  );
+
+  return s.replace(re, (_, cmt, str, ann, kw, ty, nm) => {
+    if (cmt) return `<span class="cmt">${cmt}</span>`;
+    if (str) return `<span class="str">${str}</span>`;
+    if (ann) return `<span class="ann">${ann}</span>`;
+    if (kw)  return `<span class="kw">${kw}</span>`;
+    if (ty)  return `<span class="ty">${ty}</span>`;
+    if (nm)  return `<span class="nm">${nm}</span>`;
+    return _;
+  });
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', renderStep);
+</script>
+</body>
+</html>
