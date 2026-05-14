@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Arquitetura Hexagonal
+parent: Teste de desenvolvimento
 nav_order: 18
 ---
 
