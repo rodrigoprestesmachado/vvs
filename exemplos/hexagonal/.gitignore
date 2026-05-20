@@ -1,3 +1,8 @@
+# Frontend (Vue / Vite)
+frontend/node_modules/
+frontend/dist/
+src/main/resources/META-INF/resources/
+
 #Maven
 target/
 pom.xml.tag

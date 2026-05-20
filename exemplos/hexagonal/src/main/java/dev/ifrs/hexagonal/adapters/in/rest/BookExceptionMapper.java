@@ -15,6 +15,7 @@ import dev.ifrs.hexagonal.domain.exception.BookAlreadyRegisteredException;
 import dev.ifrs.hexagonal.domain.exception.BookNotFoundException;
 import dev.ifrs.hexagonal.domain.exception.InvalidBookException;
 
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -28,6 +29,10 @@ import org.jboss.logging.Logger;
  * Falhas vindas de {@link java.util.concurrent.CompletableFuture} chegam
  * frequentemente como {@link java.util.concurrent.CompletionException}; por
  * isso percorremos a cadeia de {@link Throwable#getCause()}.
+ * <p>
+ * {@link WebApplicationException} (p.ex. {@code NotFoundException} lançada
+ * pelo roteamento JAX-RS para recursos estáticos não encontrados) é repassada
+ * diretamente com seu status HTTP original, sem ser registrada como erro.
  */
 @Provider
 public class BookExceptionMapper implements ExceptionMapper<RuntimeException> {
@@ -66,6 +71,10 @@ public class BookExceptionMapper implements ExceptionMapper<RuntimeException> {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(new ErrorResponse(e.getMessage()))
                         .build();
+            }
+            if (t instanceof WebApplicationException) {
+                WebApplicationException wae = (WebApplicationException) t;
+                return wae.getResponse();
             }
         }
         LOG.error("Erro não tratado na API REST", exception);

@@ -4,6 +4,7 @@ API REST de **cadastro de livros** (CRUD) usada como exemplo didático de **arqu
 
 ## O que o projeto faz
 
+- Interface web em **Vue 3** com **Bulma** na raiz **`/`** (CRUD completo sobre `/books`).
 - Expõe recursos HTTP em `/books` para criar, listar, atualizar e remover livros.
 - Valida **ISBN-10** e regras básicas de negócio no **domínio** (`Book`, exceções de domínio).
 - Persiste dados em **MySQL** de forma **reativa** (Hibernate Reactive + Panache).
@@ -24,6 +25,7 @@ Pacotes principais:
 - **Java 25** (conforme `maven.compiler.release` no `pom.xml`).
 - **Docker** (recomendado): o Quarkus **Dev Services** sobe um container MySQL automaticamente em desenvolvimento e nos testes, sem você configurar um banco manualmente.
 - **Maven** embutido: o projeto inclui `./mvnw` (Linux/macOS) e `mvnw.cmd` (Windows).
+- **Node.js** (opcional): só é necessário se você desenvolver o front isoladamente com `npm run dev`; no fluxo Maven o plugin `frontend-maven-plugin` instala Node/npm automaticamente e executa o build do Vue.
 
 > Se a porta **3306** já estiver em uso no seu computador, o container do MySQL pode falhar ao subir. Libere a porta ou ajuste `quarkus.datasource.devservices.port` em `src/main/resources/application.properties`.
 
@@ -35,8 +37,37 @@ Na raiz do projeto:
 ./mvnw quarkus:dev
 ```
 
-- A API sobe (porta HTTP padrão do Quarkus: **8080**, salvo configuração contrária).
+O Maven compila o front-end Vue na fase `generate-resources` (artefatos em `src/main/resources/META-INF/resources/`) antes de subir a aplicação. Para pular esse passo (por exemplo, se ainda não alterou o front):
+
+```bash
+./mvnw quarkus:dev -Dskip.frontend=true
+```
+
+- Aplicação e interface: <http://localhost:8080/> (porta HTTP padrão do Quarkus: **8080**).
+- A API REST continua em `/books` (o front usa `fetch` relativo ao mesmo host).
 - O Dev UI fica em: <http://localhost:8080/q/dev/> (apenas em dev).
+
+### Desenvolvimento só do front-end (hot reload)
+
+Com o back-end já em execução (`./mvnw quarkus:dev` em outro terminal):
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+O Vite sobe em <http://localhost:5173/> e encaminha `/books` para `http://localhost:8080` (proxy no `vite.config.js`).
+
+Para gerar os estáticos manualmente (sem Maven):
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+A saída vai para `src/main/resources/META-INF/resources/` (servida pelo Quarkus na raiz `/`).
 
 Endpoints REST (prefixo comum do recurso):
 
