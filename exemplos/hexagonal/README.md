@@ -10,6 +10,7 @@ API REST de **cadastro de livros** (CRUD) usada como exemplo didático de **arqu
 - Persiste dados em **MySQL** de forma **reativa** (Hibernate Reactive + Panache).
 - Inclui um adaptador de “e-mail” que apenas **registra eventos em log** (substituto simples de envio real).
 - Documentação OpenAPI e Swagger UI (quando a aplicação está em execução).
+- Testes automatizados da **API** (JUnit + RestAssured) e da **interface web** (Playwright E2E).
 
 Pacotes principais:
 
@@ -82,11 +83,66 @@ Documentação interativa:
 
 ## Testes
 
+O projeto inclui dois tipos de teste automatizado:
+
+| Tipo | Ferramenta | O que valida | Comando |
+|------|------------|--------------|---------|
+| API e domínio | JUnit, RestAssured (`@QuarkusTest`) | Endpoints `/books`, códigos HTTP, regras expostas pela API | `./mvnw test` |
+| Interface web (E2E) | [Playwright](https://playwright.dev/) | Fluxo CRUD na UI Vue (`/`) contra a API real | `./mvnw verify -Pe2e` |
+
+Em ambos os casos o Quarkus usa **Dev Services** para subir o MySQL em Docker. Garanta **Docker em execução** e as portas **8080** (HTTP) e **3306** (MySQL devservices) livres.
+
+### API e domínio
+
+Testes em `src/test/java/` (por exemplo `BookResourceTest`, `BooksServiceTest`):
+
 ```bash
 ./mvnw test
 ```
 
-Os testes de integração usam o mesmo stack (Docker para MySQL). Garanta Docker em execução e porta disponível para o serviço de banco.
+### Interface web (Playwright)
+
+Os testes E2E ficam em `frontend/e2e/` (spec principal: `books.spec.js`). A configuração está em `frontend/playwright.config.js`.
+
+**Via Maven** (recomendado): compila o front, instala o Chromium, sobe o Quarkus em modo dev e executa o Playwright. Use o perfil Maven `e2e`:
+
+```bash
+./mvnw verify -Pe2e
+```
+
+O perfil roda, nesta ordem: testes unitários/integração Java (`test`), instalação do browser (`setup:e2e`), testes E2E (`test:e2e`). A primeira execução pode demorar mais (download do Chromium e subida do MySQL).
+
+> **Não** combine `-Pe2e` com `-DskipTests`: o `frontend-maven-plugin` interpreta `skipTests` e pula os testes npm, incluindo o Playwright.
+
+**Somente o front** (com o back-end já em execução):
+
+```bash
+./mvnw quarkus:dev
+```
+
+Em outro terminal:
+
+```bash
+cd frontend
+npm install
+npm run setup:e2e    # uma vez (ou após atualizar @playwright/test)
+npm run test:e2e     # sobe o Quarkus automaticamente se nada estiver na 8080
+```
+
+Se a aplicação já estiver rodando e você quiser evitar uma segunda instância:
+
+```bash
+BASE_URL=http://localhost:8080 npm run test:e2e
+```
+
+**Modo interativo** (depurar passo a passo no navegador):
+
+```bash
+cd frontend
+npx playwright test --ui
+```
+
+Relatório HTML após falhas: `npx playwright show-report` (gerado em `frontend/playwright-report/`).
 
 ## Empacotar e rodar o JAR
 

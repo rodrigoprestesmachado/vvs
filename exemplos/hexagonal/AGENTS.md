@@ -13,7 +13,7 @@ Aplicação **Quarkus** de exemplo que implementa um **CRUD de livros** com **ar
 - **MapStruct** (`BookMapper`): entidade JPA ↔ modelo de domínio.
 - **Lombok** em entidade JPA (`BookEntity`).
 - **Jackson** para JSON; **SmallRye OpenAPI** / Swagger UI.
-- **Testes**: `quarkus-junit`, RestAssured; ambiente de teste pode usar Testcontainers/Dev Services (Docker necessário).
+- **Testes**: `quarkus-junit`, RestAssured (`./mvnw test`); E2E da UI Vue com **Playwright** em `frontend/e2e/` (`./mvnw verify -Pe2e`, perfil Maven `e2e`). Docker necessário (Dev Services MySQL).
 
 ## Layout de pacotes (`src/main/java/dev/ifrs/hexagonal`)
 
@@ -38,7 +38,8 @@ Há **`package-info.java`** em vários pacotes (exigência de documentação / C
 ## Comandos úteis
 
 - Desenvolvimento: `./mvnw quarkus:dev` (raiz do módulo `hexagonal`).
-- Testes: `./mvnw test`.
+- Testes API: `./mvnw test`.
+- Testes E2E (UI): `./mvnw verify -Pe2e` ou `cd frontend && npm run test:e2e` (com Quarkus em `quarkus:dev`).
 - Checkstyle: `./mvnw checkstyle:check` (plugin configurado com Checkstyle recente no `pom.xml`).
 
 ## Convenções para alterações

@@ -1,6 +1,9 @@
 # Frontend (Vue / Vite)
 frontend/node_modules/
 frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
+frontend/blob-report/
 src/main/resources/META-INF/resources/
 
 #Maven

@@ -82,9 +82,13 @@ function closeModal() {
   modalErrorMessage.value = '';
 }
 
+function normalizeIsbn(value) {
+  return value.trim().replace(/[\s-]/g, '');
+}
+
 function buildPayload() {
   return {
-    isbn: form.value.isbn.trim(),
+    isbn: normalizeIsbn(form.value.isbn),
     title: form.value.title.trim(),
     author: form.value.author.trim(),
     publicationYear: Number(form.value.publicationYear),
@@ -256,9 +260,9 @@ onMounted(refreshBooks);
                 class="input"
                 type="text"
                 required
-                maxlength="10"
+                maxlength="15"
                 :disabled="!!editingIsbn"
-                placeholder="Ex.: 0306406152"
+                placeholder="Ex.: 1-56881-111-X ou 156881111X"
               />
             </div>
             <p v-if="editingIsbn" class="help">
