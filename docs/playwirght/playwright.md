@@ -39,209 +39,139 @@ operações de cadastro, edição, exclusão e listagem de livros.
 
 ## 2. Configuração do projeto Maven
 
-Para usar o Playwright com Java, crie um projeto Maven e adicione as
-dependências do Playwright e do JUnit 5 no arquivo `pom.xml`. O Maven Surefire
-cuida da execução dos testes e da geração dos relatórios.
+Este tutorial usa o projeto `exemplos/hexagonal`. O `pom.xml` desse módulo já
+inclui a dependência do Playwright Java e o plugin Surefire. Você só precisa
+adicionar o que falta para gravar testes com o Codegen e executar com JUnit 5.
 
-### 2.1. Estrutura do projeto
+### 2.1. Estrutura de arquivos de teste
+
+Crie os arquivos de teste E2E em Java dentro do módulo hexagonal:
 
 ```
-books-e2e/
-├── src/
-│   └── test/
-│       └── java/
-│           └── BooksTest.java
-├── src/
-│   └── test/
-│       └── resources/
-│           └── junit-platform.properties
+exemplos/hexagonal/
+├── src/test/java/dev/ifrs/hexagonal/e2e/
+│   └── BooksTest.java
+├── src/test/resources/
+│   └── junit-platform.properties
 └── pom.xml
 ```
 
-### 2.2. Arquivo pom.xml
+### 2.2. Trechos a adicionar no pom.xml
+
+O arquivo completo está em [`exemplos/hexagonal/pom.xml`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/pom.xml).
+Ele já contém:
+
+| Item | Onde está no pom.xml |
+|---|---|
+| Dependência Playwright Java | bloco `<dependencies>` |
+| Plugin Surefire | bloco `<build><plugins>` |
+| Perfil `e2e` | bloco `<profiles>` (testes Playwright em JavaScript no frontend) |
+
+Adicione **somente** os trechos abaixo.
+
+**Dependência JUnit 5** (dentro de `<dependencies>`):
 
 ```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>dev.ifrs</groupId>
-  <artifactId>books-e2e</artifactId>
-  <version>1.0.0</version>
-
-  <properties>
-    <maven.compiler.release>17</maven.compiler.release>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <dependencies>
-
-    <!-- Playwright Java -->
-    <dependency>
-      <groupId>com.microsoft.playwright</groupId>
-      <artifactId>playwright</artifactId>
-      <version>1.51.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- JUnit 5 -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.11.0</version>
-      <scope>test</scope>
-    </dependency>
-
-  </dependencies>
-
-  <build>
-    <plugins>
-
-      <!-- Executa testes JUnit 5 e gera relatório XML (surefire-reports/) -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.5</version>
-      </plugin>
-
-      <!-- Permite rodar a CLI do Playwright (codegen, install) via mvn exec:java -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.2.0</version>
-      </plugin>
-
-    </plugins>
-  </build>
-
-</project>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.11.0</version>
+    <scope>test</scope>
+</dependency>
 ```
+
+**Plugin exec** (dentro de `<build><plugins>`, permite `codegen` e `install` via Maven):
+
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>3.2.0</version>
+</plugin>
+```
+
+> O perfil `e2e` do projeto já declara o `exec-maven-plugin` para a pipeline
+> npm. Se você preferir não alterar o bloco principal, use `-Pe2e` nos comandos
+> da seção 2.3 e da seção 3.
 
 ### 2.3. Instalação dos navegadores
 
-Após criar o `pom.xml`, baixe os binários dos navegadores com o comando abaixo.
-Esse passo é necessário somente uma vez por máquina:
+Na raiz do módulo hexagonal, baixe os binários dos navegadores. Esse passo é
+necessário somente uma vez por máquina:
 
 ```sh
-mvn exec:java -e \
+cd exemplos/hexagonal
+./mvnw exec:java -e \
   -D exec.mainClass=com.microsoft.playwright.CLI \
   -D exec.args="install"
 ```
 
 ---
 
-## 3. Primeiro teste
+## 3. Gravando o primeiro teste
 
-Um teste no Playwright Java segue o ciclo padrão do JUnit 5: a classe de teste
-abre o navegador uma vez (`@BeforeAll`), cria um contexto isolado para cada
-teste (`@BeforeEach`) e fecha tudo ao final (`@AfterAll`, `@AfterEach`).
+A forma mais rápida de começar é **gravar a interação** com a interface, sem
+escrever código. O **Codegen** abre o navegador, observa o que você faz e gera
+o Java automaticamente. Só depois de gravar é que vamos entender o código na
+seção 4.
 
-O exemplo abaixo verifica que a página inicial do cadastro de livros exibe o
-título correto:
+### 3.1. Preparando o ambiente
 
-```java
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.AriaRole;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class BooksTest {
-
-    static Playwright playwright;
-    static Browser browser;
-    BrowserContext context;
-    Page page;
-
-    @BeforeAll
-    static void abrirNavegador() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch();
-    }
-
-    @AfterAll
-    static void fecharNavegador() {
-        playwright.close();
-    }
-
-    @BeforeEach
-    void novoContexto() {
-        context = browser.newContext();
-        page = context.newPage();
-    }
-
-    @AfterEach
-    void fecharContexto() {
-        context.close();
-    }
-
-    @Test
-    void paginaInicialExibeTitulo() {
-        page.navigate("http://localhost:8080");
-        Locator titulo = page.getByRole(
-            AriaRole.HEADING,
-            new Page.GetByRoleOptions().setName("Cadastro de Livros")
-        );
-        assertTrue(titulo.isVisible());
-    }
-}
-```
-
-### 3.1. Anatomia do teste
-
-| Elemento | Função |
-|---|---|
-| `Playwright.create()` | Inicia o processo interno do Playwright |
-| `playwright.chromium().launch()` | Abre uma instância do navegador Chromium |
-| `browser.newContext()` | Cria um perfil isolado: cookies, storage e estado próprios |
-| `context.newPage()` | Abre uma aba dentro do contexto |
-| `page.navigate(url)` | Navega para a URL informada |
-| `page.getByRole(...)` | Localiza um elemento pelo papel ARIA |
-| `assertTrue(locator.isVisible())` | Assertiva: verifica que o elemento está visível |
-| `playwright.close()` | Fecha o navegador e libera todos os recursos |
-
----
-
-## 4. Playwright Codegen
-
-A forma mais rápida de criar um teste é **gravar a interação** com a interface.
-O Codegen abre o navegador, observa o que você faz e gera o código Java
-automaticamente, sem precisar escrever nada do zero.
-
-### 4.1. Iniciando o Codegen
-
-Execute o comando abaixo com o backend Quarkus rodando. A opção `--target java`
-instrui o Codegen a gerar código Java em vez de TypeScript:
+Antes de gravar, suba o backend Quarkus do projeto hexagonal:
 
 ```sh
-mvn exec:java -e \
+cd exemplos/hexagonal
+./mvnw quarkus:dev
+```
+
+Com a aplicação em `http://localhost:8080`, abra o Codegen com saída em Java
+(na raiz do módulo hexagonal):
+
+```sh
+cd exemplos/hexagonal
+./mvnw exec:java -e \
   -D exec.mainClass=com.microsoft.playwright.CLI \
   -D exec.args="codegen --target java http://localhost:8080"
 ```
 
-Ao executar o comando, duas janelas aparecem lado a lado:
+Duas janelas aparecem lado a lado:
 
-1. **Navegador** — onde você interage normalmente (clica, digita, navega).
-2. **Playwright Inspector** — painel que exibe o código Java gerado em tempo real.
+1. **Navegador**, onde você interage normalmente (clica, digita, navega).
+2. **Playwright Inspector**, painel que exibe o código Java em tempo real.
 
 <center>
   <img src="img/codegen.png" alt="Playwright Codegen" width="80%" height="80%" border=0 style="border:0; text-decoration:none; outline:none" /><br/>
   Figura 1 — Codegen: navegador (esquerda) e Inspector (direita)
 </center>
 
-### 4.2. Fluxo de uso passo a passo
+### 3.2. O que gravar
 
-1. **Inicie a gravação** — assim que o Codegen abre, ele já está gravando
+Vamos registrar o cadastro de um livro. No navegador, siga estes passos enquanto
+o Inspector gera o código:
+
+1. Clique em **Novo livro**.
+2. Preencha o ISBN com `156881111X`.
+3. Preencha o título com `Erdős on Graphs: His Legacy of Unsolved Problems`.
+4. Preencha o autor com `Fan Chung, Ronald L. Graham`.
+5. Preencha o ano com `1999`.
+6. Clique em **Salvar**.
+7. Verifique que a linha com o ISBN aparece na tabela (use o botão de assertiva
+   do Inspector, descrito na seção 3.4).
+
+Cada clique e cada texto digitado vira uma linha de código Java no Inspector.
+
+### 3.3. Fluxo de gravação passo a passo
+
+1. **Inicie a gravação.** Assim que o Codegen abre, ele já está gravando
    (ícone vermelho ativo no Inspector).
-2. **Interaja com a página** — clique em botões, preencha formulários e navegue
+2. **Interaja com a página.** Clique em botões, preencha formulários e navegue
    normalmente. Cada ação vira uma linha de código Java.
-3. **Adicione assertivas** — use os botões da barra do Inspector (ver seção 4.3).
-4. **Pause se necessário** — clique no botão vermelho para pausar ou retomar.
-5. **Copie o código** — clique em **Copy** no Inspector e cole dentro de um
-   método `@Test` na sua classe.
+3. **Adicione assertivas.** Use os botões da barra do Inspector (seção 3.4).
+4. **Pause se necessário.** Clique no botão vermelho para pausar ou retomar.
+5. **Copie o código.** Clique em **Copy** no Inspector. Guarde o resultado;
+   vamos analisar o conteúdo na seção 4.
 
-### 4.3. Criando assertivas
+### 3.4. Criando assertivas durante a gravação
 
 O Inspector possui três botões para criar assertivas sem escrever código:
 
@@ -254,35 +184,39 @@ O Inspector possui três botões para criar assertivas sem escrever código:
 **Como usar:** clique no botão da assertiva desejada e, em seguida, clique
 sobre o elemento na página. A linha é adicionada automaticamente ao código.
 
-### 4.4. Seletores gerados
+Para o cadastro de livros, use **Assert visibility** sobre a linha da tabela
+que contém o ISBN `156881111X`.
 
-O Codegen prioriza seletores **semânticos** (baseados em como o usuário
-enxerga a interface), tornando os testes mais robustos a mudanças de layout:
-
-| Prioridade | Método | Exemplo em Java |
-|---|---|---|
-| 1ª | `getByRole()` | `page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Salvar"))` |
-| 2ª | `getByText()` | `page.getByText("Nenhum livro cadastrado")` |
-| 3ª | `getByLabel()` | `page.getByLabel("Título")` |
-| 4ª | `getByPlaceholder()` | `page.getByPlaceholder("Ex.: 1-56881-111-X")` |
-| 5ª | `getByTestId()` | `page.getByTestId("btn-salvar")` |
-| Fallback | `locator()` (CSS) | `page.locator("#isbn")` |
-
-### 4.5. Opções úteis da linha de comando
+### 3.5. Opções úteis da linha de comando
 
 | Opção | Exemplo | Descrição |
 |---|---|---|
 | `--browser` | `--browser firefox` | Navegador alvo (chromium, firefox, webkit) |
-| `--output` | `--output /tmp/Exemplo.java` | Salva direto em arquivo |
+| `--output` | `--output src/test/java/CadastroLivroGravado.java` | Salva direto em arquivo |
 | `--target` | `--target java` | Linguagem de saída |
 | `--device` | `--device "iPhone 13"` | Emula um dispositivo móvel |
 | `--lang` | `--lang "pt-BR"` | Idioma do navegador |
 
-### 4.6. Exemplo de código gerado pelo Codegen
+Para salvar a gravação direto no projeto:
 
-O teste abaixo foi produzido pelo Codegen ao acessar o cadastro de livros,
-clicar em **Novo livro**, preencher o formulário e verificar que a linha
-aparece na tabela:
+```sh
+cd exemplos/hexagonal
+./mvnw exec:java -e \
+  -D exec.mainClass=com.microsoft.playwright.CLI \
+  -D exec.args="codegen --target java --output src/test/java/dev/ifrs/hexagonal/e2e/CadastroLivroGravado.java http://localhost:8080"
+```
+
+---
+
+## 4. Entendendo o código gerado
+
+Depois de gravar, o Inspector exibe um arquivo Java completo. Antes de evoluir
+para testes mais complexos, vale entender o que cada parte faz.
+
+### 4.1. Código completo gerado pelo Codegen
+
+O trecho abaixo corresponde ao fluxo gravado na seção 3 (cadastro de um livro
+e verificação na tabela):
 
 ```java
 import com.microsoft.playwright.*;
@@ -290,7 +224,7 @@ import com.microsoft.playwright.options.*;
 import static com.microsoft.playwright.options.AriaRole.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class ExemploCodgen {
+public class CadastroLivroGravado {
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(
@@ -314,29 +248,49 @@ public class ExemploCodgen {
             page.getByRole(BUTTON, new Page.GetByRoleOptions().setName("Salvar")).click();
 
             assertThat(
-                page.getByRole(ROW, new Page.GetByRoleOptions().setName("156881111X"))
+                page.getByRole(ROW).filter(
+                    new Locator.FilterOptions().setHasText("156881111X"))
             ).isVisible();
         }
     }
 }
 ```
 
-Pontos a observar:
+### 4.2. Anatomia do código
 
-- **`try-with-resources`** — o bloco garante que o Playwright feche todos os
-  recursos automaticamente ao final.
-- **`getByRole()`** — seletor semântico baseado no papel ARIA do elemento.
-- **`assertThat(...).isVisible()`** — assertiva com auto wait: aguarda até o
-  tempo limite configurado antes de falhar.
+| Trecho | O que faz |
+|---|---|
+| `Playwright.create()` | Inicia o processo interno do Playwright |
+| `playwright.chromium().launch(...)` | Abre o navegador Chromium (visível com `setHeadless(false)`) |
+| `browser.newContext()` | Cria um perfil isolado: cookies, storage e estado próprios |
+| `context.newPage()` | Abre uma aba dentro do contexto |
+| `page.navigate(url)` | Navega para a URL informada |
+| `page.getByRole(...).click()` | Localiza um elemento pelo papel ARIA e clica |
+| `page.getByRole(...).fill(...)` | Localiza um campo e preenche com texto |
+| `assertThat(...).isVisible()` | Assertiva com auto wait: aguarda o elemento aparecer |
+| `try (Playwright playwright = ...)` | Garante que todos os recursos sejam fechados ao final |
 
----
+### 4.3. Seletores usados na gravação
 
-## 5. Exemplos completos: CRUD de livros
+O Codegen prioriza seletores **semânticos**, baseados em como o usuário enxerga
+a interface. Isso torna os testes mais robustos a mudanças de layout:
 
-Esta seção mostra testes para cada operação disponível no cadastro de livros.
-Os testes usam a mesma estrutura de classe apresentada na seção 3.
+| Prioridade | Método | Exemplo em Java |
+|---|---|---|
+| 1ª | `getByRole()` | `page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Salvar"))` |
+| 2ª | `getByText()` | `page.getByText("Nenhum livro cadastrado")` |
+| 3ª | `getByLabel()` | `page.getByLabel("Título")` |
+| 4ª | `getByPlaceholder()` | `page.getByPlaceholder("Ex.: 1-56881-111-X")` |
+| 5ª | `getByTestId()` | `page.getByTestId("btn-salvar")` |
+| Fallback | `locator()` (CSS) | `page.locator("#isbn")` |
 
-### 5.1. Cadastrar um livro
+No cadastro de livros, o Codegen escolheu `getByRole` para botões, campos de
+texto e linhas da tabela porque a interface Vue expõe papéis ARIA nos elementos.
+
+### 4.4. Adaptando a gravação para JUnit 5
+
+O Codegen gera um `main()` executável. Para integrar ao Maven e gerar relatório
+JUnit, converta a gravação em uma classe de teste com o ciclo padrão do JUnit 5:
 
 ```java
 import com.microsoft.playwright.*;
@@ -376,9 +330,9 @@ public class BooksTest {
 
     @Test
     void cadastraLivro() {
+        // Passos gerados pelo Codegen (seção 3)
         page.getByRole(AriaRole.BUTTON,
             new Page.GetByRoleOptions().setName("Novo livro")).click();
-
         page.getByRole(AriaRole.TEXTBOX,
             new Page.GetByRoleOptions().setName("ISBN-")).fill("156881111X");
         page.getByRole(AriaRole.TEXTBOX,
@@ -389,21 +343,67 @@ public class BooksTest {
                 "Fan Chung, Ronald L. Graham");
         page.getByRole(AriaRole.SPINBUTTON,
             new Page.GetByRoleOptions().setName("Ano de publicação")).fill("1999");
-
         page.getByRole(AriaRole.BUTTON,
             new Page.GetByRoleOptions().setName("Salvar")).click();
 
-        // Verifica que a linha com o ISBN aparece na tabela
         assertThat(
             page.getByRole(AriaRole.ROW).filter(
                 new Locator.FilterOptions().setHasText("156881111X"))
         ).isVisible();
-
-        // Verifica a mensagem de sucesso
-        assertThat(
-            page.getByRole(AriaRole.STATUS)
-        ).hasText("Livro criado com sucesso.");
     }
+}
+```
+
+| Elemento JUnit | Função |
+|---|---|
+| `@BeforeAll` | Abre o navegador uma vez para todos os testes |
+| `@BeforeEach` | Cria contexto e página limpos antes de cada teste |
+| `@Test` | Marca o método gravado como caso de teste |
+| `@AfterEach` / `@AfterAll` | Fecha contexto e navegador ao final |
+
+Execute com `./mvnw test` na raiz do módulo hexagonal. O relatório XML será
+gerado em `target/surefire-reports/` (conforme a seção 6).
+
+---
+
+## 5. Exemplos completos: CRUD de livros
+
+Com o fluxo de gravação e a estrutura JUnit já entendidos, esta seção mostra
+testes para as demais operações do cadastro de livros.
+
+### 5.1. Cadastrar um livro
+
+O teste de cadastro já foi gravado e adaptado na seção 4.4. Abaixo, a mesma
+gravação com uma verificação extra: a mensagem de sucesso exibida após salvar.
+
+```java
+@Test
+void cadastraLivroComMensagemDeSucesso() {
+    page.getByRole(AriaRole.BUTTON,
+        new Page.GetByRoleOptions().setName("Novo livro")).click();
+
+    page.getByRole(AriaRole.TEXTBOX,
+        new Page.GetByRoleOptions().setName("ISBN-")).fill("156881111X");
+    page.getByRole(AriaRole.TEXTBOX,
+        new Page.GetByRoleOptions().setName("Título")).fill(
+            "Erdős on Graphs: His Legacy of Unsolved Problems");
+    page.getByRole(AriaRole.TEXTBOX,
+        new Page.GetByRoleOptions().setName("Autor")).fill(
+            "Fan Chung, Ronald L. Graham");
+    page.getByRole(AriaRole.SPINBUTTON,
+        new Page.GetByRoleOptions().setName("Ano de publicação")).fill("1999");
+
+    page.getByRole(AriaRole.BUTTON,
+        new Page.GetByRoleOptions().setName("Salvar")).click();
+
+    assertThat(
+        page.getByRole(AriaRole.ROW).filter(
+            new Locator.FilterOptions().setHasText("156881111X"))
+    ).isVisible();
+
+    assertThat(
+        page.getByRole(AriaRole.STATUS)
+    ).hasText("Livro criado com sucesso.");
 }
 ```
 
@@ -476,14 +476,16 @@ de integração contínua (Jenkins, GitHub Actions, GitLab CI, etc.).
 
 ### 6.1. Executar os testes via Maven
 
-Com o projeto configurado conforme a seção 2, basta rodar:
+Com os trechos da seção 2.2 adicionados ao `pom.xml`, execute na raiz do
+módulo hexagonal:
 
 ```sh
-mvn test
+cd exemplos/hexagonal
+./mvnw test -Dtest=BooksTest
 ```
 
-O Surefire executa todos os métodos anotados com `@Test` e grava os relatórios
-em `target/surefire-reports/`. Cada classe de teste gera dois arquivos:
+O Surefire executa os métodos anotados com `@Test` e grava os relatórios em
+`target/surefire-reports/`. Cada classe de teste gera dois arquivos:
 
 ```
 target/surefire-reports/
@@ -507,24 +509,32 @@ importado diretamente por qualquer ferramenta de CI:
 
 ### 6.3. Integração com o ciclo de vida do Maven
 
-Para que os testes E2E façam parte do build sem bloquear o ciclo padrão, crie
-um perfil `e2e` no `pom.xml`. Dessa forma o comando `mvn test` normal não
-executa os testes E2E; eles rodam apenas quando o perfil é ativado
-explicitamente:
+O projeto hexagonal já possui um perfil `e2e` que executa testes Playwright em
+JavaScript no frontend (`frontend/e2e/`). Para os testes E2E em Java descritos
+neste tutorial, use o Surefire no ciclo `test` padrão.
+
+Para rodar **somente** os testes Java E2E e gerar o relatório XML:
+
+```sh
+cd exemplos/hexagonal
+./mvnw test -Dtest="**/*E2eTest,**/*Test" -DfailIfNoTests=false
+```
+
+Para incluir os testes Java E2E em uma pipeline sem rodar no build diário,
+configure o Surefire com um perfil dedicado. Adicione ao
+`exemplos/hexagonal/pom.xml`:
 
 ```xml
 <profiles>
   <profile>
-    <id>e2e</id>
+    <id>e2e-java</id>
     <build>
       <plugins>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.5</version>
           <configuration>
             <includes>
-              <include>**/*Test.java</include>
+              <include>**/e2e/**/*Test.java</include>
             </includes>
           </configuration>
         </plugin>
@@ -534,10 +544,10 @@ explicitamente:
 </profiles>
 ```
 
-Para executar os testes E2E e gerar o relatório XML:
+Para executar os testes E2E em Java e gerar o relatório XML:
 
 ```sh
-mvn test -P e2e
+./mvnw test -Pe2e-java
 ```
 
 ---
@@ -637,9 +647,9 @@ junit.jupiter.execution.parallel.config.fixed.parallelism=3
 | `config.strategy` | `fixed` | Número fixo de threads paralelas |
 | `config.fixed.parallelism` | `3` | Uma thread por navegador |
 
-Após essa configuração, ao rodar `mvn test` os três navegadores abrirão
-simultaneamente e o resultado aparecerá no relatório XML com os três casos
-de teste separados:
+Após essa configuração, ao rodar `./mvnw test -Pe2e-java` os três navegadores
+abrirão simultaneamente e o resultado aparecerá no relatório XML com os três
+casos de teste separados:
 
 ```
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
