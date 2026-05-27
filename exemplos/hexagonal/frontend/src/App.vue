@@ -102,15 +102,15 @@ async function saveBook() {
   const payload = buildPayload();
 
   try {
-    if (editingIsbn.value) {
+    const isUpdate = !!editingIsbn.value;
+    if (isUpdate) {
       await updateBook(editingIsbn.value, payload);
-      showSuccess('Livro atualizado com sucesso.');
     } else {
       await createBook(payload);
-      showSuccess('Livro criado com sucesso.');
     }
     closeModal();
     await refreshBooks();
+    showSuccess(isUpdate ? 'Livro atualizado com sucesso.' : 'Livro criado com sucesso.');
   } catch (err) {
     modalErrorMessage.value = err.message;
   } finally {
@@ -126,8 +126,8 @@ async function removeBook(isbn) {
   clearMessages();
   try {
     await deleteBook(isbn);
-    showSuccess('Livro removido com sucesso.');
     await refreshBooks();
+    showSuccess('Livro removido com sucesso.');
   } catch (err) {
     showError(err.message);
   }

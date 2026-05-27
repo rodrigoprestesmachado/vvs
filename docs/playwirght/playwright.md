@@ -31,68 +31,59 @@ operações de cadastro, edição, exclusão e listagem de livros.
 
 ### 1.2. Pré-requisitos
 
-- [Java 17](https://openjdk.org) ou superior
-- [Maven 3.9](https://maven.apache.org) ou superior
-- Backend Quarkus do projeto hexagonal rodando em `http://localhost:8080`
+- [Java 25](https://openjdk.org) (versão fixada em `maven.compiler.release` no
+  `pom.xml` do projeto hexagonal)
+- [Maven 3.9](https://maven.apache.org) ou superior (o módulo inclui `./mvnw`,
+  não é necessário instalar Maven globalmente)
+- [Docker](https://www.docker.com/) em execução — a anotação `@QuarkusTest`
+  sobe o Quarkus e o MySQL Dev Services automaticamente ao rodar os testes,
+  então **não é preciso** iniciar `./mvnw quarkus:dev` antes
 
 ---
 
 ## 2. Configuração do projeto Maven
 
 Este tutorial usa o projeto `exemplos/hexagonal`. O `pom.xml` desse módulo já
-inclui a dependência do Playwright Java e o plugin Surefire. Você só precisa
-adicionar o que falta para gravar testes com o Codegen e executar com JUnit 5.
+traz tudo o que é necessário para gravar testes com o Codegen e executá-los
+com JUnit 5 — você não precisa adicionar nada para começar.
 
 ### 2.1. Estrutura de arquivos de teste
 
-Crie os arquivos de teste E2E em Java dentro do módulo hexagonal:
+Os testes E2E em Java vivem ao lado dos demais testes do módulo hexagonal:
 
 ```
 exemplos/hexagonal/
-├── src/test/java/dev/ifrs/hexagonal/e2e/
-│   └── BooksTest.java
+├── src/test/java/dev/ifrs/hexagonal/
+│   ├── BooksE2ETest.java
+│   └── BooksMultiBrowserTest.java
 ├── src/test/resources/
 │   └── junit-platform.properties
 └── pom.xml
 ```
 
-### 2.2. Trechos a adicionar no pom.xml
+### 2.2. O que já está pronto no projeto
 
 O arquivo completo está em [`exemplos/hexagonal/pom.xml`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/pom.xml).
-Ele já contém:
+Tudo o que o tutorial precisa já está configurado:
 
-| Item | Onde está no pom.xml |
+| Item | Onde está |
 |---|---|
-| Dependência Playwright Java | bloco `<dependencies>` |
-| Plugin Surefire | bloco `<build><plugins>` |
-| Perfil `e2e` | bloco `<profiles>` (testes Playwright em JavaScript no frontend) |
+| Dependência Playwright Java (`1.52.0`) | bloco `<dependencies>` do `pom.xml` |
+| Dependência `quarkus-junit` (traz JUnit Jupiter via BOM Quarkus 3.34.1) | bloco `<dependencies>` do `pom.xml` |
+| Dependência `rest-assured` (para pré-condições REST nos testes E2E) | bloco `<dependencies>` do `pom.xml` |
+| Plugin `maven-surefire-plugin` (gera relatórios JUnit XML) | bloco `<build><plugins>` do `pom.xml` |
+| Plugin `exec-maven-plugin` (permite chamar o CLI do Playwright) | bloco `<build><plugins>` do `pom.xml` |
+| Perfil `e2e` | bloco `<profiles>` do `pom.xml` (executa testes Playwright em **JavaScript** no frontend) |
+| `quarkus.http.test-port=8080` | `src/main/resources/application.properties` |
 
-Adicione **somente** os trechos abaixo.
+> Não fixe uma versão de `junit-jupiter` no `pom.xml`: o `quarkus-junit` já a
+> resolve via BOM Quarkus, e declarar manualmente costuma criar conflito de
+> classes.
 
-**Dependência JUnit 5** (dentro de `<dependencies>`):
-
-```xml
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <version>5.11.0</version>
-    <scope>test</scope>
-</dependency>
-```
-
-**Plugin exec** (dentro de `<build><plugins>`, permite `codegen` e `install` via Maven):
-
-```xml
-<plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>exec-maven-plugin</artifactId>
-    <version>3.2.0</version>
-</plugin>
-```
-
-> O perfil `e2e` do projeto já declara o `exec-maven-plugin` para a pipeline
-> npm. Se você preferir não alterar o bloco principal, use `-Pe2e` nos comandos
-> da seção 2.3 e da seção 3.
+> A propriedade `quarkus.http.test-port=8080` é o que faz o `@QuarkusTest`
+> subir a aplicação na porta `8080` durante os testes (o padrão do Quarkus em
+> teste é `8081`). Sem ela, as URLs `http://localhost:8080` deste tutorial não
+> funcionariam.
 
 ### 2.3. Instalação dos navegadores
 
@@ -117,7 +108,9 @@ seção 4.
 
 ### 3.1. Preparando o ambiente
 
-Antes de gravar, suba o backend Quarkus do projeto hexagonal:
+O Codegen precisa de uma aplicação rodando para gravar a interação. Como o
+`@QuarkusTest` só sobe o backend durante a execução dos testes, para esta
+sessão de gravação inicial vamos subir o Quarkus manualmente:
 
 ```sh
 cd exemplos/hexagonal
@@ -125,7 +118,7 @@ cd exemplos/hexagonal
 ```
 
 Com a aplicação em `http://localhost:8080`, abra o Codegen com saída em Java
-(na raiz do módulo hexagonal):
+(em outro terminal, na raiz do módulo hexagonal):
 
 ```sh
 cd exemplos/hexagonal
@@ -203,7 +196,7 @@ Para salvar a gravação direto no projeto:
 cd exemplos/hexagonal
 ./mvnw exec:java -e \
   -D exec.mainClass=com.microsoft.playwright.CLI \
-  -D exec.args="codegen --target java --output src/test/java/dev/ifrs/hexagonal/e2e/CadastroLivroGravado.java http://localhost:8080"
+  -D exec.args="codegen --target java --output src/test/java/dev/ifrs/hexagonal/CadastroLivroGravado.java http://localhost:8080"
 ```
 
 ---
@@ -287,50 +280,42 @@ a interface. Isso torna os testes mais robustos a mudanças de layout:
 No cadastro de livros, o Codegen escolheu `getByRole` para botões, campos de
 texto e linhas da tabela porque a interface Vue expõe papéis ARIA nos elementos.
 
-### 4.4. Adaptando a gravação para JUnit 5
+### 4.4. Adaptando a gravação para `@QuarkusTest` + `@UsePlaywright`
 
-O Codegen gera um `main()` executável. Para integrar ao Maven e gerar relatório
-JUnit, converta a gravação em uma classe de teste com o ciclo padrão do JUnit 5:
+O Codegen gera um `main()` executável. Para integrar ao Maven, gerar relatório
+JUnit XML e subir o Quarkus automaticamente, o projeto hexagonal usa duas
+anotações que substituem todo o ciclo `@BeforeAll`/`@BeforeEach`/`@AfterAll`:
+
+- **`@QuarkusTest`** (de `io.quarkus.test.junit`) — sobe o Quarkus e o MySQL
+  Dev Services antes de qualquer teste, na porta configurada por
+  `quarkus.http.test-port=8080`.
+- **`@UsePlaywright`** (de `com.microsoft.playwright.junit`) — gerencia
+  `Playwright`, `Browser` e `BrowserContext`, e injeta um `Page` novo a cada
+  método `@Test` (cada teste recebe um contexto isolado, com cookies e
+  storage limpos).
+
+A classe de teste fica reduzida ao essencial:
 
 ```java
-import com.microsoft.playwright.*;
+package dev.ifrs.hexagonal;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.junit.UsePlaywright;
 import com.microsoft.playwright.options.AriaRole;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import org.junit.jupiter.api.*;
 
-public class BooksTest {
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
 
-    static Playwright playwright;
-    static Browser browser;
-    BrowserContext context;
-    Page page;
-
-    @BeforeAll
-    static void abrirNavegador() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch();
-    }
-
-    @AfterAll
-    static void fecharNavegador() {
-        playwright.close();
-    }
-
-    @BeforeEach
-    void novoContexto() {
-        context = browser.newContext();
-        page = context.newPage();
-        page.navigate("http://localhost:8080");
-    }
-
-    @AfterEach
-    void fecharContexto() {
-        context.close();
-    }
+@QuarkusTest
+@UsePlaywright
+public class BooksE2ETest {
 
     @Test
-    void cadastraLivro() {
-        // Passos gerados pelo Codegen (seção 3)
+    void cadastraLivro(Page page) {
+        page.navigate("http://localhost:8080/");
+
         page.getByRole(AriaRole.BUTTON,
             new Page.GetByRoleOptions().setName("Novo livro")).click();
         page.getByRole(AriaRole.TEXTBOX,
@@ -354,12 +339,34 @@ public class BooksTest {
 }
 ```
 
-| Elemento JUnit | Função |
+| Elemento | Função |
 |---|---|
-| `@BeforeAll` | Abre o navegador uma vez para todos os testes |
-| `@BeforeEach` | Cria contexto e página limpos antes de cada teste |
-| `@Test` | Marca o método gravado como caso de teste |
-| `@AfterEach` / `@AfterAll` | Fecha contexto e navegador ao final |
+| `@QuarkusTest` | Sobe o Quarkus + MySQL Dev Services em `http://localhost:8080` antes dos testes |
+| `@UsePlaywright` | Inicia o Playwright, abre o navegador (Chromium em modo headless) e cria um `BrowserContext` por método de teste |
+| `Page page` no parâmetro do `@Test` | O Playwright injeta automaticamente a página vinda do contexto isolado |
+| `@Test` | Marca o método como caso de teste JUnit 5 |
+
+Se quiser **acompanhar visualmente** (modo headed, útil para depuração local),
+forneça uma `OptionsFactory` em `@UsePlaywright`:
+
+```java
+import com.microsoft.playwright.junit.Options;
+import com.microsoft.playwright.junit.OptionsFactory;
+
+@QuarkusTest
+@UsePlaywright(BooksE2ETest.HeadedOptions.class)
+public class BooksE2ETest {
+
+    public static class HeadedOptions implements OptionsFactory {
+        @Override
+        public Options getOptions() {
+            return new Options().setHeadless(false);
+        }
+    }
+
+    // ... métodos @Test ...
+}
+```
 
 Execute com `./mvnw test` na raiz do módulo hexagonal. O relatório XML será
 gerado em `target/surefire-reports/` (conforme a seção 6).
@@ -368,17 +375,41 @@ gerado em `target/surefire-reports/` (conforme a seção 6).
 
 ## 5. Exemplos completos: CRUD de livros
 
-Com o fluxo de gravação e a estrutura JUnit já entendidos, esta seção mostra
+Com a estrutura `@QuarkusTest` + `@UsePlaywright` em mãos, esta seção mostra
 testes para as demais operações do cadastro de livros.
+
+Cada `@Test` recebe um `Page` novo (em um `BrowserContext` isolado), mas
+**todos compartilham o mesmo banco MySQL** durante a execução de uma mesma
+classe. Para que os testes sejam independentes da ordem de execução,
+declaramos um `@BeforeEach` que apaga o ISBN de teste via REST antes de cada
+caso (404 é ignorado):
+
+```java
+import io.restassured.http.ContentType;
+import static io.restassured.RestAssured.given;
+import org.junit.jupiter.api.BeforeEach;
+
+@BeforeEach
+void limparLivroDeTeste() {
+    given().delete("/books/156881111X");
+}
+```
+
+Para os cenários que dependem de um livro já existente (`editaLivro` e
+`excluiLivro`), o próprio teste cadastra a pré-condição via `POST /books` —
+mais rápido e mais robusto do que cadastrar pela UI a cada execução.
 
 ### 5.1. Cadastrar um livro
 
-O teste de cadastro já foi gravado e adaptado na seção 4.4. Abaixo, a mesma
-gravação com uma verificação extra: a mensagem de sucesso exibida após salvar.
+Os passos abaixo replicam exatamente a gravação da seção 3, com uma verificação
+extra: a mensagem de sucesso exibida após salvar (o elemento de `role="status"`
+no `App.vue`):
 
 ```java
 @Test
-void cadastraLivroComMensagemDeSucesso() {
+void cadastraLivroComMensagemDeSucesso(Page page) {
+    page.navigate("http://localhost:8080/");
+
     page.getByRole(AriaRole.BUTTON,
         new Page.GetByRoleOptions().setName("Novo livro")).click();
 
@@ -409,17 +440,35 @@ void cadastraLivroComMensagemDeSucesso() {
 
 ### 5.2. Editar um livro
 
-O campo ISBN fica desabilitado na edição; somente os demais campos podem ser
-alterados. O teste verifica que o título atualizado aparece na tabela após
-salvar:
+O campo ISBN fica desabilitado na edição (`disabled` no `<input>` do
+`App.vue`); somente os demais campos podem ser alterados. O teste cria a
+pré-condição via REST antes de abrir a UI e verifica que o título atualizado
+aparece na tabela após salvar:
 
 ```java
 @Test
-void editaLivro() {
-    // Pré-condição: o livro já deve existir no banco
+void editaLivro(Page page) {
+    // Pré-condição via REST: garante o livro no banco antes de abrir a UI
+    given()
+        .contentType(ContentType.JSON)
+        .body("""
+            {
+              "isbn": "156881111X",
+              "title": "Erdős on Graphs: His Legacy of Unsolved Problems",
+              "author": "Fan Chung, Ronald L. Graham",
+              "publicationYear": 1999,
+              "copiesAvailable": 1
+            }
+            """)
+        .post("/books")
+        .then().statusCode(201);
+
+    page.navigate("http://localhost:8080/");
+
     page.getByRole(AriaRole.ROW)
         .filter(new Locator.FilterOptions().setHasText("156881111X"))
-        .getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions().setName("Editar"))
+        .getByRole(AriaRole.BUTTON,
+            new Locator.GetByRoleOptions().setName("Editar"))
         .click();
 
     Locator campoTitulo = page.getByRole(AriaRole.TEXTBOX,
@@ -432,7 +481,8 @@ void editaLivro() {
 
     assertThat(
         page.getByRole(AriaRole.ROW)
-            .filter(new Locator.FilterOptions().setHasText("Erdős on Graphs (2ª edição)"))
+            .filter(new Locator.FilterOptions()
+                .setHasText("Erdős on Graphs (2ª edição)"))
     ).isVisible();
 }
 ```
@@ -440,18 +490,38 @@ void editaLivro() {
 ### 5.3. Excluir um livro
 
 A exclusão exibe um diálogo de confirmação nativo do navegador
-(`window.confirm`). O Playwright permite aceitar ou rejeitar esse diálogo
-antes de clicar no botão:
+(`window.confirm` em `App.vue`). O Playwright permite aceitar ou rejeitar
+esse diálogo antes de clicar no botão. Repare que o handler de diálogo é
+registrado **antes** do clique para garantir que esteja ativo no momento em
+que o `confirm` aparece:
 
 ```java
 @Test
-void excluiLivro() {
+void excluiLivro(Page page) {
+    // Pré-condição via REST
+    given()
+        .contentType(ContentType.JSON)
+        .body("""
+            {
+              "isbn": "156881111X",
+              "title": "Erdős on Graphs: His Legacy of Unsolved Problems",
+              "author": "Fan Chung, Ronald L. Graham",
+              "publicationYear": 1999,
+              "copiesAvailable": 1
+            }
+            """)
+        .post("/books")
+        .then().statusCode(201);
+
+    page.navigate("http://localhost:8080/");
+
     // Aceita o diálogo de confirmação automaticamente
     page.onDialog(dialog -> dialog.accept());
 
     page.getByRole(AriaRole.ROW)
         .filter(new Locator.FilterOptions().setHasText("156881111X"))
-        .getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions().setName("Excluir"))
+        .getByRole(AriaRole.BUTTON,
+            new Locator.GetByRoleOptions().setName("Excluir"))
         .click();
 
     // Verifica que a linha sumiu da tabela
@@ -476,12 +546,13 @@ de integração contínua (Jenkins, GitHub Actions, GitLab CI, etc.).
 
 ### 6.1. Executar os testes via Maven
 
-Com os trechos da seção 2.2 adicionados ao `pom.xml`, execute na raiz do
-módulo hexagonal:
+A classe `BooksE2ETest` roda no ciclo `test` padrão (a anotação `@QuarkusTest`
+sobe o Quarkus + MySQL Dev Services automaticamente). Na raiz do módulo
+hexagonal:
 
 ```sh
 cd exemplos/hexagonal
-./mvnw test -Dtest=BooksTest
+./mvnw test -Dtest=BooksE2ETest
 ```
 
 O Surefire executa os métodos anotados com `@Test` e grava os relatórios em
@@ -489,65 +560,44 @@ O Surefire executa os métodos anotados com `@Test` e grava os relatórios em
 
 ```
 target/surefire-reports/
-├── BooksTest.txt          ← saída em texto puro
-└── TEST-BooksTest.xml     ← relatório no formato JUnit XML
+├── BooksE2ETest.txt          ← saída em texto puro
+└── TEST-BooksE2ETest.xml     ← relatório no formato JUnit XML
 ```
 
 ### 6.2. Formato do relatório XML
 
-O arquivo `TEST-BooksTest.xml` segue o esquema padrão do JUnit e pode ser
+O arquivo `TEST-BooksE2ETest.xml` segue o esquema padrão do JUnit e pode ser
 importado diretamente por qualquer ferramenta de CI:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="BooksTest" tests="3" failures="0" errors="0" skipped="0" time="8.42">
-  <testcase name="cadastraLivro" classname="BooksTest" time="3.15"/>
-  <testcase name="editaLivro"    classname="BooksTest" time="2.80"/>
-  <testcase name="excluiLivro"   classname="BooksTest" time="2.47"/>
+<testsuite name="BooksE2ETest" tests="3" failures="0" errors="0" skipped="0" time="8.42">
+  <testcase name="cadastraLivro" classname="dev.ifrs.hexagonal.BooksE2ETest" time="3.15"/>
+  <testcase name="editaLivro"    classname="dev.ifrs.hexagonal.BooksE2ETest" time="2.80"/>
+  <testcase name="excluiLivro"   classname="dev.ifrs.hexagonal.BooksE2ETest" time="2.47"/>
 </testsuite>
 ```
 
 ### 6.3. Integração com o ciclo de vida do Maven
 
-O projeto hexagonal já possui um perfil `e2e` que executa testes Playwright em
-JavaScript no frontend (`frontend/e2e/`). Para os testes E2E em Java descritos
-neste tutorial, use o Surefire no ciclo `test` padrão.
+O projeto hexagonal já possui um perfil `e2e` no `pom.xml`, mas atenção:
+esse perfil executa os testes Playwright em **JavaScript** que vivem em
+`frontend/e2e/books.spec.js` (via `frontend-maven-plugin` + npm). Ele **não**
+roda os testes Java deste tutorial.
 
-Para rodar **somente** os testes Java E2E e gerar o relatório XML:
+Os testes E2E em Java (`BooksE2ETest`, `BooksMultiBrowserTest`) entram no
+mesmo ciclo `test` que os testes de API (`BookResourceTest`):
 
 ```sh
 cd exemplos/hexagonal
-./mvnw test -Dtest="**/*E2eTest,**/*Test" -DfailIfNoTests=false
+./mvnw test          # roda TODOS os testes Java
+./mvnw verify -Pe2e  # roda testes Java + Playwright em JavaScript do frontend
 ```
 
-Para incluir os testes Java E2E em uma pipeline sem rodar no build diário,
-configure o Surefire com um perfil dedicado. Adicione ao
-`exemplos/hexagonal/pom.xml`:
-
-```xml
-<profiles>
-  <profile>
-    <id>e2e-java</id>
-    <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <includes>
-              <include>**/e2e/**/*Test.java</include>
-            </includes>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-</profiles>
-```
-
-Para executar os testes E2E em Java e gerar o relatório XML:
+Para executar somente os testes E2E em Java (útil em uma pipeline dedicada):
 
 ```sh
-./mvnw test -Pe2e-java
+./mvnw test -Dtest='Books*E2ETest,BooksMultiBrowserTest'
 ```
 
 ---
@@ -560,18 +610,31 @@ navegadores ao mesmo tempo, reduzindo o tempo total de execução.
 
 ### 7.1. Teste parametrizado por navegador
 
-A ideia é passar o nome do navegador como parâmetro. Dentro do teste, a
-instância correta do `BrowserType` é selecionada antes de abrir o navegador:
+`@UsePlaywright` cria **um** navegador por classe de teste. Para alternar
+entre Chromium, Firefox e WebKit no mesmo conjunto de testes voltamos ao
+controle manual (`Playwright.create()`). Mantemos `@QuarkusTest` na classe
+para que o backend continue subindo automaticamente:
 
 ```java
-import com.microsoft.playwright.*;
+package dev.ifrs.hexagonal;
+
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.*;
+
 import java.util.stream.Stream;
 
+@QuarkusTest
 public class BooksMultiBrowserTest {
 
     static Playwright playwright;
@@ -601,7 +664,7 @@ public class BooksMultiBrowserTest {
 
         try (Browser browser = tipo.launch()) {
             Page page = browser.newContext().newPage();
-            page.navigate("http://localhost:8080");
+            page.navigate("http://localhost:8080/");
 
             page.getByRole(AriaRole.BUTTON,
                 new Page.GetByRoleOptions().setName("Novo livro")).click();
@@ -627,29 +690,50 @@ public class BooksMultiBrowserTest {
 }
 ```
 
-### 7.2. Habilitando o paralelismo no JUnit 5
+> Antes da primeira execução, instale também Firefox e WebKit:
+> `./mvnw exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install firefox webkit"`.
 
-Por padrão o JUnit 5 executa os testes de forma sequencial. Para que os três
-navegadores abram ao mesmo tempo, crie o arquivo
-`src/test/resources/junit-platform.properties` com o conteúdo abaixo:
+### 7.2. Sobre paralelismo + `@QuarkusTest`
+
+Em teoria, o JUnit 5 permite habilitar execução paralela com este arquivo
+`src/test/resources/junit-platform.properties` e a anotação
+`@Execution(ExecutionMode.CONCURRENT)`:
 
 ```properties
 junit.jupiter.execution.parallel.enabled=true
-junit.jupiter.execution.parallel.mode.default=concurrent
+junit.jupiter.execution.parallel.mode.default=same_thread
 junit.jupiter.execution.parallel.config.strategy=fixed
 junit.jupiter.execution.parallel.config.fixed.parallelism=3
 ```
 
 | Propriedade | Valor | Efeito |
 |---|---|---|
-| `parallel.enabled` | `true` | Ativa o modo paralelo |
-| `mode.default` | `concurrent` | Testes rodam ao mesmo tempo por padrão |
+| `parallel.enabled` | `true` | Ativa o motor de execução paralela do JUnit |
+| `mode.default` | `same_thread` | Por padrão, testes rodam sequenciais |
 | `config.strategy` | `fixed` | Número fixo de threads paralelas |
 | `config.fixed.parallelism` | `3` | Uma thread por navegador |
 
-Após essa configuração, ao rodar `./mvnw test -Pe2e-java` os três navegadores
-abrirão simultaneamente e o resultado aparecerá no relatório XML com os três
-casos de teste separados:
+**Limitação importante:** o `@QuarkusTest` não é thread-safe (a extensão JUnit
+do Quarkus inicializa estruturas estáticas que falham quando o mesmo método
+é invocado em paralelo). Por isso o `BooksMultiBrowserTest` **não** carrega
+`@Execution(ExecutionMode.CONCURRENT)`: os três navegadores são abertos em
+sequência. O ganho do `@ParameterizedTest` continua sendo cobrir Chromium,
+Firefox e WebKit a partir de um único código de teste.
+
+Quem precisar de paralelismo real entre navegadores tem duas saídas:
+
+1. **Abrir mão de `@QuarkusTest`** — voltar a subir o backend manualmente
+   (`./mvnw quarkus:dev`) e marcar a classe com
+   `@Execution(ExecutionMode.CONCURRENT)`. Isso libera o paralelismo, mas
+   exige uma janela extra rodando o Quarkus.
+2. **Separar uma classe por navegador** — `BooksChromiumTest`,
+   `BooksFirefoxTest`, `BooksWebKitTest`, todas com `@QuarkusTest`. Como o
+   `mode.default=same_thread` permite paralelismo entre classes diferentes,
+   o Surefire pode rodá-las em paralelo (à custa de subir Quarkus uma vez
+   por classe).
+
+Executando `./mvnw test -Dtest=BooksMultiBrowserTest` o resultado aparece
+no relatório XML com os três casos de teste separados:
 
 ```
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
@@ -667,36 +751,70 @@ A gravação de vídeo é útil para investigar falhas que não se reproduzem
 facilmente de forma manual. O Playwright salva um arquivo `.webm` por contexto
 dentro do diretório informado.
 
-Para ativar a gravação, passe a opção `setRecordVideoDir` ao criar o contexto:
+### 8.1. Com `@UsePlaywright` (estilo das seções 4 e 5)
+
+Como o `BrowserContext` é gerenciado pela integração JUnit, basta fornecer uma
+`OptionsFactory` que defina `setRecordVideoDir`. Todos os métodos `@Test` da
+classe passam a gravar vídeo automaticamente:
+
+```java
+import com.microsoft.playwright.junit.Options;
+import com.microsoft.playwright.junit.OptionsFactory;
+import com.microsoft.playwright.junit.UsePlaywright;
+import java.nio.file.Paths;
+
+@QuarkusTest
+@UsePlaywright(BooksE2ETest.WithVideo.class)
+public class BooksE2ETest {
+
+    public static class WithVideo implements OptionsFactory {
+        @Override
+        public Options getOptions() {
+            return new Options()
+                .setRecordVideoDir(Paths.get("target/test-videos/"));
+        }
+    }
+
+    // ... métodos @Test ...
+}
+```
+
+O arquivo `.webm` aparece em `target/test-videos/` somente após o contexto ser
+fechado (o que a integração faz ao terminar cada `@Test`).
+
+### 8.2. Com controle manual (estilo da seção 7)
+
+Para o `BooksMultiBrowserTest`, que cria o `BrowserContext` manualmente, a
+gravação vai como opção do `newContext`:
 
 ```java
 import java.nio.file.Paths;
 
 BrowserContext context = browser.newContext(
     new Browser.NewContextOptions()
-        .setRecordVideoDir(Paths.get("test-videos/"))
+        .setRecordVideoDir(Paths.get("target/test-videos/"))
 );
 
 Page page = context.newPage();
-page.navigate("http://localhost:8080");
+page.navigate("http://localhost:8080/");
 // ... interações do teste ...
 
 // O vídeo só é gravado no disco após fechar o contexto
 context.close();
 ```
 
-Para gravar somente quando o teste falha, feche o contexto dentro de um bloco
-`try/finally` e delete o arquivo em caso de sucesso:
+Para gravar **somente quando o teste falha**, feche o contexto dentro de um
+bloco `try/finally` e delete o arquivo em caso de sucesso:
 
 ```java
 Path videoPath = null;
 try {
     context = browser.newContext(
         new Browser.NewContextOptions()
-            .setRecordVideoDir(Paths.get("test-videos/"))
+            .setRecordVideoDir(Paths.get("target/test-videos/"))
     );
     page = context.newPage();
-    page.navigate("http://localhost:8080");
+    page.navigate("http://localhost:8080/");
 
     // ... passos do teste ...
 
@@ -706,15 +824,16 @@ try {
     Files.deleteIfExists(videoPath);
 } catch (AssertionError e) {
     context.close();
-    // Teste falhou: o vídeo permanece em test-videos/
+    // Teste falhou: o vídeo permanece em target/test-videos/
     throw e;
 }
 ```
 
-Os vídeos são salvos em `test-videos/` com nomes gerados automaticamente:
+Os vídeos são salvos em `target/test-videos/` com nomes gerados
+automaticamente:
 
 ```
-test-videos/
+target/test-videos/
 └── a3f9b2c1d4e5f6a7.webm
 ```
 
