@@ -55,7 +55,8 @@ Os testes E2E em Java vivem ao lado dos demais testes do módulo hexagonal:
 exemplos/hexagonal/
 ├── src/test/java/dev/ifrs/hexagonal/
 │   ├── BooksE2ETest.java
-│   └── BooksMultiBrowserTest.java
+│   ├── BooksMultiBrowserTest.java
+│   └── PlayrightTest.java
 ├── src/test/resources/
 │   └── junit-platform.properties
 └── pom.xml
@@ -585,8 +586,8 @@ esse perfil executa os testes Playwright em **JavaScript** que vivem em
 `frontend/e2e/books.spec.js` (via `frontend-maven-plugin` + npm). Ele **não**
 roda os testes Java deste tutorial.
 
-Os testes E2E em Java (`BooksE2ETest`, `BooksMultiBrowserTest`) entram no
-mesmo ciclo `test` que os testes de API (`BookResourceTest`):
+Os testes E2E em Java (`BooksE2ETest`, `BooksMultiBrowserTest`, `PlayrightTest`)
+entram no mesmo ciclo `test` que os testes de API (`BookResourceTest`):
 
 ```sh
 cd exemplos/hexagonal
@@ -597,7 +598,7 @@ cd exemplos/hexagonal
 Para executar somente os testes E2E em Java (útil em uma pipeline dedicada):
 
 ```sh
-./mvnw test -Dtest='Books*E2ETest,BooksMultiBrowserTest'
+./mvnw test -Dtest='Books*E2ETest,BooksMultiBrowserTest,PlayrightTest'
 ```
 
 ---
@@ -606,98 +607,152 @@ Para executar somente os testes E2E em Java (útil em uma pipeline dedicada):
 
 O Playwright Java suporta Chromium, Firefox e WebKit com a mesma API. Usando
 `@ParameterizedTest` do JUnit 5 é possível rodar o mesmo teste nos três
-navegadores ao mesmo tempo, reduzindo o tempo total de execução.
+navegadores **ao mesmo tempo**, reduzindo o tempo total de execução.
 
-### 7.1. Teste parametrizado por navegador
+### 7.1. Por que `Playwright` não pode ser compartilhado entre threads
 
-`@UsePlaywright` cria **um** navegador por classe de teste. Para alternar
-entre Chromium, Firefox e WebKit no mesmo conjunto de testes voltamos ao
-controle manual (`Playwright.create()`). Mantemos `@QuarkusTest` na classe
-para que o backend continue subindo automaticamente:
+A classe `Playwright` **não é thread-safe**: ela mantém processo e estado
+internos que falham quando chamados simultaneamente de threads diferentes. A
+abordagem antiga — criar um único `Playwright` estático em `@BeforeAll` e
+reutilizá-lo no `@ParameterizedTest` — impede o uso de
+`@Execution(ExecutionMode.CONCURRENT)`.
+
+A solução é simples: **cada invocação do teste parametrizado cria e fecha seu
+próprio `Playwright`** dentro de um `try-with-resources`. Como cada invocação
+roda em sua própria thread (quando `CONCURRENT` está ativo), não há
+compartilhamento de estado e o paralelismo funciona com `@QuarkusTest`.
+
+### 7.2. Classe `PlayrightTest` — teste simples + parametrizado paralelo
+
+A classe `PlayrightTest` combina dois estilos em um único arquivo:
+
+- O método `test` usa a `Page` **injetada por `@UsePlaywright`** (Chromium
+  configurado com `slowMo` e gravação de vídeo via `WithVideo`).
+- O método `cadastraLivroEmCadaNavegador` cria seu **próprio `Playwright`
+  por invocação** e roda em paralelo nos três navegadores.
+
+ISBNs diferentes por navegador evitam conflitos no banco compartilhado:
 
 ```java
 package dev.ifrs.hexagonal;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.AriaRole;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.junit.Options;
+import com.microsoft.playwright.junit.OptionsFactory;
+import com.microsoft.playwright.junit.UsePlaywright;
+import com.microsoft.playwright.options.AriaRole;
+
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
 @QuarkusTest
-public class BooksMultiBrowserTest {
-
-    static Playwright playwright;
-
-    @BeforeAll
-    static void iniciar() {
-        playwright = Playwright.create();
-    }
-
-    @AfterAll
-    static void encerrar() {
-        playwright.close();
-    }
+@UsePlaywright(PlayrightTest.WithVideo.class)
+public class PlayrightTest {
 
     static Stream<String> navegadores() {
         return Stream.of("chromium", "firefox", "webkit");
     }
 
+    @Test
+    void test(Page page) {
+        page.navigate("http://localhost:8080/");
+        page.getByRole(AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName("Novo livro")).click();
+        page.getByRole(AriaRole.TEXTBOX,
+                new Page.GetByRoleOptions().setName("ISBN-")).fill("6587958494");
+        page.getByRole(AriaRole.TEXTBOX,
+                new Page.GetByRoleOptions().setName("Título")).fill("Estatistica Basica");
+        page.getByRole(AriaRole.TEXTBOX,
+                new Page.GetByRoleOptions().setName("Autor")).fill("Rodrigo");
+        page.getByRole(AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName("Salvar")).click();
+        assertThat(page.locator("tbody")).containsText("6587958494");
+    }
+
     @ParameterizedTest(name = "cadastraLivro [{0}]")
     @MethodSource("navegadores")
+    @Execution(ExecutionMode.CONCURRENT)
     void cadastraLivroEmCadaNavegador(String nomeNavegador) {
-        BrowserType tipo = switch (nomeNavegador) {
-            case "firefox" -> playwright.firefox();
-            case "webkit"  -> playwright.webkit();
-            default        -> playwright.chromium();
+        String isbn = switch (nomeNavegador) {
+            case "firefox" -> "0201634554";
+            case "webkit"  -> "0596007124";
+            default        -> "0306406152";
         };
 
-        try (Browser browser = tipo.launch()) {
-            Page page = browser.newContext().newPage();
-            page.navigate("http://localhost:8080/");
+        try (Playwright pw = Playwright.create()) {
+            BrowserType tipo = switch (nomeNavegador) {
+                case "firefox" -> pw.firefox();
+                case "webkit"  -> pw.webkit();
+                default        -> pw.chromium();
+            };
 
-            page.getByRole(AriaRole.BUTTON,
-                new Page.GetByRoleOptions().setName("Novo livro")).click();
-            page.getByRole(AriaRole.TEXTBOX,
-                new Page.GetByRoleOptions().setName("ISBN-")).fill("156881111X");
-            page.getByRole(AriaRole.TEXTBOX,
-                new Page.GetByRoleOptions().setName("Título")).fill(
-                    "Erdős on Graphs: His Legacy of Unsolved Problems");
-            page.getByRole(AriaRole.TEXTBOX,
-                new Page.GetByRoleOptions().setName("Autor")).fill(
-                    "Fan Chung, Ronald L. Graham");
-            page.getByRole(AriaRole.SPINBUTTON,
-                new Page.GetByRoleOptions().setName("Ano de publicação")).fill("1999");
-            page.getByRole(AriaRole.BUTTON,
-                new Page.GetByRoleOptions().setName("Salvar")).click();
+            try (Browser browser = tipo.launch(
+                        new BrowserType.LaunchOptions().setSlowMo(300));
+                 BrowserContext context = browser.newContext(
+                        new Browser.NewContextOptions()
+                                .setRecordVideoDir(
+                                        Paths.get("target/videos/" + nomeNavegador)))) {
 
-            assertThat(
-                page.getByRole(AriaRole.ROW)
-                    .filter(new Locator.FilterOptions().setHasText("156881111X"))
-            ).isVisible();
+                Page page = context.newPage();
+                page.navigate("http://localhost:8080/");
+
+                page.getByRole(AriaRole.BUTTON,
+                        new Page.GetByRoleOptions().setName("Novo livro")).click();
+                page.getByRole(AriaRole.TEXTBOX,
+                        new Page.GetByRoleOptions().setName("ISBN-")).fill(isbn);
+                page.getByRole(AriaRole.TEXTBOX,
+                        new Page.GetByRoleOptions().setName("Título")).fill("Estatistica Basica");
+                page.getByRole(AriaRole.TEXTBOX,
+                        new Page.GetByRoleOptions().setName("Autor")).fill("Rodrigo");
+                page.getByRole(AriaRole.BUTTON,
+                        new Page.GetByRoleOptions().setName("Salvar")).click();
+
+                assertThat(page.locator("tbody")).containsText(isbn);
+            }
+        }
+    }
+
+    /** Configura gravação de vídeo e slowMo para o teste {@code test}. */
+    public static class WithVideo implements OptionsFactory {
+        @Override
+        public Options getOptions() {
+            return new Options()
+                    .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
+                    .setContextOptions(new Browser.NewContextOptions()
+                            .setRecordVideoDir(Paths.get("target/videos/chromium")));
         }
     }
 }
 ```
 
-> Antes da primeira execução, instale também Firefox e WebKit:
-> `./mvnw exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install firefox webkit"`.
+### 7.3. Pontos-chave da implementação
 
-### 7.2. Sobre paralelismo + `@QuarkusTest`
+| Elemento | Por que é assim |
+|---|---|
+| `try (Playwright pw = Playwright.create())` dentro do método | `Playwright` não é thread-safe; criar por invocação elimina conflito entre threads |
+| `@Execution(ExecutionMode.CONCURRENT)` | Instrui o JUnit 5 a rodar as três invocações do `@ParameterizedTest` em paralelo |
+| ISBN diferente por navegador | O banco MySQL é compartilhado; ISBNs distintos evitam conflito de chave primária |
+| `setSlowMo(300)` no `LaunchOptions` | Desacelera cada ação em 300 ms para que o vídeo gravado seja legível |
+| `setRecordVideoDir("target/videos/" + nomeNavegador)` | Cada navegador grava em seu próprio subdiretório |
 
-Em teoria, o JUnit 5 permite habilitar execução paralela com este arquivo
-`src/test/resources/junit-platform.properties` e a anotação
-`@Execution(ExecutionMode.CONCURRENT)`:
+### 7.4. Configuração de paralelismo no JUnit Platform
+
+O arquivo `src/test/resources/junit-platform.properties` habilita o motor
+paralelo e define o número de threads:
 
 ```properties
 junit.jupiter.execution.parallel.enabled=true
@@ -709,38 +764,24 @@ junit.jupiter.execution.parallel.config.fixed.parallelism=3
 | Propriedade | Valor | Efeito |
 |---|---|---|
 | `parallel.enabled` | `true` | Ativa o motor de execução paralela do JUnit |
-| `mode.default` | `same_thread` | Por padrão, testes rodam sequenciais |
+| `mode.default` | `same_thread` | Testes não anotados rodam na thread corrente (seguro para `@QuarkusTest`) |
 | `config.strategy` | `fixed` | Número fixo de threads paralelas |
-| `config.fixed.parallelism` | `3` | Uma thread por navegador |
+| `config.fixed.parallelism` | `3` | Uma thread por navegador para o `@ParameterizedTest` |
 
-**Limitação importante:** o `@QuarkusTest` não é thread-safe (a extensão JUnit
-do Quarkus inicializa estruturas estáticas que falham quando o mesmo método
-é invocado em paralelo). Por isso o `BooksMultiBrowserTest` **não** carrega
-`@Execution(ExecutionMode.CONCURRENT)`: os três navegadores são abertos em
-sequência. O ganho do `@ParameterizedTest` continua sendo cobrir Chromium,
-Firefox e WebKit a partir de um único código de teste.
+> Antes da primeira execução, instale Firefox e WebKit caso ainda não tenha
+> feito:
+> `./mvnw exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install firefox webkit"`.
 
-Quem precisar de paralelismo real entre navegadores tem duas saídas:
-
-1. **Abrir mão de `@QuarkusTest`** — voltar a subir o backend manualmente
-   (`./mvnw quarkus:dev`) e marcar a classe com
-   `@Execution(ExecutionMode.CONCURRENT)`. Isso libera o paralelismo, mas
-   exige uma janela extra rodando o Quarkus.
-2. **Separar uma classe por navegador** — `BooksChromiumTest`,
-   `BooksFirefoxTest`, `BooksWebKitTest`, todas com `@QuarkusTest`. Como o
-   `mode.default=same_thread` permite paralelismo entre classes diferentes,
-   o Surefire pode rodá-las em paralelo (à custa de subir Quarkus uma vez
-   por classe).
-
-Executando `./mvnw test -Dtest=BooksMultiBrowserTest` o resultado aparece
-no relatório XML com os três casos de teste separados:
+Executando `./mvnw test -Dtest=PlayrightTest` o resultado aparece no
+relatório XML com os quatro casos de teste (um simples + três parametrizados):
 
 ```
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 [INFO]
-[INFO]   BooksMultiBrowserTest > cadastraLivro [chromium] PASSED
-[INFO]   BooksMultiBrowserTest > cadastraLivro [firefox]  PASSED
-[INFO]   BooksMultiBrowserTest > cadastraLivro [webkit]   PASSED
+[INFO]   PlayrightTest > test PASSED
+[INFO]   PlayrightTest > cadastraLivro [chromium] PASSED
+[INFO]   PlayrightTest > cadastraLivro [firefox]  PASSED
+[INFO]   PlayrightTest > cadastraLivro [webkit]   PASSED
 ```
 
 ---
@@ -751,27 +792,33 @@ A gravação de vídeo é útil para investigar falhas que não se reproduzem
 facilmente de forma manual. O Playwright salva um arquivo `.webm` por contexto
 dentro do diretório informado.
 
-### 8.1. Com `@UsePlaywright` (estilo das seções 4 e 5)
+### 8.1. Com `@UsePlaywright` — classe `WithVideo`
 
-Como o `BrowserContext` é gerenciado pela integração JUnit, basta fornecer uma
-`OptionsFactory` que defina `setRecordVideoDir`. Todos os métodos `@Test` da
-classe passam a gravar vídeo automaticamente:
+Quando o `BrowserContext` é gerenciado pela integração JUnit (`@UsePlaywright`),
+a configuração de vídeo vai em uma `OptionsFactory` interna à classe de teste.
+A classe `WithVideo` do `PlayrightTest` também define `slowMo` via
+`setLaunchOptions`, tornando o vídeo mais legível:
 
 ```java
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.junit.Options;
 import com.microsoft.playwright.junit.OptionsFactory;
 import com.microsoft.playwright.junit.UsePlaywright;
 import java.nio.file.Paths;
 
 @QuarkusTest
-@UsePlaywright(BooksE2ETest.WithVideo.class)
-public class BooksE2ETest {
+@UsePlaywright(PlayrightTest.WithVideo.class)
+public class PlayrightTest {
 
+    /** Configura gravação de vídeo e slowMo para o teste {@code test}. */
     public static class WithVideo implements OptionsFactory {
         @Override
         public Options getOptions() {
             return new Options()
-                .setRecordVideoDir(Paths.get("target/test-videos/"));
+                    .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
+                    .setContextOptions(new Browser.NewContextOptions()
+                            .setRecordVideoDir(Paths.get("target/videos/chromium")));
         }
     }
 
@@ -779,63 +826,57 @@ public class BooksE2ETest {
 }
 ```
 
-O arquivo `.webm` aparece em `target/test-videos/` somente após o contexto ser
-fechado (o que a integração faz ao terminar cada `@Test`).
+| Opção | Método | Efeito |
+|---|---|---|
+| `slowMo(300)` | `setLaunchOptions` | Adiciona 300 ms entre cada ação (torna o vídeo legível) |
+| `setRecordVideoDir(...)` | `setContextOptions` | Diretório onde o `.webm` será gravado |
 
-### 8.2. Com controle manual (estilo da seção 7)
+O arquivo `.webm` é escrito em disco somente após o contexto ser fechado — o
+que a integração JUnit faz automaticamente ao terminar cada `@Test`.
 
-Para o `BooksMultiBrowserTest`, que cria o `BrowserContext` manualmente, a
-gravação vai como opção do `newContext`:
+### 8.2. Com controle manual — teste parametrizado por navegador
 
-```java
-import java.nio.file.Paths;
-
-BrowserContext context = browser.newContext(
-    new Browser.NewContextOptions()
-        .setRecordVideoDir(Paths.get("target/test-videos/"))
-);
-
-Page page = context.newPage();
-page.navigate("http://localhost:8080/");
-// ... interações do teste ...
-
-// O vídeo só é gravado no disco após fechar o contexto
-context.close();
-```
-
-Para gravar **somente quando o teste falha**, feche o contexto dentro de um
-bloco `try/finally` e delete o arquivo em caso de sucesso:
+No método `cadastraLivroEmCadaNavegador` (seção 7), `Browser` e
+`BrowserContext` são criados manualmente dentro de um `try-with-resources`
+aninhado. A gravação de vídeo é ativada no `newContext` e cada navegador
+grava em seu próprio subdiretório:
 
 ```java
-Path videoPath = null;
-try {
-    context = browser.newContext(
-        new Browser.NewContextOptions()
-            .setRecordVideoDir(Paths.get("target/test-videos/"))
-    );
-    page = context.newPage();
-    page.navigate("http://localhost:8080/");
+try (Browser browser = tipo.launch(
+            new BrowserType.LaunchOptions().setSlowMo(300));
+     BrowserContext context = browser.newContext(
+            new Browser.NewContextOptions()
+                    .setRecordVideoDir(
+                            Paths.get("target/videos/" + nomeNavegador)))) {
 
-    // ... passos do teste ...
+    Page page = context.newPage();
+    // ... interações do teste ...
 
-    videoPath = page.video().path();
-    context.close();
-    // Teste passou: remove o vídeo
-    Files.deleteIfExists(videoPath);
-} catch (AssertionError e) {
-    context.close();
-    // Teste falhou: o vídeo permanece em target/test-videos/
-    throw e;
-}
+} // BrowserContext é fechado aqui → vídeo é gravado no disco
 ```
 
-Os vídeos são salvos em `target/test-videos/` com nomes gerados
-automaticamente:
+O `try-with-resources` duplo (primeiro `Browser`, depois `BrowserContext`)
+garante que o contexto seja fechado antes do browser, condição necessária para
+que o arquivo `.webm` seja finalizado corretamente no disco.
+
+### 8.3. Estrutura de saída dos vídeos
+
+Após a execução de `PlayrightTest`, os vídeos ficam organizados por navegador:
 
 ```
-target/test-videos/
-└── a3f9b2c1d4e5f6a7.webm
+target/videos/
+├── chromium/
+│   ├── a3f9b2c1d4e5f6a7.webm   ← gravado pelo @Test test(Page page)
+│   └── b1c2d3e4f5a6b7c8.webm   ← gravado pela invocação chromium do @ParameterizedTest
+├── firefox/
+│   └── c4d5e6f7a8b9c0d1.webm
+└── webkit/
+    └── d7e8f9a0b1c2d3e4.webm
 ```
+
+> O nome do arquivo é gerado automaticamente pelo Playwright. Para associar
+> um vídeo a um teste específico, use `page.video().path()` logo antes de
+> fechar o contexto.
 
 ---
 
