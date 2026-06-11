@@ -18,8 +18,6 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -29,8 +27,9 @@ import org.junit.jupiter.params.provider.MethodSource;
  * <p>O método {@code test} usa a instância injetada pelo {@code @UsePlaywright}
  * (Chromium). O teste parametrizado {@code cadastraLivroEmCadaNavegador} cria
  * sua própria instância de {@link Playwright} dentro de cada invocação porque
- * {@code Playwright} não é thread-safe; dessa forma os três navegadores podem
- * rodar em paralelo sem interferência.</p>
+ * {@code Playwright} não é thread-safe; cada invocação cria sua própria
+ * instância. Os navegadores rodam em sequência porque {@code @QuarkusTest}
+ * não suporta execução paralela de métodos de teste.</p>
  */
 @QuarkusTest
 @UsePlaywright(PlayrightTest.WithVideo.class)
@@ -58,7 +57,6 @@ public class PlayrightTest {
 
     @ParameterizedTest(name = "cadastraLivro [{0}]")
     @MethodSource("navegadores")
-    @Execution(ExecutionMode.CONCURRENT)
     void cadastraLivroEmCadaNavegador(String nomeNavegador) {
         String isbn = switch (nomeNavegador) {
             case "firefox" -> "0201634554";
