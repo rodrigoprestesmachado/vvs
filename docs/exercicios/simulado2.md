@@ -13,7 +13,7 @@ nav_order: 22
 O mock deve retornar um objeto Usuario quando o método buscarPorId(1) for chamado.
 {: .fs-3 }
 
-4. Escreva um teste usando RestAssured que envie uma requisição GET para o endpoint /api/usuarios e verifique se o código de status retornado é 200.
+2. Escreva um teste usando RestAssured que envie uma requisição GET para o endpoint /api/usuarios e verifique se o código de status retornado é 200.
 O teste deve usar a estrutura básica given() / when() / then().
 {: .fs-3 }
 
@@ -111,67 +111,60 @@ Use o padrão given() / when() / then() e envie o corpo:
 * D) Os três testes são equivalentes e todos envolvem apenas usuários finais sem participação do time de desenvolvimento.
 {: .fs-3 }
 
-12. Qual é a principal finalidade do Selenium no contexto de testes de software?
-* A) Automatizar testes de API baseados em REST, substituindo ferramentas como RestAssured.
-* B) Automatizar a interação com navegadores para realizar testes funcional e de interface de usuário (UI) em aplicações web.
-* C) Realizar testes de unidade diretamente no código-fonte sem abrir um navegador.
-* D) Executar testes de carga e estresse em servidores web.
-{: .fs-3 }
-
-13. Qual é uma prática comum ao escrever testes com RestAssured?
+12. Qual é uma prática comum ao escrever testes com RestAssured?
 * A) Utilizar RestAssured para mockar o comportamento do servidor, sem enviar requisições reais.
 * B) Configurar a URL base, endpoints, parâmetros e validações de resposta usando uma API fluente que facilita a leitura do teste.
 * C) Executar testes apenas por linha de comando, já que RestAssured não funciona com JUnit ou TestNG.
 * D) Utilizar RestAssured exclusivamente para testar serviços SOAP.
 {: .fs-3 }
 
-14. Por que ferramentas como RestAssured são importantes no contexto de testes automatizados de APIs REST?
+13. Por que ferramentas como RestAssured são importantes no contexto de testes automatizados de APIs REST?
 * A) Porque eliminam completamente a necessidade de manter documentação da API.
 * B) Porque permitem validar o comportamento de APIs por meio de testes automatizados, garantindo que os serviços atendam seus contratos e respondam corretamente a diferentes cenários.
 * C) Porque substituem servidores web, permitindo executar a API diretamente dentro dos testes.
 * D) Porque são obrigatórias em qualquer projeto Maven que exponha endpoints REST.
 {: .fs-3 }
 
-15. Sobre o uso de mocks em testes unitários, qual afirmação é mais correta?
+14. Sobre o uso de mocks em testes unitários, qual afirmação é mais correta?
 * A) Mocks servem para simular dependências externas ou pesadas (como banco de dados ou chamadas de rede), permitindo testar uma unidade de código isoladamente.
 * B) Mocks tornam desnecessários os testes de integração, porque já garantem que tudo funcionará corretamente em produção.
 * C) O uso de mocks é desaconselhável quando o método testado depende somente de lógica interna e não de dependências externas.
 * D) Mocks devem sempre retornar valores aleatórios para aumentar a cobertura de testes e revelar mais bugs.
 {: .fs-3 }
 
-16. Qual é o principal risco de usar mocks em excesso durante testes unitários?
+15. Qual é o principal risco de usar mocks em excesso durante testes unitários?
 * A) Aumentar o tempo de execução dos testes, tornando-os tão lentos quanto testes de sistema.
 * B) Permitir que dependências reais sejam executadas por engano durante o teste.
 * C) Impedir o uso de ferramentas como JUnit ou TestNG.
 * D) Criar testes que validam apenas comportamentos simulados, não a integração real entre componentes, podendo gerar uma falsa sensação de segurança.
 {: .fs-3 }
 
-17. Em qual situação o uso de mocks é mais apropriado?
+16. Em qual situação o uso de mocks é mais apropriado?
 * A) Quando o código depende de serviços externos ou recursos lentos, e é necessário isolar a lógica para garantir um teste rápido e determinístico.
 * B) Quando se deseja testar todo o fluxo do sistema de ponta a ponta.
 * C) Quando a unidade de código não possui dependências externas e toda a lógica está contida em um único método.
 * D) Quando se quer validar configurações reais de infraestrutura, como banco de dados, filas e serviços remotos.
 {: .fs-3 }
 
-18. Qual alternativa explica corretamente a diferença entre @Mock, @InjectMocks e @Spy no Mockito?
+17. Qual alternativa explica corretamente a diferença entre @Mock, @InjectMocks e @Spy no Mockito?
 * A) @Mock cria objetos reais, @Spy cria objetos falsos e @InjectMocks impede injeção de dependências.
 * B) @Mock cria um objeto totalmente simulado; @Spy cria um objeto parcial que usa comportamento real salvo quando sobrescrito; @InjectMocks injeta automaticamente mocks e spies nas dependências da classe sendo testada.
 * C) @Mock e @Spy são equivalentes, apenas com sintaxe diferente; @InjectMocks serve para criar logs de teste.
 * D) @InjectMocks substitui a necessidade de @Mock e @Spy, pois cria todos os objetos simulados automaticamente.
 {: .fs-3 }
 
-19. Qual é o propósito da anotação @InjectMocks no Mockito?
+18. Qual é o propósito da anotação @InjectMocks no Mockito?
 * A) Criar um mock completo da classe sob teste, ignorando todas as suas dependências.
 * B) Criar automaticamente mocks para todas as dependências da classe, sem necessidade de usar @Mock.
 * C) Criar uma instância real da classe sob teste e injetar automaticamente nela os objetos anotados com @Mock ou @Spy.
 * D) Forçar que todos os métodos da classe testada sejam sobrescritos com comportamentos simulados.
 {: .fs-3 }
 
-20. Em qual situação o uso de @Spy é mais recomendado do que @Mock?
-A) Quando se deseja simular completamente todas as chamadas a métodos, sem executar nenhuma lógica real.
-B) Quando é importante testar parte do comportamento real de um objeto, mas ainda assim controlar ou verificar chamadas específicas a alguns métodos.
-C) Quando a classe testada não possui dependências e não precisa de simulação.
-D) Quando se quer garantir que nenhum método seja chamado durante o teste.
+19. Em qual situação o uso de @Spy é mais recomendado do que @Mock?
+* A) Quando se deseja simular completamente todas as chamadas a métodos, sem executar nenhuma lógica real.
+* B) Quando é importante testar parte do comportamento real de um objeto, mas ainda assim controlar ou verificar chamadas específicas a alguns métodos.
+* C) Quando a classe testada não possui dependências e não precisa de simulação.
+* D) Quando se quer garantir que nenhum método seja chamado durante o teste.
 {: .fs-3 }
 
 
