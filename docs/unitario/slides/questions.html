@@ -8,11 +8,97 @@
 	src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js">
 	</script>
 	<script>quizdown.init();</script>
-    <title>Questões: Junit</title>
+    <title>Questões: JUnit</title>
 </head>
 <body>
     <div class="quizdown">
+        # O que caracteriza um teste unitário?
+        - [ ] Executar o sistema completo com usuários reais
+        - [x] Avaliar pequenos componentes, como métodos ou classes, de forma isolada
+        - [ ] Medir apenas o desempenho da aplicação em produção
+        - [ ] Substituir a revisão de código por inspeções manuais
 
+        > Dica: revise a seção O que é teste unitário? e o slide O que é JUnit?
+
+        # Qual é uma vantagem de usar o JUnit em testes unitários?
+        - [ ] Eliminar a necessidade de assertivas
+        - [ ] Garantir que o código nunca tenha bugs
+        - [x] Automatizar a verificação e permitir execuções rápidas e repetidas
+        - [ ] Substituir o Maven no ciclo de construção
+
+        > Dica: revise a seção Por que usar o JUnit? e o slide Por que usar JUnit?
+
+        # No Exemplo 1, o que a anotação `@Test` indica?
+        - [ ] Que o método configura o ambiente antes de todos os testes
+        - [x] Que o método é um caso de teste a ser executado pelo JUnit
+        - [ ] Que o método deve ser ignorado na execução
+        - [ ] Que o método define a ordem de execução dos testes
+
+        > Dica: revise a seção Primeiro teste e o slide Exemplo de Teste com JUnit 5
+
+        # Qual é a diferença entre `@BeforeAll` e `@BeforeEach`?
+        - [ ] `@BeforeAll` roda antes de cada teste; `@BeforeEach` roda uma vez só
+        - [ ] Ambas executam depois de cada método de teste
+        - [x] `@BeforeAll` roda uma vez antes de todos os testes; `@BeforeEach` roda antes de cada teste
+        - [ ] `@BeforeAll` só funciona com `@Order`; `@BeforeEach` só com `@Tag`
+
+        > Dica: revise a seção Anotações e o slide Principais Anotações do JUnit 5
+
+        # Para que serve a anotação `@DisplayName`?
+        - [ ] Definir a ordem de execução dos testes
+        - [ ] Agrupar testes por categoria no Surefire
+        - [x] Atribuir um nome mais significativo ao teste nos relatórios
+        - [ ] Verificar se uma exceção foi lançada
+
+        > Dica: revise a seção Anotações, após o Exemplo 2
+
+        # No Exemplo 3, com `@Order(1)` em `second` e `@Order(2)` em `first`, qual método roda primeiro?
+        - [ ] `first`, porque o nome vem antes na classe
+        - [x] `second`, porque possui a menor ordem (`@Order(1)`)
+        - [ ] Ambos rodam ao mesmo tempo
+        - [ ] Nenhum roda, pois `@Order` desativa `@Test`
+
+        > Dica: revise o Exemplo 3 sobre ordem de execução
+
+        # Qual assertiva é indicada para verificar se um trecho de código lança uma exceção?
+        - [ ] `assertEquals`
+        - [ ] `assertTrue`
+        - [ ] `assertNull`
+        - [x] `assertThrows`
+
+        > Dica: revise a seção Assertivas e o slide Principais Assertivas do JUnit 5
+
+        # Em `assertThrows`, por que o código sob teste costuma aparecer em uma expressão lambda?
+        - [ ] Porque lambdas são obrigatórias em todo teste do JUnit 5
+        - [x] Para que a assertiva possa capturar e verificar a exceção lançada naquele bloco
+        - [ ] Para tornar o teste mais rápido
+        - [ ] Porque o Surefire só reconhece lambdas
+
+        > Dica: revise o Exemplo 4 sobre assertThrows
+
+        # Qual boa prática os slides e o texto reforçam sobre testes unitários?
+        - [ ] Um teste pode depender do estado deixado pelo teste anterior
+        - [ ] Todos os testes devem ficar em uma única classe
+        - [x] Cada teste deve ser independente e usar nomes descritivos
+        - [ ] Nomes de métodos de teste não importam, desde que haja `@Test`
+
+        > Dica: revise a seção Boas práticas e o slide Boas Práticas
+
+        # No Maven com Surefire, qual convenção de nome ajuda a incluir uma classe de teste na execução de `mvn test`?
+        - [ ] Prefixo `Main` no nome da classe
+        - [x] Sufixo `Test` no nome da classe (por exemplo, `AnnotationsTest`)
+        - [ ] Extensão `.junit` no arquivo
+        - [ ] Pacote obrigatório chamado `surefire`
+
+        > Dica: revise a seção JUnit com Maven
+
+        # Para executar apenas um grupo de testes rotulados no Surefire, qual combinação é adequada?
+        - [ ] Apenas `@DisplayName` no método de teste
+        - [ ] Apenas `assertEquals` no `pom.xml`
+        - [x] `@Tag` nos testes e a configuração `<groups>` no plugin Surefire
+        - [ ] `@BeforeAll` junto com `@Order`
+
+        > Dica: revise o Exemplo 5 e a configuração de groups no Surefire
     </div>
 </body>
 </html>
