@@ -1,7 +1,10 @@
 <!-- .slide:  data-background-opacity="0.3" data-background-image="img/title.jpg"
 data-transition="convex"  -->
-# Introdução ao Junit 5
+# Introdução ao JUnit 5
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
+
+Com exemplos da classe Book (hexagonal)
+<!-- .element: style="font-size: small; color:white;" -->
 
 Pressione 'F' para tela cheia
 <!-- .element: style="font-size: small; color:white;" -->
@@ -14,10 +17,10 @@ Pressione 'F' para tela cheia
 ## O que é JUnit?
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- Criado em 1997 por Erich Gamma e Kent Beck, O Junit é uma das ferramentas mais populares para testes de unidade em Java.
+- Criado em 1997 por Erich Gamma e Kent Beck, o JUnit é uma das ferramentas mais populares para testes de unidade em Java.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- O Junit é uma estrutura de teste de unidade para a linguagem de programação Java. Fornece anotações para identificar métodos de teste, métodos de configuração e métodos de limpeza.
+- Fornece anotações para identificar métodos de teste, de configuração e de limpeza, além de assertivas para verificar resultados.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -33,38 +36,59 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Unidade sob teste: Book
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+- No exemplo hexagonal, `Book` é domínio em Java puro.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- `Book.of(...)` valida ISBN-10, título, autor, ano e exemplares.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- Dados inválidos lançam `InvalidBookException`.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- Ideal para teste unitário: sem banco, REST ou Quarkus.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+
 <!-- .slide: data-background="white" data-transition="convex"  -->
 ## Exemplo de Teste com JUnit 5
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
-class MyFirstJUnitJupiterTests {
-
-    private final Calculator calculator = new Calculator();
+class BookTest {
 
     @Test
-    void addition() {
-        assertEquals(2, calculator.add(1, 1));
+    void shouldCreateBookWhenDataIsValid() {
+        Book book = Book.of(
+            "0-306-40615-2",
+            "Clean Code",
+            "Robert Martin",
+            2008,
+            5);
+        assertEquals("Clean Code", book.getTitle());
     }
 }
 ```
-<!-- .element: style="margin-bottom:50px; font-size: 20px; color:black" -->
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Principais Anotações do JUnit 5
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- `@BeforeAll`: Indica que o método estático que será executado antes dos outros métodos.
+- `@BeforeAll`: método estático executado antes de todos os testes.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- `@AfterAll`: Indica que o método estático que será executado depois dos outros métodos.
+- `@AfterAll`: método estático executado depois de todos os testes.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- `@BeforeEach`: Indica que o método que será executado antes de cada método anotado com: @Test,  `@RepeatedTest`, @ParameterizedTest ou @TestFactory.
+- `@BeforeEach`: executado antes de cada `@Test` (útil para montar um `Book` válido).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- `@AfterEach`: Indica que o método que será executado depois de cada método anotado com: `@Test`, `@RepeatedTest`, `@ParameterizedTest` ou `@TestFactory`.
+- `@AfterEach`: executado depois de cada `@Test`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -81,38 +105,53 @@ class MyFirstJUnitJupiterTests {
 - `assertNull`: verifica se um valor é nulo.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- `assertThrows`: verifica se uma exceção é lançada. Porém, se faz necessário
-destacar o uso da assertiva `assertThrows` que, para verificar exceções, possui
-uma forma de escrita um pouco diferente das demais.
+- `assertThrows`: verifica se uma exceção é lançada (com lambda).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
 <!-- .slide: data-background="white" data-transition="convex"  -->
-## Principais Assertivas do JUnit 5
+## assertThrows com Book
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
 @Test
-void exception() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        Integer.parseInt("One");
+void shouldRejectBlankTitle() {
+    assertThrows(InvalidBookException.class, () -> {
+        Book.of("0-306-40615-2", "", "Robert Martin", 2008, 5);
     });
 }
 ```
-<!-- .element: style="margin-bottom:50px; font-size: 20px; color:black" -->
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## Boas Práticas
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- Escrever testes independentes: cada teste deve ser independente e não depender do estado de outros testes.
+- Escrever testes independentes: cada teste não deve depender do estado de outros.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Nomeação de métodos de teste: use nomes descritivos para os métodos de teste, indicando o comportamento que está sendo testado.
+- Nomeação descritiva: por exemplo, `shouldRejectBlankTitle`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Organização de testes: organize os testes em classes separadas, correspondendo às classes de código que estão sendo testadas.
+- Organização: classe `BookTest` para a unidade `Book`.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="#185449" data-transition="convex"  -->
+## Exercício prático
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
+
+- Crie `BookTest` no módulo `exemplos/hexagonal`.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- Cubra criação válida e rejeições (título, autor, exemplares, ano, ISBN).
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- Execute com `./mvnw test`.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- Detalhes no texto: docs/unitario/junit.md
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -120,10 +159,10 @@ void exception() {
 # Conclusão
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- JUnit é uma ferramenta poderosa para testes automatizados em Java.
+- JUnit automatiza testes de unidades como `Book`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Permite escrever testes eficientes e confiáveis para garantir a qualidade do código.
+- Domínio hexagonal em Java puro facilita testes rápidos e isolados.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -142,7 +181,10 @@ void exception() {
 # Referências 📚
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-* Junit. Disponível em: https://junit.org/junit5/
+* JUnit. Disponível em: https://junit.org/junit5/
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+* Book.java (hexagonal). Disponível em: github.com/rodrigoprestesmachado/vvs
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 <center>

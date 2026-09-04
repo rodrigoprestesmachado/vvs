@@ -16,8 +16,9 @@ nav_order: 9
 </center>
 
 Os slides acima apresentam uma visão geral do JUnit 5. Nas seções a seguir,
-você aprofunda cada tópico com exemplos, configurações e detalhes que
-complementam o material apresentado.
+você aprofunda cada tópico com exemplos baseados na classe de domínio
+[`Book`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)
+do projeto hexagonal da disciplina.
 {: .fs-3 }
 
 ## O que é teste unitário?
@@ -31,6 +32,12 @@ classes, de forma isolada.
 Na prática, um teste unitário chama rotinas com diferentes parâmetros de
 entrada para exercitar os comportamentos esperados daquele trecho de código.
 Assim, quando algo quebra, fica mais fácil localizar o problema.
+{: .fs-3 }
+
+No exemplo hexagonal, a unidade ideal para começar é a classe `Book`: ela
+valida ISBN-10, título, autor, ano e exemplares em `Book.of(...)`, sem
+depender de banco, REST ou Quarkus. Isso é Java puro e, portanto, um alvo
+natural de teste unitário.
 {: .fs-3 }
 
 ## Por que usar o JUnit?
@@ -48,41 +55,82 @@ Usar o JUnit ajuda a:
 * repetir a execução dos testes de forma rápida e consistente.
 {: .fs-3 }
 
+## O domínio `Book` como unidade sob teste
+
+A fábrica `Book.of` é o único ponto de criação validado. Se os dados forem
+válidos, retorna um `Book`; se algum invariante for violado, lança
+`InvalidBookException`.
+{: .fs-3 }
+
+Trecho resumido da API (veja o
+[código completo](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)):
+{: .fs-3 }
+
+```java
+public static Book of(
+        final String isbn,
+        final String title,
+        final String author,
+        final int publicationYear,
+        final int copiesAvailable) {
+    validate(isbn, title, author, publicationYear, copiesAvailable);
+    return builder()
+            .isbn(isbn)
+            .title(title)
+            .author(author)
+            .publicationYear(publicationYear)
+            .copiesAvailable(copiesAvailable)
+            .build();
+}
+```
+
+ISBN válido usado nos exemplos abaixo: `0-306-40615-2` (hífens são aceitos
+e removidos na validação).
+{: .fs-3 }
+
 ## Primeiro teste
 
-O formato básico de um teste no JUnit 5 pode ser observado no Exemplo 1
-abaixo (o mesmo exemplo apresentado nos slides):
+O Exemplo 1 mostra um teste JUnit 5 que cria um livro válido e verifica o
+título (o mesmo tipo de exemplo apresentado nos slides):
 {: .fs-3 }
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import example.util.Calculator;
+
+import dev.ifrs.hexagonal.domain.model.Book;
 import org.junit.jupiter.api.Test;
 
-class MyFirstJUnitJupiterTests {
-
-    private final Calculator calculator = new Calculator();
+class BookTest {
 
     @Test
-    void addition() {
-        assertEquals(2, calculator.add(1, 1));
+    void shouldCreateBookWhenDataIsValid() {
+        Book book = Book.of(
+                "0-306-40615-2",
+                "Clean Code",
+                "Robert Martin",
+                2008,
+                5);
+
+        assertEquals("Clean Code", book.getTitle());
+        assertEquals("Robert Martin", book.getAuthor());
+        assertEquals(2008, book.getPublicationYear());
     }
 }
 ```
 
 <center>
-Exemplo 1: teste simples com JUnit
+Exemplo 1: primeiro teste unitário com Book
 </center>
 {: .fs-3 }
 
-No Exemplo 1, a anotação `@Test` indica que `addition` é um método de teste.
-Por sua vez, a assertiva `assertEquals` verifica se a soma de 1 + 1, feita
-pelo método `add` da classe `Calculator`, retorna o valor 2.
+No Exemplo 1, a anotação `@Test` indica que o método é um caso de teste.
+A assertiva `assertEquals` compara o valor esperado com o obtido pelos
+getters do `Book`.
 {: .fs-3 }
 
-Como ilustração, o Vídeo 1 mostra como implementar testes unitários para a
-classe `Calculator` no VS Code, usando a extensão
+Como ilustração genérica do fluxo no VS Code, o Vídeo 1 mostra a extensão
 [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test).
+Aplique o mesmo fluxo ao projeto `exemplos/hexagonal`.
 {: .fs-3 }
 
 <center>
@@ -98,9 +146,8 @@ classe `Calculator` no VS Code, usando a extensão
 </center>
 {: .fs-3 }
 
-A configuração do JUnit em um projeto Java com Maven não aparece no vídeo.
-Se você seguir os mesmos passos, perceberá dependências do JUnit no arquivo
-`pom.xml`, como no trecho abaixo:
+No projeto hexagonal, as dependências do JUnit já vêm pelo Quarkus. Em um
+projeto Maven clássico, elas aparecem no `pom.xml` assim:
 {: .fs-3 }
 
 ```xml
@@ -121,8 +168,8 @@ Se você seguir os mesmos passos, perceberá dependências do JUnit no arquivo
 ## Anotações
 
 Os slides listam as principais anotações de ciclo de vida do JUnit. Esta
-seção aprofunda o tema com exemplos. Entre as anotações mais usadas estão
-`@BeforeAll`, `@AfterAll`, `@BeforeEach` e `@AfterEach`
+seção aprofunda o tema com exemplos sobre `Book`. Entre as anotações mais
+usadas estão `@BeforeAll`, `@AfterAll`, `@BeforeEach` e `@AfterEach`
 ([documentação](https://junit.org/junit5/docs/current/user-guide/#writing-tests-annotations)):
 {: .fs-3 }
 
@@ -132,115 +179,90 @@ seção aprofunda o tema com exemplos. Entre as anotações mais usadas estão
 * `@AfterEach`: método executado **depois** de cada método anotado com `@Test`, `@RepeatedTest`, `@ParameterizedTest` ou `@TestFactory`.
 {: .fs-3 }
 
-O Exemplo 2 demonstra `@BeforeAll` e `@BeforeEach`. O método estático `init`
-roda uma única vez antes de qualquer teste. Já o método `add`, anotado com
-`@BeforeEach`, roda antes de cada `@Test`. Com dois testes na classe, `add`
-será executado duas vezes. O exemplo também usa o *Logger* do JUnit para
-registrar mensagens.
+O Exemplo 2 usa `@BeforeEach` para montar um `Book` válido antes de cada
+teste. Assim, cada método começa com o mesmo estado inicial, sem repetir a
+chamada a `Book.of` em todos os testes.
 {: .fs-3 }
 
 ```java
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.jupiter.api.BeforeAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import dev.ifrs.hexagonal.domain.model.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+class BookLifecycleTest {
 
-/**
- * AnnotationsTest.
- */
-public class AnnotationsTest {
-
-    /** Logger. **/
-    private static Logger logger = Logger.getLogger("AnnotationsTest");
-
-    private static List<String> cars;
-
-    @BeforeAll
-    public static void init() {
-        logger.info("init");
-        cars = new ArrayList<String>();
-        cars.add("Volvo");
-    }
+    private Book book;
 
     @BeforeEach
-    public void add() {
-        logger.info("add");
-        cars.add("Bmw");
+    void setUp() {
+        book = Book.of(
+                "0-306-40615-2",
+                "Clean Code",
+                "Robert Martin",
+                2008,
+                5);
     }
 
     @Test
-    @DisplayName("Length test")
-    public void length() {
-        logger.info("length");
-        assertEquals(2, cars.size());
+    @DisplayName("Deve expor o ISBN informado")
+    void shouldExposeIsbn() {
+        assertEquals("0-306-40615-2", book.getIsbn());
     }
 
     @Test
-    @DisplayName("Remove car test")
-    public void remove() {
-        logger.log(Level.INFO, "remove");
-        cars.remove(0);
-        assertEquals(2, cars.size());
+    @DisplayName("Deve expor a quantidade de exemplares")
+    void shouldExposeCopies() {
+        assertEquals(5, book.getCopiesAvailable());
     }
 }
 ```
 
 <center>
-Exemplo 2: uso das anotações BeforeAll e BeforeEach
+Exemplo 2: @BeforeEach e @DisplayName com Book
 </center>
 {: .fs-3 }
 
-Observe que os dois casos de teste usam `@DisplayName`. Essa anotação permite
-dar um nome mais significativo aos testes, o que facilita a leitura dos
-relatórios de execução.
+Observe o uso de `@DisplayName`: a anotação permite um nome mais
+significativo nos relatórios de execução.
 {: .fs-3 }
 
-Outra situação comum é definir a ordem de execução dos casos de teste. Com a
-anotação `@Order`, você estabelece uma sequência pré-definida. No Exemplo 3,
-por causa de `@Order`, o método `second` (ordem 1) é executado antes de
-`first` (ordem 2).
+Outra situação comum é definir a ordem de execução dos casos de teste. Com
+`@Order`, você estabelece uma sequência pré-definida. No Exemplo 3, o método
+`second` (ordem 1) roda antes de `first` (ordem 2). Em testes de domínio
+como `Book`, prefira testes independentes; `@Order` aparece aqui só para
+você conhecer a anotação.
 {: .fs-3 }
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.logging.Logger;
-
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-/**
- * TagOrderTest.
- */
-class TagOrderTest {
-
-    private static Logger logger = Logger.getLogger("TagOrderTest");
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class BookOrderDemoTest {
 
     @Test
     @Order(2)
     void first() {
-        logger.info("first");
         assertEquals(1, 1);
     }
 
     @Test
     @Order(1)
     void second() {
-        logger.info("second");
         assertEquals(1, 1);
     }
-
 }
 ```
 
 <center>
-Exemplo 3: ordem de execução dos casos de teste
+Exemplo 3: ordem de execução com @Order
 </center>
 {: .fs-3 }
 
@@ -252,24 +274,37 @@ Vale destacar `assertThrows`, usada para verificar exceções, com uma forma
 de escrita um pouco diferente das demais.
 {: .fs-3 }
 
+No domínio `Book`, dados inválidos devem produzir `InvalidBookException`.
+O Exemplo 4 verifica o caso de título em branco:
+{: .fs-3 }
+
 ```java
-@Test
-void exception() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        Integer.parseInt("One");
-    });
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import dev.ifrs.hexagonal.domain.exception.InvalidBookException;
+import dev.ifrs.hexagonal.domain.model.Book;
+import org.junit.jupiter.api.Test;
+
+class BookExceptionTest {
+
+    @Test
+    void shouldRejectBlankTitle() {
+        assertThrows(InvalidBookException.class, () -> {
+            Book.of("0-306-40615-2", "", "Robert Martin", 2008, 5);
+        });
+    }
 }
 ```
 
 <center>
-Exemplo 4: assertiva assertThrows
+Exemplo 4: assertThrows com InvalidBookException
 </center>
 {: .fs-3 }
 
-No Exemplo 4, `assertThrows` verifica se o trecho
-`Integer.parseInt("One")`, escrito como expressão
-[lambda](https://www.w3schools.com/java/java_lambda.asp), lança a exceção
-`IllegalArgumentException`.
+No Exemplo 4, `assertThrows` recebe a classe da exceção esperada e uma
+expressão [lambda](https://www.w3schools.com/java/java_lambda.asp) com o
+código que deve falhar. Se a exceção não for lançada (ou for de outro tipo),
+o teste falha.
 {: .fs-3 }
 
 ## Boas práticas
@@ -281,9 +316,10 @@ desde o início:
 * **Independência:** cada teste deve ser independente e não depender do
   estado deixado por outros testes.
 * **Nomeação:** use nomes descritivos nos métodos de teste, indicando o
-  comportamento que está sendo verificado.
+  comportamento que está sendo verificado (por exemplo,
+  `shouldRejectBlankTitle`).
 * **Organização:** organize os testes em classes separadas, correspondendo
-  às classes de produção que estão sendo testadas.
+  às classes de produção. Para `Book`, o natural é uma classe `BookTest`.
 {: .fs-3 }
 
 Seguir essas práticas torna os testes mais fáceis de manter e de interpretar
@@ -297,41 +333,42 @@ ciclo Maven. O plugin
 [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/index.html)
 executa os testes durante a construção do projeto. Para isso, as classes de
 teste precisam seguir o padrão de nomes do plugin, em geral o sufixo `Test`.
-No Exemplo 2, a classe `AnnotationsTest` respeita essa convenção. Os padrões
-de inclusão e exclusão estão na
+A classe `BookTest` respeita essa convenção. Os padrões de inclusão e
+exclusão estão na
 [documentação](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html)
 do Surefire.
 {: .fs-3 }
 
-Com o plugin configurado, os testes rodam no ciclo de testes com:
+No módulo hexagonal, execute:
 {: .fs-3 }
 
-    mvn test
+```bash
+cd exemplos/hexagonal
+./mvnw test
+```
 
 Muitas vezes é necessário agrupar testes para executá-los de forma separada
 (por requisito, componente ou funcionalidade). A anotação `@Tag` rotula
-testes em categorias. Veja o trecho abaixo:
+testes em categorias:
 {: .fs-3 }
 
 ```java
 @Test
-@Order(1)
-@Tag("VVS")
-void first() {
-    logger.info("first");
-    assertEquals(1, 1);
+@Tag("domain")
+void shouldRejectBlankTitle() {
+    assertThrows(InvalidBookException.class, () -> {
+        Book.of("0-306-40615-2", "", "Robert Martin", 2008, 5);
+    });
 }
 ```
 
 <center>
-Exemplo 5: método do Exemplo 3 com a anotação @Tag("VVS")
+Exemplo 5: anotação @Tag em um teste de Book
 </center>
 {: .fs-3 }
 
-Assim, se você marcar um dos métodos do Exemplo 3 com `@Tag("VVS")` e
-ajustar a configuração do Surefire no `pom.xml`, poderá executar apenas o
-grupo rotulado. O trecho abaixo faz com que só os testes com a tag `VVS`
-sejam executados por `mvn test`:
+Com a configuração abaixo no Surefire, apenas os testes com a tag `domain`
+entram em `mvn test`:
 {: .fs-3 }
 
 ```xml
@@ -340,10 +377,59 @@ sejam executados por `mvn test`:
     <artifactId>maven-surefire-plugin</artifactId>
     <version>${maven-surefire-plugin.version}</version>
     <configuration>
-        <groups>VVS</groups>
+        <groups>domain</groups>
     </configuration>
 </plugin>
 ```
+
+## Exercícios práticos: testando `Book`
+
+Agora é a sua vez de escrever testes unitários sobre a classe
+[`Book`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java).
+O objetivo é exercitar `@Test`, assertivas e `assertThrows` sem depender de
+banco, HTTP ou mocks.
+{: .fs-3 }
+
+### Como obter o código
+
+```bash
+git clone -b dev https://github.com/rodrigoprestesmachado/vvs
+code vvs/exemplos/hexagonal
+```
+
+### O que fazer
+
+1. Crie a classe `BookTest` em
+   `src/test/java/dev/ifrs/hexagonal/domain/model/BookTest.java`.
+2. Implemente **pelo menos cinco** métodos de teste cobrindo os cenários
+   abaixo.
+3. Execute `./mvnw test` e corrija até todos passarem.
+{: .fs-3 }
+
+### Cenários sugeridos
+
+* **Criação válida:** chame `Book.of` com ISBN `0-306-40615-2` e dados
+  coerentes; verifique título, autor, ano e exemplares com `assertEquals`.
+* **Título em branco:** `title` vazio deve lançar `InvalidBookException`
+  (`assertThrows`).
+* **Autor em branco:** `author` vazio deve lançar `InvalidBookException`.
+* **Exemplares negativos:** `copiesAvailable` menor que zero deve lançar
+  `InvalidBookException`.
+* **Ano inválido:** ano `0` ou um ano no futuro distante (por exemplo,
+  `9999`) deve lançar `InvalidBookException`.
+* **Desafio (ISBN):** ISBN com comprimento errado (por exemplo, `"123"`)
+  ou dígito verificador incorreto deve lançar `InvalidBookException`.
+{: .fs-3 }
+
+### Dicas
+
+* Use `@DisplayName` ou nomes no estilo `shouldRejectBlankTitle`.
+* Se vários testes compartilham o mesmo ISBN válido, considere `@BeforeEach`.
+* Leia a documentação da fábrica `Book.of` e de `validate` na própria classe
+  antes de escrever os casos.
+* Não é necessário Mockito nestes exercícios: `Book` não tem dependências
+  externas.
+{: .fs-3 }
 
 ## Teste seus conhecimentos
 
@@ -365,6 +451,10 @@ SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergam
 {: .fs-3 }
 
 JUnit 5. Disponível em: [https://junit.org/junit5/](https://junit.org/junit5/).
+{: .fs-3 }
+
+Classe `Book` (exemplo hexagonal). Disponível em:
+[github.com/rodrigoprestesmachado/vvs/.../Book.java](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java).
 {: .fs-3 }
 
 <center>

@@ -4,101 +4,101 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script
-	src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js">
-	</script>
-	<script>quizdown.init();</script>
+    <script src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js"></script>
+    <script>quizdown.init();</script>
     <title>Questões: JUnit</title>
 </head>
 <body>
     <div class="quizdown">
-        # O que caracteriza um teste unitário?
-        - [ ] Executar o sistema completo com usuários reais
-        - [x] Avaliar pequenos componentes, como métodos ou classes, de forma isolada
-        - [ ] Medir apenas o desempenho da aplicação em produção
-        - [ ] Substituir a revisão de código por inspeções manuais
+### O que caracteriza um teste unitário?
 
-        > Dica: revise a seção O que é teste unitário? e o slide O que é JUnit?
+> Dica: revise a seção O que é teste unitário e o slide O que é JUnit
 
-        # Qual é uma vantagem de usar o JUnit em testes unitários?
-        - [ ] Eliminar a necessidade de assertivas
-        - [ ] Garantir que o código nunca tenha bugs
-        - [x] Automatizar a verificação e permitir execuções rápidas e repetidas
-        - [ ] Substituir o Maven no ciclo de construção
+- [ ] Executar o sistema completo com usuários reais
+- [x] Avaliar pequenos componentes, como métodos ou classes, de forma isolada
+- [ ] Medir apenas o desempenho da aplicação em produção
+- [ ] Substituir a revisão de código por inspeções manuais
 
-        > Dica: revise a seção Por que usar o JUnit? e o slide Por que usar JUnit?
+### Por que a classe Book do exemplo hexagonal é um bom alvo de teste unitário?
 
-        # No Exemplo 1, o que a anotação `@Test` indica?
-        - [ ] Que o método configura o ambiente antes de todos os testes
-        - [x] Que o método é um caso de teste a ser executado pelo JUnit
-        - [ ] Que o método deve ser ignorado na execução
-        - [ ] Que o método define a ordem de execução dos testes
+> Dica: revise a seção O domínio Book como unidade sob teste
 
-        > Dica: revise a seção Primeiro teste e o slide Exemplo de Teste com JUnit 5
+- [ ] Porque ela depende diretamente do MySQL
+- [ ] Porque só funciona dentro do Quarkus
+- [x] Porque é domínio em Java puro e valida regras em Book.of sem infraestrutura
+- [ ] Porque substitui o JUnit
 
-        # Qual é a diferença entre `@BeforeAll` e `@BeforeEach`?
-        - [ ] `@BeforeAll` roda antes de cada teste; `@BeforeEach` roda uma vez só
-        - [ ] Ambas executam depois de cada método de teste
-        - [x] `@BeforeAll` roda uma vez antes de todos os testes; `@BeforeEach` roda antes de cada teste
-        - [ ] `@BeforeAll` só funciona com `@Order`; `@BeforeEach` só com `@Tag`
+### No Exemplo 1, o que a anotação @Test indica?
 
-        > Dica: revise a seção Anotações e o slide Principais Anotações do JUnit 5
+> Dica: revise a seção Primeiro teste e o slide Exemplo de Teste com JUnit 5
 
-        # Para que serve a anotação `@DisplayName`?
-        - [ ] Definir a ordem de execução dos testes
-        - [ ] Agrupar testes por categoria no Surefire
-        - [x] Atribuir um nome mais significativo ao teste nos relatórios
-        - [ ] Verificar se uma exceção foi lançada
+- [ ] Que o método configura o ambiente antes de todos os testes
+- [x] Que o método é um caso de teste a ser executado pelo JUnit
+- [ ] Que o método deve ser ignorado na execução
+- [ ] Que o método define a ordem de execução dos testes
 
-        > Dica: revise a seção Anotações, após o Exemplo 2
+### Qual é a diferença entre @BeforeAll e @BeforeEach?
 
-        # No Exemplo 3, com `@Order(1)` em `second` e `@Order(2)` em `first`, qual método roda primeiro?
-        - [ ] `first`, porque o nome vem antes na classe
-        - [x] `second`, porque possui a menor ordem (`@Order(1)`)
-        - [ ] Ambos rodam ao mesmo tempo
-        - [ ] Nenhum roda, pois `@Order` desativa `@Test`
+> Dica: revise a seção Anotações e o slide Principais Anotações do JUnit 5
 
-        > Dica: revise o Exemplo 3 sobre ordem de execução
+- [ ] @BeforeAll roda antes de cada teste; @BeforeEach roda uma vez só
+- [ ] Ambas executam depois de cada método de teste
+- [x] @BeforeAll roda uma vez antes de todos os testes; @BeforeEach roda antes de cada teste
+- [ ] @BeforeAll só funciona com @Order; @BeforeEach só com @Tag
 
-        # Qual assertiva é indicada para verificar se um trecho de código lança uma exceção?
-        - [ ] `assertEquals`
-        - [ ] `assertTrue`
-        - [ ] `assertNull`
-        - [x] `assertThrows`
+### Para que serve a anotação @DisplayName?
 
-        > Dica: revise a seção Assertivas e o slide Principais Assertivas do JUnit 5
+> Dica: revise a seção Anotações, após o Exemplo 2
 
-        # Em `assertThrows`, por que o código sob teste costuma aparecer em uma expressão lambda?
-        - [ ] Porque lambdas são obrigatórias em todo teste do JUnit 5
-        - [x] Para que a assertiva possa capturar e verificar a exceção lançada naquele bloco
-        - [ ] Para tornar o teste mais rápido
-        - [ ] Porque o Surefire só reconhece lambdas
+- [ ] Definir a ordem de execução dos testes
+- [ ] Agrupar testes por categoria no Surefire
+- [x] Atribuir um nome mais significativo ao teste nos relatórios
+- [ ] Verificar se uma exceção foi lançada
 
-        > Dica: revise o Exemplo 4 sobre assertThrows
+### Qual assertiva é adequada para verificar que Book.of lança InvalidBookException com título em branco?
 
-        # Qual boa prática os slides e o texto reforçam sobre testes unitários?
-        - [ ] Um teste pode depender do estado deixado pelo teste anterior
-        - [ ] Todos os testes devem ficar em uma única classe
-        - [x] Cada teste deve ser independente e usar nomes descritivos
-        - [ ] Nomes de métodos de teste não importam, desde que haja `@Test`
+> Dica: revise a seção Assertivas e o slide assertThrows com Book
 
-        > Dica: revise a seção Boas práticas e o slide Boas Práticas
+- [ ] assertEquals
+- [ ] assertTrue
+- [ ] assertNull
+- [x] assertThrows
 
-        # No Maven com Surefire, qual convenção de nome ajuda a incluir uma classe de teste na execução de `mvn test`?
-        - [ ] Prefixo `Main` no nome da classe
-        - [x] Sufixo `Test` no nome da classe (por exemplo, `AnnotationsTest`)
-        - [ ] Extensão `.junit` no arquivo
-        - [ ] Pacote obrigatório chamado `surefire`
+### Em assertThrows, por que o código sob teste costuma aparecer em uma expressão lambda?
 
-        > Dica: revise a seção JUnit com Maven
+> Dica: revise o Exemplo 4 sobre assertThrows
 
-        # Para executar apenas um grupo de testes rotulados no Surefire, qual combinação é adequada?
-        - [ ] Apenas `@DisplayName` no método de teste
-        - [ ] Apenas `assertEquals` no `pom.xml`
-        - [x] `@Tag` nos testes e a configuração `<groups>` no plugin Surefire
-        - [ ] `@BeforeAll` junto com `@Order`
+- [ ] Porque lambdas são obrigatórias em todo teste do JUnit 5
+- [x] Para que a assertiva possa capturar e verificar a exceção lançada naquele bloco
+- [ ] Para tornar o teste mais rápido
+- [ ] Porque o Surefire só reconhece lambdas
 
-        > Dica: revise o Exemplo 5 e a configuração de groups no Surefire
+### Qual boa prática os slides e o texto reforçam sobre testes unitários?
+
+> Dica: revise a seção Boas práticas e o slide Boas Práticas
+
+- [ ] Um teste pode depender do estado deixado pelo teste anterior
+- [ ] Todos os testes devem ficar em uma única classe
+- [x] Cada teste deve ser independente e usar nomes descritivos
+- [ ] Nomes de métodos de teste não importam, desde que haja @Test
+
+### No Maven com Surefire, qual convenção de nome ajuda a incluir uma classe de teste na execução de mvn test?
+
+> Dica: revise a seção JUnit com Maven
+
+- [ ] Prefixo Main no nome da classe
+- [x] Sufixo Test no nome da classe, por exemplo BookTest
+- [ ] Extensão .junit no arquivo
+- [ ] Pacote obrigatório chamado surefire
+
+### Nos exercícios práticos sobre Book, o que o estudante deve fazer?
+
+> Dica: revise a seção Exercícios práticos
+
+- [ ] Escrever apenas testes de integração com RestAssured
+- [x] Criar BookTest e cobrir criação válida e rejeições com assertThrows
+- [ ] Alterar o código de produção de Book antes de testar
+- [ ] Usar Mockito obrigatoriamente em todos os cenários
     </div>
 </body>
 </html>

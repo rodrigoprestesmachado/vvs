@@ -182,19 +182,21 @@
       overflow: hidden; border: 1px solid var(--border);
       margin-bottom: 3rem;
     }
-    .hero img {
-      width: 100%; height: 280px; object-fit: cover; opacity: 0.55;
+    .hero img, .hero > svg {
+      width: 100%; height: 280px; object-fit: cover; opacity: 1;
+      display: block; background: #e8eef6;
     }
-    @media (min-width: 640px) { .hero img { height: 320px; } }
+    @media (min-width: 640px) { .hero img, .hero > svg { height: 320px; } }
     .hero-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, var(--bg), rgba(244,247,251,0.75), rgba(244,247,251,0.2));
+      background: linear-gradient(to top, rgba(244,247,251,0.95) 0%, rgba(244,247,251,0.35) 45%, rgba(244,247,251,0.05) 100%);
+      pointer-events: none;
     }
     .hero-text {
       position: absolute; bottom: 0; left: 0; right: 0;
       padding: 1.5rem 2rem;
     }
-    .hero-text h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .hero-text h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--fg); text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
     @media (min-width: 640px) { .hero-text h1 { font-size: 2.5rem; } }
     .hero-text p { color: var(--fg-muted); font-size: 1.125rem; }
 
@@ -546,7 +548,34 @@
 
   <!-- Hero -->
   <section class="hero">
-    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310419663028323009/fv6ht27TLpnyragnjJ5pzP/hero-blueprint-4Qh3A89Ejf7wsSyaVdbFRf.webp" alt="Arquitetura Hexagonal Blueprint" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" role="img" aria-label="Blueprint de arquitetura hexagonal" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" stroke-width="0.6" opacity="0.35"/>
+        </pattern>
+        <linearGradient id="hero-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e8eef6"/>
+          <stop offset="100%" stop-color="#d7e4f2"/>
+        </linearGradient>
+      </defs>
+      <rect width="1280" height="420" fill="url(#hero-bg)"/>
+      <rect width="1280" height="420" fill="url(#hero-grid)"/>
+      <polygon points="640,40 980,160 980,300 640,420 300,300 300,160"
+               fill="rgba(37,99,235,0.08)" stroke="#2563eb" stroke-width="3"/>
+      <polygon points="640,95 900,190 900,270 640,365 380,270 380,190"
+               fill="rgba(217,119,6,0.08)" stroke="#d97706" stroke-width="2.5" stroke-dasharray="10 6"/>
+      <polygon points="640,155 790,225 790,255 640,325 490,255 490,225"
+               fill="rgba(5,150,105,0.18)" stroke="#059669" stroke-width="3"/>
+      <text x="640" y="235" text-anchor="middle" fill="#047857" font-family="system-ui,sans-serif" font-size="28" font-weight="700">DOMINIO</text>
+      <text x="640" y="265" text-anchor="middle" fill="#059669" font-family="system-ui,sans-serif" font-size="16">Book / BooksService</text>
+      <text x="640" y="125" text-anchor="middle" fill="#b45309" font-family="system-ui,sans-serif" font-size="16" font-weight="600">PORTAS</text>
+      <rect x="560" y="55" width="160" height="36" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+      <text x="640" y="78" text-anchor="middle" fill="#1d4ed8" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Adaptadores In</text>
+      <rect x="900" y="200" width="150" height="36" rx="8" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="975" y="223" text-anchor="middle" fill="#6d28d9" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Adaptadores Out</text>
+      <rect x="230" y="200" width="150" height="36" rx="8" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="305" y="223" text-anchor="middle" fill="#6d28d9" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Persistencia</text>
+    </svg>
     <div class="hero-overlay"></div>
     <div class="hero-text">
       <h1>Arquitetura Hexagonal</h1>
@@ -933,7 +962,7 @@ docker compose up -d
 /* ═══════════════════════════════════════════════════════════════════ */
 /* DATA                                                               */
 /* ═══════════════════════════════════════════════════════════════════ */
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310419663028323009/fv6ht27TLpnyragnjJ5pzP/hero-blueprint-4Qh3A89Ejf7wsSyaVdbFRf.webp";
+const HERO_IMG = null;
 
 /* ── Hex Diagram Layer Info ── */
 const HEX_LAYERS = {

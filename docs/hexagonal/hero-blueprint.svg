@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" role="img" aria-label="Blueprint de arquitetura hexagonal">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" stroke-width="0.6" opacity="0.35"/>
+    </pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8eef6"/>
+      <stop offset="100%" stop-color="#d7e4f2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="420" fill="url(#bg)"/>
+  <rect width="1280" height="420" fill="url(#grid)"/>
+
+  <polygon points="640,40 980,160 980,300 640,420 300,300 300,160"
+           fill="rgba(37,99,235,0.08)" stroke="#2563eb" stroke-width="3"/>
+  <polygon points="640,95 900,190 900,270 640,365 380,270 380,190"
+           fill="rgba(217,119,6,0.08)" stroke="#d97706" stroke-width="2.5" stroke-dasharray="10 6"/>
+  <polygon points="640,155 790,225 790,255 640,325 490,255 490,225"
+           fill="rgba(5,150,105,0.18)" stroke="#059669" stroke-width="3"/>
+
+  <text x="640" y="235" text-anchor="middle" fill="#047857" font-family="system-ui,sans-serif" font-size="28" font-weight="700">DOMINIO</text>
+  <text x="640" y="265" text-anchor="middle" fill="#059669" font-family="system-ui,sans-serif" font-size="16">Book / BooksService</text>
+  <text x="640" y="125" text-anchor="middle" fill="#b45309" font-family="system-ui,sans-serif" font-size="16" font-weight="600">PORTAS</text>
+
+  <rect x="560" y="55" width="160" height="36" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+  <text x="640" y="78" text-anchor="middle" fill="#1d4ed8" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Adaptadores In</text>
+
+  <rect x="900" y="200" width="150" height="36" rx="8" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="975" y="223" text-anchor="middle" fill="#6d28d9" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Adaptadores Out</text>
+
+  <rect x="230" y="200" width="150" height="36" rx="8" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="305" y="223" text-anchor="middle" fill="#6d28d9" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Persistencia</text>
+</svg>
