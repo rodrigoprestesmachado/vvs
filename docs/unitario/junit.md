@@ -417,6 +417,7 @@ code vvs/exemplos/hexagonal
 {: .fs-3 }
 
 ### Exercício 1: criação válida
+{: .fw-500 }
 
 Escreva `shouldCreateBookWhenDataIsValid`, chamando `Book.of` com o ISBN
 `0-306-40615-2` e dados coerentes (título, autor, ano e exemplares). Use
@@ -429,6 +430,7 @@ de `Book`.
 {: .fs-3 }
 
 ### Exercício 2: título em branco
+{: .fw-500 }
 
 Escreva `shouldRejectBlankTitle`: chame `Book.of` com `title` igual a
 `""` (mantendo os demais campos válidos) e use `assertThrows` para
@@ -437,18 +439,21 @@ modelo.
 {: .fs-3 }
 
 ### Exercício 3: autor em branco
+{: .fw-500 }
 
 Repita a estrutura do Exercício 2, agora trocando o `author` por `""`.
 Nomeie o método `shouldRejectBlankAuthor`.
 {: .fs-3 }
 
 ### Exercício 4: exemplares negativos
+{: .fw-500 }
 
 Escreva `shouldRejectNegativeCopies`: use um `copiesAvailable` negativo
 (por exemplo, `-1`) e verifique que `InvalidBookException` é lançada.
 {: .fs-3 }
 
 ### Exercício 5: ano inválido
+{: .fw-500 }
 
 Escreva `shouldRejectFuturePublicationYear`, usando um ano bem no futuro
 (por exemplo, `9999`), e `shouldRejectYearZero`, usando o ano `0`. Ambos
@@ -456,6 +461,7 @@ devem lançar `InvalidBookException`.
 {: .fs-3 }
 
 ### Exercício 6: reduzindo repetição com `@BeforeEach`
+{: .fw-500 }
 
 Até aqui, cada teste provavelmente repetiu o mesmo ISBN, título e autor
 válidos. Crie um campo `VALID_ISBN` (ou similar) e, se achar necessário,
@@ -465,6 +471,7 @@ testes para deixar o relatório mais legível.
 {: .fs-3 }
 
 ### Exercício 7 (desafio): validação de ISBN
+{: .fw-500 }
 
 Agora explore a validação de ISBN-10 lendo o método `validate` na classe
 `Book`. Escreva:
