@@ -128,24 +128,6 @@ A assertiva `assertEquals` compara o valor esperado com o obtido pelos
 getters do `Book`.
 {: .fs-3 }
 
-Como ilustração genérica do fluxo no VS Code, o Vídeo 1 mostra a extensão
-[Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test).
-Aplique o mesmo fluxo ao projeto `exemplos/hexagonal`.
-{: .fs-3 }
-
-<center>
-    <iframe
-    width="560" height="315"
-    src="https://www.youtube.com/embed/N_FWR1MJ37o"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-    </iframe>
-    <br/>
-    Vídeo 1: introdução ao JUnit com o VS Code
-</center>
-{: .fs-3 }
-
 No projeto hexagonal, as dependências do JUnit já vêm pelo Quarkus. Em um
 projeto Maven clássico, elas aparecem no `pom.xml` assim:
 {: .fs-3 }
@@ -382,6 +364,33 @@ entram em `mvn test`:
 </plugin>
 ```
 
+## Executando testes no VS Code
+
+Antes de partir para os exercícios, vale ver como criar e rodar testes
+JUnit no editor. O Vídeo 1 usa a extensão
+[Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test)
+para escrever e executar casos de teste. O cenário do vídeo é introdutório;
+o mesmo fluxo se aplica ao módulo `exemplos/hexagonal` quando você criar a
+classe `BookTest`.
+{: .fs-3 }
+
+<center>
+    <iframe
+    width="560" height="315"
+    src="https://www.youtube.com/embed/N_FWR1MJ37o"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+    </iframe>
+    <br/>
+    Vídeo 1: como escrever e executar testes JUnit no VS Code
+</center>
+{: .fs-3 }
+
+Depois de assistir, use `./mvnw test` ou a própria extensão para validar
+os testes que você escrever na próxima seção.
+{: .fs-3 }
+
 ## Exercícios práticos: testando `Book`
 
 Agora é a sua vez de escrever testes unitários sobre a classe
@@ -397,38 +406,84 @@ git clone -b dev https://github.com/rodrigoprestesmachado/vvs
 code vvs/exemplos/hexagonal
 ```
 
-### O que fazer
+### Preparação
 
 1. Crie a classe `BookTest` em
    `src/test/java/dev/ifrs/hexagonal/domain/model/BookTest.java`.
-2. Implemente **pelo menos cinco** métodos de teste cobrindo os cenários
-   abaixo.
-3. Execute `./mvnw test` e corrija até todos passarem.
+2. Resolva os exercícios **na ordem**: eles vão do mais simples ao mais
+   desafiador e reaproveitam o que você aprendeu no exercício anterior.
+3. Depois de cada exercício, execute `./mvnw test` (ou use o VS Code) e só
+   avance quando o teste passar.
 {: .fs-3 }
 
-### Cenários sugeridos
+### Exercício 1: criação válida
 
-* **Criação válida:** chame `Book.of` com ISBN `0-306-40615-2` e dados
-  coerentes; verifique título, autor, ano e exemplares com `assertEquals`.
-* **Título em branco:** `title` vazio deve lançar `InvalidBookException`
-  (`assertThrows`).
-* **Autor em branco:** `author` vazio deve lançar `InvalidBookException`.
-* **Exemplares negativos:** `copiesAvailable` menor que zero deve lançar
-  `InvalidBookException`.
-* **Ano inválido:** ano `0` ou um ano no futuro distante (por exemplo,
-  `9999`) deve lançar `InvalidBookException`.
-* **Desafio (ISBN):** ISBN com comprimento errado (por exemplo, `"123"`)
-  ou dígito verificador incorreto deve lançar `InvalidBookException`.
+Escreva `shouldCreateBookWhenDataIsValid`, chamando `Book.of` com o ISBN
+`0-306-40615-2` e dados coerentes (título, autor, ano e exemplares). Use
+`assertEquals` para conferir cada um desses quatro valores com os getters
+de `Book`.
+{: .fs-3 }
+
+> Este é o mesmo teste do Exemplo 1. Copie-o para começar com confiança e
+> depois siga para os próximos.
+{: .fs-3 }
+
+### Exercício 2: título em branco
+
+Escreva `shouldRejectBlankTitle`: chame `Book.of` com `title` igual a
+`""` (mantendo os demais campos válidos) e use `assertThrows` para
+verificar que `InvalidBookException` é lançada. Use o Exemplo 4 como
+modelo.
+{: .fs-3 }
+
+### Exercício 3: autor em branco
+
+Repita a estrutura do Exercício 2, agora trocando o `author` por `""`.
+Nomeie o método `shouldRejectBlankAuthor`.
+{: .fs-3 }
+
+### Exercício 4: exemplares negativos
+
+Escreva `shouldRejectNegativeCopies`: use um `copiesAvailable` negativo
+(por exemplo, `-1`) e verifique que `InvalidBookException` é lançada.
+{: .fs-3 }
+
+### Exercício 5: ano inválido
+
+Escreva `shouldRejectFuturePublicationYear`, usando um ano bem no futuro
+(por exemplo, `9999`), e `shouldRejectYearZero`, usando o ano `0`. Ambos
+devem lançar `InvalidBookException`.
+{: .fs-3 }
+
+### Exercício 6: reduzindo repetição com `@BeforeEach`
+
+Até aqui, cada teste provavelmente repetiu o mesmo ISBN, título e autor
+válidos. Crie um campo `VALID_ISBN` (ou similar) e, se achar necessário,
+um método auxiliar para montar um `Book` válido, reduzindo a duplicação
+entre os exercícios anteriores. Adicione `@DisplayName` a pelo menos dois
+testes para deixar o relatório mais legível.
+{: .fs-3 }
+
+### Exercício 7 (desafio): validação de ISBN
+
+Agora explore a validação de ISBN-10 lendo o método `validate` na classe
+`Book`. Escreva:
+{: .fs-3 }
+
+* `shouldRejectIsbnWithWrongLength`: ISBN com comprimento incorreto, como
+  `"123"`.
+* `shouldRejectIsbnWithInvalidCheckDigit`: ISBN com o dígito verificador
+  trocado (por exemplo, troque o último dígito de `0-306-40615-2`).
+* `shouldAcceptIsbnWithCheckDigitX`: um ISBN-10 válido cujo dígito
+  verificador seja `X`, usando `assertDoesNotThrow`.
 {: .fs-3 }
 
 ### Dicas
 
-* Use `@DisplayName` ou nomes no estilo `shouldRejectBlankTitle`.
-* Se vários testes compartilham o mesmo ISBN válido, considere `@BeforeEach`.
-* Leia a documentação da fábrica `Book.of` e de `validate` na própria classe
-  antes de escrever os casos.
 * Não é necessário Mockito nestes exercícios: `Book` não tem dependências
   externas.
+* Se travar no Exercício 7, releia a seção **Assertivas** e o método
+  `validate` de `Book.java` antes de tentar de novo.
 {: .fs-3 }
 
 ## Teste seus conhecimentos
