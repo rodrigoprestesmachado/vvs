@@ -131,6 +131,18 @@ ao nosso projeto:
 </plugin>
 ```
 
+## Teste seus conhecimentos
+
+Revise o texto acima e responda às questões teóricas abaixo.
+
+<center>
+    <iframe src="https://vvs.rpmhub.dev/maven/questions.html"
+        title="Questões sobre Maven"
+        width="90%" height="500"
+        style="border:none;">
+    </iframe>
+</center>
+
 ## Exercício 🏋️
 
 1. Crie um projeto Java usando o Maven (pode ser um projeto Quarkus).
