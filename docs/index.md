@@ -27,6 +27,7 @@ canal `#vvs`.
 
 * [Maven](maven/maven.md)
 * [Recursos relacionados com a disciplina](perifericos/perifericos.md)
+* [Estudo por Projeto](projeto/projeto.md)
 {: .fs-3 }
 
 ## Referências
