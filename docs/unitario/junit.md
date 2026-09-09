@@ -16,9 +16,9 @@ nav_order: 9
 </center>
 
 Os slides acima apresentam uma visão geral do JUnit 5. Nas seções a seguir,
-você aprofunda cada tópico com exemplos baseados na classe de domínio
-[`Book`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)
-do projeto hexagonal da disciplina.
+você aprofunda cada tópico com exemplos baseados em uma classe de domínio
+`Book`, uma versão simplificada e autocontida (sem framework, banco ou HTTP)
+inspirada no projeto hexagonal da disciplina.
 {: .fs-3 }
 
 ## O que é teste unitário?
@@ -34,10 +34,10 @@ entrada para exercitar os comportamentos esperados daquele trecho de código.
 Assim, quando algo quebra, fica mais fácil localizar o problema.
 {: .fs-3 }
 
-No exemplo hexagonal, a unidade ideal para começar é a classe `Book`: ela
-valida ISBN-10, título, autor, ano e exemplares em `Book.of(...)`, sem
-depender de banco, REST ou Quarkus. Isso é Java puro e, portanto, um alvo
-natural de teste unitário.
+A classe `Book` usada a seguir é a unidade ideal para começar: ela valida
+ISBN-10, título, autor, ano e exemplares em `Book.of(...)`, sem depender de
+banco, REST ou Quarkus. Isso é Java puro e, portanto, um alvo natural de
+teste unitário.
 {: .fs-3 }
 
 ## Por que usar o JUnit?
@@ -62,8 +62,8 @@ válidos, retorna um `Book`; se algum invariante for violado, lança
 `InvalidBookException`.
 {: .fs-3 }
 
-Trecho resumido da API (veja o
-[código completo](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)):
+Trecho resumido da API (o código completo é apresentado na seção
+[Classes sob teste](#classes-sob-teste), mais adiante):
 {: .fs-3 }
 
 ```java
@@ -97,7 +97,7 @@ título (o mesmo tipo de exemplo apresentado nos slides):
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.ifrs.hexagonal.domain.model.Book;
+import dev.ifrs.junit.model.Book;
 import org.junit.jupiter.api.Test;
 
 class BookTest {
@@ -128,8 +128,9 @@ A assertiva `assertEquals` compara o valor esperado com o obtido pelos
 getters do `Book`.
 {: .fs-3 }
 
-No projeto hexagonal, as dependências do JUnit já vêm pelo Quarkus. Em um
-projeto Maven clássico, elas aparecem no `pom.xml` assim:
+Em projetos Quarkus, as dependências do JUnit já vêm por padrão. Em um
+projeto Maven clássico como o que você vai criar nos exercícios, elas
+precisam ser declaradas no `pom.xml` assim:
 {: .fs-3 }
 
 ```xml
@@ -169,7 +170,7 @@ chamada a `Book.of` em todos os testes.
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.ifrs.hexagonal.domain.model.Book;
+import dev.ifrs.junit.model.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -263,8 +264,8 @@ O Exemplo 4 verifica o caso de título em branco:
 ```java
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import dev.ifrs.hexagonal.domain.exception.InvalidBookException;
-import dev.ifrs.hexagonal.domain.model.Book;
+import dev.ifrs.junit.exception.InvalidBookException;
+import dev.ifrs.junit.model.Book;
 import org.junit.jupiter.api.Test;
 
 class BookExceptionTest {
@@ -321,12 +322,11 @@ exclusão estão na
 do Surefire.
 {: .fs-3 }
 
-No módulo hexagonal, execute:
+No seu projeto Maven, execute:
 {: .fs-3 }
 
 ```bash
-cd exemplos/hexagonal
-./mvnw test
+mvn test
 ```
 
 Muitas vezes é necessário agrupar testes para executá-los de forma separada
@@ -370,8 +370,8 @@ Antes de partir para os exercícios, vale ver como criar e rodar testes
 JUnit no editor. O Vídeo 1 usa a extensão
 [Java Test Runner](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test)
 para escrever e executar casos de teste. O cenário do vídeo é introdutório;
-o mesmo fluxo se aplica ao módulo `exemplos/hexagonal` quando você criar a
-classe `BookTest`.
+o mesmo fluxo se aplica ao projeto simples que você vai criar a seguir,
+quando criar a classe `BookTest`.
 {: .fs-3 }
 
 <center>
@@ -387,32 +387,253 @@ classe `BookTest`.
 </center>
 {: .fs-3 }
 
-Depois de assistir, use `./mvnw test` ou a própria extensão para validar
+Depois de assistir, use `mvn test` ou a própria extensão para validar
 os testes que você escrever na próxima seção.
 {: .fs-3 }
 
 ## Exercícios práticos: testando `Book`
 
-Agora é a sua vez de escrever testes unitários sobre a classe
-[`Book`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java).
-O objetivo é exercitar `@Test`, assertivas e `assertThrows` sem depender de
+Agora é a sua vez de escrever testes unitários sobre uma classe `Book`
+autocontida, sem depender de clonar o repositório da disciplina. O
+objetivo é exercitar `@Test`, assertivas e `assertThrows` sem depender de
 banco, HTTP ou mocks.
 {: .fs-3 }
 
-### Como obter o código
+### Preparação do projeto
+
+Crie um projeto Maven simples do zero — não é necessário clonar nenhum
+repositório. Você pode usar a linha de comando:
 
 ```bash
-git clone -b dev https://github.com/rodrigoprestesmachado/vvs
-code vvs/exemplos/hexagonal
+mvn archetype:generate -DgroupId=dev.ifrs.junit \
+    -DartifactId=book-junit \
+    -DarchetypeArtifactId=maven-archetype-quickstart \
+    -DarchetypeVersion=1.4 \
+    -DinteractiveMode=false
+cd book-junit
+code .
 ```
 
-### Preparação
+Ou, no VS Code, usar a extensão
+[Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+e o comando **Java: Create Java Project** → **No build tools** ou
+**Maven**.
+{: .fs-3 }
+
+O arquétipo `maven-archetype-quickstart` traz JUnit 4 por padrão. Abra o
+`pom.xml` gerado e troque (ou adicione) as dependências do JUnit 5, iguais
+às apresentadas na seção [Primeiro teste](#primeiro-teste):
+{: .fs-3 }
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.11.0</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>5.11.0</version>
+    <scope>test</scope>
+</dependency>
+```
+
+Para que `mvn test` reconheça e execute testes JUnit 5, adicione (ou
+atualize) o plugin Surefire no `pom.xml`:
+{: .fs-3 }
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.0</version>
+        </plugin>
+    </plugins>
+</build>
+```
+
+### Classes sob teste
+
+Copie as duas classes abaixo para o seu projeto. Elas são uma versão
+simplificada e independente do exemplo hexagonal da disciplina — sem
+nenhuma dependência de banco, REST ou Quarkus.
+{: .fs-3 }
+
+Crie `src/main/java/dev/ifrs/junit/exception/InvalidBookException.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.junit.exception;
+
+/**
+ * Erro de validação de dados de livro (regras de domínio ou formato).
+ */
+public class InvalidBookException extends RuntimeException {
+
+    public InvalidBookException(final String message) {
+        super(message);
+    }
+}
+```
+
+Crie `src/main/java/dev/ifrs/junit/model/Book.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.junit.model;
+
+import dev.ifrs.junit.exception.InvalidBookException;
+
+import java.time.Year;
+
+/**
+ * Representa um livro catalogado pela biblioteca. A criação validada ocorre
+ * apenas via {@link #of(String, String, String, int, int)}.
+ */
+public final class Book {
+
+    private final String isbn;
+    private final String title;
+    private final String author;
+    private final int publicationYear;
+    private final int copiesAvailable;
+
+    private Book(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+        this.copiesAvailable = copiesAvailable;
+    }
+
+    /**
+     * Único ponto de criação validado; use em toda lógica de negócio.
+     *
+     * @param isbn             ISBN-10 (hífens opcionais)
+     * @param title            título não vazio
+     * @param author           autor não vazio
+     * @param publicationYear  ano entre 1 e o ano corrente
+     * @param copiesAvailable  exemplares disponíveis (não negativo)
+     * @return livro válido
+     * @throws InvalidBookException se algum invariante for violado
+     */
+    public static Book of(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        validate(isbn, title, author, publicationYear, copiesAvailable);
+        return new Book(isbn, title, author, publicationYear, copiesAvailable);
+    }
+
+    private static void validate(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        validateIsbn10(isbn);
+        if (title == null || title.isBlank()) {
+            throw new InvalidBookException("Title cannot be blank");
+        }
+        if (author == null || author.isBlank()) {
+            throw new InvalidBookException("Author cannot be blank");
+        }
+        int currentYear = Year.now().getValue();
+        if (publicationYear < 1 || publicationYear > currentYear) {
+            throw new InvalidBookException(
+                    "Publication year must be between 1 and " + currentYear);
+        }
+        if (copiesAvailable < 0) {
+            throw new InvalidBookException(
+                    "Copies available cannot be negative");
+        }
+    }
+
+    private static void validateIsbn10(final String isbn) {
+        if (isbn == null) {
+            throw new InvalidBookException("ISBN cannot be null");
+        }
+
+        String clean = isbn.replaceAll("[\\s\\-]", "");
+
+        if (clean.length() != 10) {
+            throw new InvalidBookException(
+                    "ISBN-10 must have exactly 10 characters after "
+                            + "removing hyphens (got: " + clean.length() + ")");
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 9; i++) {
+            char c = clean.charAt(i);
+            if (!Character.isDigit(c)) {
+                throw new InvalidBookException(
+                        "ISBN-10 positions 1–9 must be digits");
+            }
+            sum += (i + 1) * Character.getNumericValue(c);
+        }
+
+        char last = clean.charAt(9);
+        if (last == 'X' || last == 'x') {
+            sum += 10 * 10;
+        } else if (Character.isDigit(last)) {
+            sum += 10 * Character.getNumericValue(last);
+        } else {
+            throw new InvalidBookException(
+                    "ISBN-10 check digit must be 0–9 or X");
+        }
+
+        if (sum % 11 != 0) {
+            throw new InvalidBookException(
+                    "Invalid ISBN-10: check digit does not match");
+        }
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPublicationYear() {
+        return publicationYear;
+    }
+
+    public int getCopiesAvailable() {
+        return copiesAvailable;
+    }
+}
+```
+
+> Esta é uma versão simplificada, sem builder, da classe
+> [`Book` do projeto hexagonal](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)
+> usado em outras partes da disciplina. As regras de validação são as
+> mesmas.
+{: .fs-3 }
+
+### Preparação dos testes
 
 1. Crie a classe `BookTest` em
-   `src/test/java/dev/ifrs/hexagonal/domain/model/BookTest.java`.
+   `src/test/java/dev/ifrs/junit/model/BookTest.java`.
 2. Resolva os exercícios **na ordem**: eles vão do mais simples ao mais
    desafiador e reaproveitam o que você aprendeu no exercício anterior.
-3. Depois de cada exercício, execute `./mvnw test` (ou use o VS Code) e só
+3. Depois de cada exercício, execute `mvn test` (ou use o VS Code) e só
    avance quando o teste passar.
 {: .fs-3 }
 
@@ -473,8 +694,12 @@ testes para deixar o relatório mais legível.
 ### Exercício 7 (desafio): validação de ISBN
 {: .fw-500 }
 
-Agora explore a validação de ISBN-10 lendo o método `validate` na classe
-`Book`. Escreva:
+Agora explore a validação de ISBN-10 lendo o método `validateIsbn10` na
+classe `Book` que você copiou. Se o algoritmo do dígito verificador não
+ficar claro, peça a uma IA (por exemplo, o chat do Cursor ou outro
+assistente) para explicar passo a passo como o ISBN-10 calcula e confere
+seu dígito verificador — isso ajuda a entender por que cada caso de teste
+abaixo deve passar ou lançar exceção. Escreva:
 {: .fs-3 }
 
 * `shouldRejectIsbnWithWrongLength`: ISBN com comprimento incorreto, como
@@ -490,7 +715,9 @@ Agora explore a validação de ISBN-10 lendo o método `validate` na classe
 * Não é necessário Mockito nestes exercícios: `Book` não tem dependências
   externas.
 * Se travar no Exercício 7, releia a seção **Assertivas** e o método
-  `validate` de `Book.java` antes de tentar de novo.
+  `validateIsbn10` de `Book.java` antes de tentar de novo. Uma IA pode
+  ajudar a gerar exemplos de ISBNs válidos e inválidos para os seus casos
+  de teste.
 {: .fs-3 }
 
 ## Teste seus conhecimentos
@@ -515,7 +742,9 @@ SOMMERVILLE, Ian. [Engenharia de software](https://biblioteca.ifrs.edu.br/pergam
 JUnit 5. Disponível em: [https://junit.org/junit5/](https://junit.org/junit5/).
 {: .fs-3 }
 
-Classe `Book` (exemplo hexagonal). Disponível em:
+Classe `Book` (versão original, usada no projeto hexagonal da disciplina;
+a versão simplificada usada nos exercícios está nesta própria página).
+Disponível em:
 [github.com/rodrigoprestesmachado/vvs/.../Book.java](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java).
 {: .fs-3 }
 
