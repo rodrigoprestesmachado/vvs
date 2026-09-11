@@ -9,22 +9,20 @@ nav_order: 2
 
 O trabalho é individual e avaliado em duas etapas: a **Etapa 1** (definição
 do projeto, em PDF) e a **Etapa 2** (entrega final, no repositório Git). A
-avaliação considera **7 critérios**, totalizando **10,0 pontos**. Os dois
+avaliação considera **5 critérios**, totalizando **10,0 pontos**. Os dois
 últimos pontos extras (teste de carga e teste de segurança) são
 **opcionais** e somam pontuação adicional, conforme definido em aula.
 {: .fs-3 }
 
 ## Critérios de avaliação
 
-| Critério | Peso | Insuficiente (0) | Regular (0,5) | Bom (0,75) | Excelente (1,0 / 1,5) |
+| Critério | Peso | Insuficiente (0) | Regular | Bom | Excelente |
 |---|---|---|---|---|---|
-| **1. Definição do Projeto** (PDF da Etapa 1) | 1,0 | Não entregue. | Entregue, mas sem indicar linguagem e/ou framework. | Entregue, indicando sistema, linguagem e framework, com descrição breve. | Entregue dentro do prazo, com descrição clara do sistema, linguagem e framework bem justificados. |
-| **2. Plano de Teste** (`.md`) | 1,5 | Não existe ou não segue o formato Markdown. | Existe, mas está incompleto (falta escopo, estratégia ou critérios). | Contempla escopo, estratégia e critérios, com pequenas lacunas. | Completo: escopo, estratégia, critérios de entrada e saída, riscos, ferramentas e cronograma bem definidos. |
-| **3. Análise Estática** | 1,5 | Não implementada. | Ferramenta configurada, mas não executada ou sem relatório. | Ferramenta configurada e executada, com relatório gerado. | Integrada ao build, relatório disponível e principais apontamentos corrigidos ou justificados. |
-| **4. Teste Unitário** | 2,0 | Não implementado. | Poucos testes, sem cobrir casos relevantes. | Testes cobrem as principais classes e métodos, com uso correto de asserts e/ou mocks. | Boa cobertura (mensurada, por exemplo com JaCoCo), incluindo casos de sucesso, falha e exceção. |
-| **5. Teste de Componente** | 2,0 | Não implementado. | Testes superficiais, sem isolar o componente adequadamente. | Testes validam o componente (API, repositório, módulo) de forma isolada. | Testes robustos, cobrindo múltiplos cenários (sucesso, erro, borda) e integrados ao build. |
-| **6. Teste de Sistema** | 1,5 | Não implementado. | Testes automatizados muito básicos (por exemplo, um único fluxo simples). | Testes automatizados cobrindo os principais fluxos do usuário. | Testes automatizados cobrindo fluxos principais e alternativos, com relatório ou evidência de execução. |
-| **7. Documentação e Organização do Repositório** | 0,5 | Repositório desorganizado, sem README ou instruções de execução. | Repositório organizado, mas com documentação mínima. | Repositório organizado com README explicando como rodar os testes. | Repositório bem organizado, documentado e com instruções claras de execução de cada tipo de teste. |
+| **1. Plano de Teste** (`.md`) | 1,5 | Não existe ou não segue o formato Markdown. | Existe, mas está incompleto (falta escopo, estratégia ou critérios). | Contempla escopo, estratégia e critérios, com pequenas lacunas. | Completo: escopo, estratégia, critérios de entrada e saída, riscos, ferramentas e cronograma bem definidos. |
+| **2. Análise Estática** | 1,5 | Não implementada. | Ferramenta configurada, mas não executada ou sem relatório. | Ferramenta configurada e executada, com relatório gerado. | Integrada ao build, relatório disponível e principais apontamentos corrigidos ou justificados. |
+| **3. Teste Unitário** | 3,0 | Não implementado. | Poucos testes, sem cobrir casos relevantes e sem uso de mocks onde seriam necessários. | Testes cobrem as principais classes e métodos, com uso correto de asserts e de mocks (Mockito) para isolar dependências externas. | Boa cobertura (mensurada, por exemplo com JaCoCo), incluindo casos de sucesso, falha e exceção, com uso criterioso de mocks para isolar unidades. |
+| **4. Teste de Componente** | 2,5 | Não implementado. | Testes superficiais, sem isolar o componente adequadamente. | Testes validam o componente (API, repositório, módulo) de forma isolada. | Testes robustos, cobrindo múltiplos cenários (sucesso, erro, borda) e integrados ao build. |
+| **5. Teste de Sistema** | 1,5 | Não implementado. | Testes automatizados muito básicos (por exemplo, um único fluxo simples). | Testes automatizados cobrindo os principais fluxos do usuário. | Testes automatizados cobrindo fluxos principais e alternativos, com relatório ou evidência de execução. |
 
 **Total: 10,0 pontos**
 {: .fs-3 }

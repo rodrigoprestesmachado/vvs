@@ -19,14 +19,23 @@
 - [ ] Medir a performance do código
 - [ ] Gerar dados de teste aleatórios
 
-### No cenário do BookService, quais são as dependências mockáveis?
+### No cenário do BookService, quais interfaces representam as portas de saída (dependências externas mockáveis)?
 
-> Dica: revise a seção Exercícios práticos: testando BookService e o slide Cenário: BookService
+> Dica: revise a seção Exercícios práticos: testando BookService e o slide Cenário: portas e casos de uso
 
 - [ ] Book e BookServiceTest
 - [x] BookRepository e NotificationService
-- [ ] Book e InvalidBookException
+- [ ] RegisterBookUseCase e BorrowBookUseCase
 - [ ] BookServiceTest e MockitoExtension
+
+### E quais interfaces representam as portas de entrada (casos de uso)?
+
+> Dica: revise a seção Exercícios práticos: testando BookService e o slide Cenário: portas e casos de uso
+
+- [ ] BookRepository e NotificationService
+- [x] RegisterBookUseCase e BorrowBookUseCase
+- [ ] Book e BookServiceTest
+- [ ] InvalidBookException e BookNotFoundException
 
 ### Qual anotação do Mockito cria e injeta instâncias simuladas em uma classe/interface?
 
@@ -45,6 +54,15 @@
 - [ ] Cria um mock e injeta mocks nas dependências
 - [x] Cria uma instância real e injeta mocks nas dependências
 - [ ] Cria uma instância real e injeta dependências reais
+
+### No vocabulário do exemplo hexagonal, o que é BookService quando anotado com @InjectMocks?
+
+> Dica: revise o parágrafo sobre o exemplo hexagonal logo após a seção @InjectMocks
+
+- [ ] Uma porta de saída
+- [ ] Uma porta de entrada (interface do caso de uso)
+- [x] O serviço de aplicação que implementa os casos de uso
+- [ ] Um adaptador REST
 
 ### Em qual situação você utilizaria a anotação @Spy no exercício do BookRepository?
 

@@ -3,7 +3,7 @@ data-transition="convex"  -->
 # Introdução a Mocks e Mockito
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
 
-Com exemplos baseados em Book e BookService
+Com exemplos baseados em Book, casos de uso e BookService
 <!-- .element: style="font-size: small; color:white;" -->
 
 Pressione 'F' para tela cheia
@@ -39,16 +39,19 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Cenário: BookService
+## Cenário: portas e casos de uso
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- `BookService` opera sobre `Book`, a mesma classe de domínio dos slides de JUnit.
+- Mesma organização do exemplo hexagonal: `domain.ports.in`, `domain.ports.out`, `domain.service`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Depende de `BookRepository` e `NotificationService`, duas interfaces externas.
+- `RegisterBookUseCase` e `BorrowBookUseCase` são as portas de entrada (casos de uso).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- São essas dependências que vamos simular com Mockito.
+- `BookRepository` e `NotificationService` são as portas de saída (dependências externas).
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- `BookService` implementa os casos de uso e é quem vamos testar com Mockito.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -63,6 +66,9 @@ Pressione 'F' para tela cheia
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - Use para isolar recursos externos: repositório, API, gateway de pagamento.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- No exemplo hexagonal, `@Mock` simula as **portas de saída** (`domain.ports.out`).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -117,6 +123,9 @@ class BookServiceTest {
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - Depende dos mocks já declarados com `@Mock` na mesma classe de teste.
+<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+- É o **serviço de aplicação** que implementa os casos de uso (portas de entrada).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 

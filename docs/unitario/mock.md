@@ -62,6 +62,12 @@ externo (repositório, API, gateway de pagamento etc.) e você quiser isolar
 esse recurso do teste.
 {: .fs-3 }
 
+Se você já viu o exemplo hexagonal da disciplina, `@Mock` é o que você usa
+para simular as **portas de saída** (`domain.ports.out`, como
+`BookRepository` ou `EmailNotification`): o teste não fala com um banco ou
+serviço de e-mail de verdade, só com um duplo controlado pelo Mockito.
+{: .fs-3 }
+
 ```java
 // Estende o JUnit para suportar injeção de dependências com Mockito
 @ExtendWith(MockitoExtension.class)
@@ -121,6 +127,12 @@ Com `@Spy` você consegue, ao mesmo tempo:
 - executar o código real do objeto (sem simular nada);
 - verificar quantas vezes um método foi chamado e com quais argumentos;
 - sobrescrever o comportamento de métodos pontuais via *stub*, se necessário.
+{: .fs-3 }
+
+`@Spy` é útil quando você tem uma implementação real e simples de uma
+**porta de saída** (por exemplo, um `BookRepository` em memória, sem
+banco de verdade) e quer testar o serviço de aplicação usando esse
+comportamento real, mas ainda assim confirmar as interações com `verify`.
 {: .fs-3 }
 
 **Exemplo 1: monitorando chamadas sem alterar o comportamento real**
@@ -281,6 +293,14 @@ dependências apareçam sozinhas. Valide sempre o comportamento da classe
 testada, não apenas os retornos das dependências simuladas.
 {: .fs-3 }
 
+No vocabulário do exemplo hexagonal, o objeto anotado com `@InjectMocks` é
+o **serviço de aplicação** (como `BooksService`), a classe concreta que
+**implementa um ou mais casos de uso** (as portas de entrada,
+`domain.ports.in`, como `AddBookUseCase`). O teste não instancia o serviço
+na mão; o Mockito monta o serviço e já injeta as portas de saída mockadas
+nele.
+{: .fs-3 }
+
 ### `@Captor`
 
 Às vezes o método que você quer testar não retorna o objeto de interesse:
@@ -290,7 +310,9 @@ interceptar o pacote antes do envio para conferir o que está dentro. A
 anotação [`@Captor`](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Captor.html),
 usada em conjunto com `ArgumentCaptor`, faz exatamente isso: captura o
 argumento passado para um método de uma dependência simulada para que você
-possa inspecioná-lo.
+possa inspecioná-lo. É especialmente comum quando o serviço de aplicação
+apenas repassa um objeto de domínio para uma porta de saída (como
+`repository.save(book)`) sem devolvê-lo diretamente.
 {: .fs-3 }
 
 Para entender o problema que `@Captor` resolve, considere a classe abaixo.
@@ -447,10 +469,15 @@ dependência nunca tenha sido chamada.
 
 Agora é a sua vez de escrever testes com Mockito. O cenário reaproveita a
 classe `Book` já apresentada na seção de
-[Teste Unitário](junit.html#exercícios-práticos-testando-book), mas agora
-ela é manipulada por um `BookService` que depende de duas colaborações
-externas: um repositório e um serviço de notificação. É justamente esse
-tipo de dependência externa que faz do Mockito uma ferramenta necessária.
+[Teste Unitário](junit.html#exercícios-práticos-testando-book) e segue a
+mesma organização em portas e casos de uso do exemplo hexagonal da
+disciplina (`domain.ports.in`, `domain.ports.out`, `domain.service`): duas
+portas de entrada (`RegisterBookUseCase`, `BorrowBookUseCase`) descrevem os
+casos de uso; duas portas de saída (`BookRepository`,
+`NotificationService`) abstraem as dependências externas; e um único
+serviço de aplicação, `BookService`, implementa os casos de uso orquestrando
+as portas de saída. É justamente a dependência dessas portas de saída que
+faz do Mockito uma ferramenta necessária.
 {: .fs-3 }
 
 ### Preparação do projeto
@@ -489,11 +516,13 @@ simplificada da mesma classe usada na seção de Teste Unitário (sem a
 validação completa de ISBN-10, para manter o foco no uso de mocks).
 {: .fs-3 }
 
-Crie `src/main/java/dev/ifrs/mockito/exception/InvalidBookException.java`:
+Assim como no exemplo hexagonal, as exceções de domínio ficam em
+`domain.exception`. Crie
+`src/main/java/dev/ifrs/mockito/domain/exception/InvalidBookException.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.exception;
+package dev.ifrs.mockito.domain.exception;
 
 public class InvalidBookException extends RuntimeException {
 
@@ -503,11 +532,12 @@ public class InvalidBookException extends RuntimeException {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/mockito/exception/BookNotFoundException.java`:
+Crie
+`src/main/java/dev/ifrs/mockito/domain/exception/BookNotFoundException.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.exception;
+package dev.ifrs.mockito.domain.exception;
 
 public class BookNotFoundException extends RuntimeException {
 
@@ -517,11 +547,12 @@ public class BookNotFoundException extends RuntimeException {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/mockito/exception/NoCopiesAvailableException.java`:
+Crie
+`src/main/java/dev/ifrs/mockito/domain/exception/NoCopiesAvailableException.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.exception;
+package dev.ifrs.mockito.domain.exception;
 
 public class NoCopiesAvailableException extends RuntimeException {
 
@@ -531,13 +562,13 @@ public class NoCopiesAvailableException extends RuntimeException {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/mockito/model/Book.java`:
+Crie `src/main/java/dev/ifrs/mockito/domain/model/Book.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.model;
+package dev.ifrs.mockito.domain.model;
 
-import dev.ifrs.mockito.exception.InvalidBookException;
+import dev.ifrs.mockito.domain.exception.InvalidBookException;
 
 import java.time.Year;
 import java.util.Objects;
@@ -645,13 +676,15 @@ public final class Book {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/mockito/repository/BookRepository.java`:
+As **portas de saída** (`domain.ports.out`) abstraem tudo que é externo ao
+domínio: persistência e notificação. Crie
+`src/main/java/dev/ifrs/mockito/domain/ports/out/BookRepository.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.repository;
+package dev.ifrs.mockito.domain.ports.out;
 
-import dev.ifrs.mockito.model.Book;
+import dev.ifrs.mockito.domain.model.Book;
 
 import java.util.Optional;
 
@@ -664,11 +697,11 @@ public interface BookRepository {
 ```
 
 Crie
-`src/main/java/dev/ifrs/mockito/notification/NotificationService.java`:
+`src/main/java/dev/ifrs/mockito/domain/ports/out/NotificationService.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.notification;
+package dev.ifrs.mockito.domain.ports.out;
 
 public interface NotificationService {
 
@@ -676,19 +709,54 @@ public interface NotificationService {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/mockito/service/BookService.java`:
+As **portas de entrada** (`domain.ports.in`) descrevem os casos de uso, um
+por operação, no mesmo estilo de `AddBookUseCase` no exemplo hexagonal.
+Crie `src/main/java/dev/ifrs/mockito/domain/ports/in/RegisterBookUseCase.java`:
 {: .fs-3 }
 
 ```java
-package dev.ifrs.mockito.service;
+package dev.ifrs.mockito.domain.ports.in;
 
-import dev.ifrs.mockito.exception.BookNotFoundException;
-import dev.ifrs.mockito.exception.NoCopiesAvailableException;
-import dev.ifrs.mockito.model.Book;
-import dev.ifrs.mockito.notification.NotificationService;
-import dev.ifrs.mockito.repository.BookRepository;
+import dev.ifrs.mockito.domain.model.Book;
 
-public class BookService {
+public interface RegisterBookUseCase {
+
+    void registerBook(Book book);
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/domain/ports/in/BorrowBookUseCase.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.domain.ports.in;
+
+import dev.ifrs.mockito.domain.model.Book;
+
+public interface BorrowBookUseCase {
+
+    Book borrowBook(String isbn, String patronEmail);
+}
+```
+
+Por fim, o **serviço de aplicação** (`domain.service`) implementa as duas
+portas de entrada, orquestrando as portas de saída, assim como
+`BooksService` faz no exemplo hexagonal. Crie
+`src/main/java/dev/ifrs/mockito/domain/service/BookService.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.domain.service;
+
+import dev.ifrs.mockito.domain.exception.BookNotFoundException;
+import dev.ifrs.mockito.domain.exception.NoCopiesAvailableException;
+import dev.ifrs.mockito.domain.model.Book;
+import dev.ifrs.mockito.domain.ports.in.BorrowBookUseCase;
+import dev.ifrs.mockito.domain.ports.in.RegisterBookUseCase;
+import dev.ifrs.mockito.domain.ports.out.BookRepository;
+import dev.ifrs.mockito.domain.ports.out.NotificationService;
+
+public class BookService implements RegisterBookUseCase, BorrowBookUseCase {
 
     private final BookRepository repository;
     private final NotificationService notifier;
@@ -700,6 +768,7 @@ public class BookService {
         this.notifier = notifier;
     }
 
+    @Override
     public void registerBook(final Book book) {
         repository.save(book);
         notifier.notify(
@@ -707,6 +776,7 @@ public class BookService {
                 "Book registered: " + book.getTitle());
     }
 
+    @Override
     public Book borrowBook(final String isbn, final String patronEmail) {
         Book book = repository.findByIsbn(isbn)
                 .orElseThrow(() -> new BookNotFoundException(
@@ -735,7 +805,7 @@ public class BookService {
 ### Preparação dos testes
 
 1. Crie a classe `BookServiceTest` em
-   `src/test/java/dev/ifrs/mockito/service/BookServiceTest.java`.
+   `src/test/java/dev/ifrs/mockito/domain/service/BookServiceTest.java`.
 2. Anote a classe com `@ExtendWith(MockitoExtension.class)`, como nos
    exemplos apresentados anteriormente.
 3. Resolva os exercícios **na ordem**: eles vão do mais simples ao mais
@@ -747,11 +817,12 @@ public class BookService {
 ### Exercício 1: `@Mock` e `@InjectMocks` básicos
 {: .fw-500 }
 
-Declare `@Mock BookRepository repository`, `@Mock NotificationService
-notifier` e `@InjectMocks BookService bookService`. Escreva
-`shouldSaveBookWhenRegistering`: crie um `Book` válido, chame
-`bookService.registerBook(book)` e use `verify` para confirmar que
-`repository.save(book)` foi chamado exatamente uma vez.
+Declare `@Mock BookRepository repository` e `@Mock NotificationService
+notifier` (as duas portas de saída) e `@InjectMocks BookService
+bookService` (o serviço de aplicação que implementa `RegisterBookUseCase`
+e `BorrowBookUseCase`). Escreva `shouldSaveBookWhenRegistering`: crie um
+`Book` válido, chame `bookService.registerBook(book)` e use `verify` para
+confirmar que `repository.save(book)` foi chamado exatamente uma vez.
 {: .fs-3 }
 
 ### Exercício 2: livro não encontrado
