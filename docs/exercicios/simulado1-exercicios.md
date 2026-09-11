@@ -15,6 +15,7 @@ Esta página reúne os links para os exercícios práticos e teóricos da discip
 
 * [PMD e Checkstyle](https://vvs.rpmhub.dev/pmd/pmd.html#exercício-prático-%EF%B8%8F)
 * [Teste Unitário (JUnit)](https://vvs.rpmhub.dev/unitario/junit.html#exercícios-práticos-testando-book)
+* [Mock (Mockito)](https://vvs.rpmhub.dev/unitario/mock.html#exercícios-práticos-testando-bookservice)
 {: .fs-3 }
 
 ## Exercícios teóricos
@@ -22,6 +23,7 @@ Esta página reúne os links para os exercícios práticos e teóricos da discip
 * [Maven](https://vvs.rpmhub.dev/maven/maven.html#teste-seus-conhecimentos)
 * [Sonar](https://vvs.rpmhub.dev/sonar/sonar.html#questões-)
 * [Teste Unitário (JUnit)](https://vvs.rpmhub.dev/unitario/junit.html#teste-seus-conhecimentos)
+* [Mock (Mockito)](https://vvs.rpmhub.dev/unitario/mock.html#teste-seus-conhecimentos-)
 {: .fs-3 }
 
 <center>

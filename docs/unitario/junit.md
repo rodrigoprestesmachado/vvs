@@ -393,77 +393,38 @@ os testes que você escrever na próxima seção.
 
 ## Exercícios práticos: testando `Book`
 
-Agora é a sua vez de escrever testes unitários sobre uma classe `Book`
-autocontida, sem depender de clonar o repositório da disciplina. O
-objetivo é exercitar `@Test`, assertivas e `assertThrows` sem depender de
-banco, HTTP ou mocks.
+Agora é a sua vez de escrever testes unitários sobre uma classe `Book`.
+O objetivo é exercitar os conceitos básicos de teste unitário e assertivas
+(`@Test`, asserções e `assertThrows`) sem depender de banco, HTTP ou mocks.
+{: .fs-3 }
+
+A classe `Book` que você vai copiar contém, de propósito, alguns bugs. A
+ideia é que você escreva os testes descritos em cada exercício e, quando
+um deles falhar de um jeito inesperado (uma exceção que não é lançada
+quando deveria, ou que é lançada quando não deveria), você investigue o
+código de `Book`, encontre o bug e o corrija. Só avance para o próximo
+exercício depois que o teste correspondente passar. Esse é o ciclo
+vermelho → verde que você vai usar bastante na disciplina.
 {: .fs-3 }
 
 ### Preparação do projeto
 
-Crie um projeto Maven simples do zero — não é necessário clonar nenhum
+Crie um projeto Quarkus simples do zero, não é necessário clonar nenhum
 repositório. Você pode usar a linha de comando:
 
 ```bash
-mvn archetype:generate -DgroupId=dev.ifrs.junit \
-    -DartifactId=book-junit \
-    -DarchetypeArtifactId=maven-archetype-quickstart \
-    -DarchetypeVersion=1.4 \
-    -DinteractiveMode=false
+mvn io.quarkus.platform:quarkus-maven-plugin:3.15.1:create \
+    -DprojectGroupId=dev.ifrs.junit \
+    -DprojectArtifactId=book-junit \
+    -DclassName="dev.ifrs.junit.GreetingResource" \
+    -Dextensions="resteasy-reactive"
 cd book-junit
 code .
 ```
 
-Ou, no VS Code, usar a extensão
-[Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
-e o comando **Java: Create Java Project** → **No build tools** ou
-**Maven**.
-{: .fs-3 }
+### Classes que serão testadas
 
-O arquétipo `maven-archetype-quickstart` traz JUnit 4 por padrão. Abra o
-`pom.xml` gerado e troque (ou adicione) as dependências do JUnit 5, iguais
-às apresentadas na seção [Primeiro teste](#primeiro-teste):
-{: .fs-3 }
-
-```xml
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-api</artifactId>
-    <version>5.11.0</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.11.0</version>
-    <scope>test</scope>
-</dependency>
-```
-
-Para que `mvn test` reconheça e execute testes JUnit 5, adicione (ou
-atualize) o plugin Surefire no `pom.xml`:
-{: .fs-3 }
-
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.0</version>
-        </plugin>
-    </plugins>
-</build>
-```
-
-### Classes sob teste
-
-Copie as duas classes abaixo para o seu projeto. Elas são uma versão
-simplificada e independente do exemplo hexagonal da disciplina — sem
-nenhuma dependência de banco, REST ou Quarkus.
-{: .fs-3 }
-
-Crie `src/main/java/dev/ifrs/junit/exception/InvalidBookException.java`:
+Copie as duas classes abaixo para o seu projeto.
 {: .fs-3 }
 
 ```java
@@ -480,21 +441,21 @@ public class InvalidBookException extends RuntimeException {
 }
 ```
 
-Crie `src/main/java/dev/ifrs/junit/model/Book.java`:
-{: .fs-3 }
-
 ```java
 package dev.ifrs.junit.model;
 
 import dev.ifrs.junit.exception.InvalidBookException;
 
 import java.time.Year;
+import java.util.Objects;
 
 /**
  * Representa um livro catalogado pela biblioteca. A criação validada ocorre
  * apenas via {@link #of(String, String, String, int, int)}.
  */
 public final class Book {
+
+    private static final int MAX_TITLE_LENGTH = 200;
 
     private final String isbn;
     private final String title;
@@ -543,18 +504,27 @@ public final class Book {
             final int publicationYear,
             final int copiesAvailable) {
         validateIsbn10(isbn);
-        if (title == null || title.isBlank()) {
+        if (title == null || author.isBlank()) {
             throw new InvalidBookException("Title cannot be blank");
         }
-        if (author == null || author.isBlank()) {
+        if (author == null || title.isBlank()) {
             throw new InvalidBookException("Author cannot be blank");
+        }
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new InvalidBookException(
+                    "Title cannot be longer than " + MAX_TITLE_LENGTH
+                            + " characters");
+        }
+        if (author.contains(" ")) {
+            throw new InvalidBookException(
+                    "Author must include first and last name");
         }
         int currentYear = Year.now().getValue();
         if (publicationYear < 1 || publicationYear > currentYear) {
             throw new InvalidBookException(
                     "Publication year must be between 1 and " + currentYear);
         }
-        if (copiesAvailable < 0) {
+        if (copiesAvailable <= 0) {
             throw new InvalidBookException(
                     "Copies available cannot be negative");
         }
@@ -618,14 +588,25 @@ public final class Book {
     public int getCopiesAvailable() {
         return copiesAvailable;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        Book book = (Book) o;
+        return isbn.equals(book.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
+    }
 }
 ```
-
-> Esta é uma versão simplificada, sem builder, da classe
-> [`Book` do projeto hexagonal](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/src/main/java/dev/ifrs/hexagonal/domain/model/Book.java)
-> usado em outras partes da disciplina. As regras de validação são as
-> mesmas.
-{: .fs-3 }
 
 ### Preparação dos testes
 
@@ -646,31 +627,34 @@ Escreva `shouldCreateBookWhenDataIsValid`, chamando `Book.of` com o ISBN
 de `Book`.
 {: .fs-3 }
 
-> Este é o mesmo teste do Exemplo 1. Copie-o para começar com confiança e
-> depois siga para os próximos.
-{: .fs-3 }
-
 ### Exercício 2: título em branco
 {: .fw-500 }
 
 Escreva `shouldRejectBlankTitle`: chame `Book.of` com `title` igual a
 `""` (mantendo os demais campos válidos) e use `assertThrows` para
 verificar que `InvalidBookException` é lançada. Use o Exemplo 4 como
-modelo.
+modelo. Se o teste falhar (a exceção não é lançada), há um bug em
+`validate`; investigue qual campo está sendo verificado no lugar
+errado e corrija.
 {: .fs-3 }
 
 ### Exercício 3: autor em branco
 {: .fw-500 }
 
 Repita a estrutura do Exercício 2, agora trocando o `author` por `""`.
-Nomeie o método `shouldRejectBlankAuthor`.
+Nomeie o método `shouldRejectBlankAuthor`. Assim como no exercício
+anterior, se a exceção não for lançada, há um bug para corrigir.
 {: .fs-3 }
 
-### Exercício 4: exemplares negativos
+### Exercício 4: exemplares
 {: .fw-500 }
 
 Escreva `shouldRejectNegativeCopies`: use um `copiesAvailable` negativo
 (por exemplo, `-1`) e verifique que `InvalidBookException` é lançada.
+Escreva também `shouldAcceptZeroCopies`, usando `copiesAvailable` igual a
+`0` e `assertDoesNotThrow` (zero exemplares é uma quantidade válida, só
+negativos devem ser rejeitados). Se esse segundo teste falhar, há um bug
+na condição que valida `copiesAvailable`; corrija-o.
 {: .fs-3 }
 
 ### Exercício 5: ano inválido
@@ -681,7 +665,50 @@ Escreva `shouldRejectFuturePublicationYear`, usando um ano bem no futuro
 devem lançar `InvalidBookException`.
 {: .fs-3 }
 
-### Exercício 6: reduzindo repetição com `@BeforeEach`
+### Exercício 6: título muito longo
+{: .fw-500 }
+
+Escreva `shouldRejectTitleLongerThan200Characters`, usando um `title`
+com mais de 200 caracteres (você pode gerar uma string longa com
+`"a".repeat(201)`), e verifique que `InvalidBookException` é lançada.
+{: .fs-3 }
+
+### Exercício 7: autor com nome completo
+{: .fw-500 }
+
+A regra de negócio diz que `author` deve conter nome e sobrenome (ou
+seja, deve haver pelo menos um espaço entre duas palavras). Escreva
+`shouldAcceptAuthorWithFullName`, usando um autor como `"Ada Lovelace"`
+e `assertDoesNotThrow`, e `shouldRejectAuthorWithoutLastName`, usando um
+autor sem espaço, como `"Ada"`, verificando que `InvalidBookException` é
+lançada. Se um dos dois testes falhar, há um bug na condição que valida
+o nome do autor; corrija-o.
+{: .fs-3 }
+
+### Exercício 8: ISBN normalizado
+{: .fw-500 }
+
+A regra de negócio diz que `getIsbn()` deve sempre devolver o ISBN
+normalizado, ou seja, apenas dígitos (e opcionalmente `X`), sem
+separadores ou espaços, mesmo que o ISBN informado em `Book.of` os
+contenha. Escreva `shouldReturnNormalizedIsbn`, criando um `Book` com o
+ISBN `"0-306-40615-2"` e usando `assertEquals` para verificar que
+`getIsbn()` retorna `"0306406152"`. Se o teste falhar, há um bug (ou
+uma regra ainda não implementada) em `Book`; corrija-o.
+{: .fs-3 }
+
+### Exercício 9: igualdade entre livros
+{: .fw-500 }
+
+Dois `Book` com o mesmo ISBN devem ser considerados iguais, mesmo que os
+demais campos sejam diferentes. Escreva `shouldConsiderBooksWithSameIsbnEqual`,
+criando dois livros com o mesmo ISBN, mas título/autor diferentes, e use
+`assertEquals` para comparar os dois objetos. Escreva também
+`shouldConsiderBooksWithDifferentIsbnNotEqual`, comparando dois livros
+com ISBNs diferentes e usando `assertNotEquals`.
+{: .fs-3 }
+
+### Exercício 10: reduzindo repetição com `@BeforeEach`
 {: .fw-500 }
 
 Até aqui, cada teste provavelmente repetiu o mesmo ISBN, título e autor
@@ -691,14 +718,14 @@ entre os exercícios anteriores. Adicione `@DisplayName` a pelo menos dois
 testes para deixar o relatório mais legível.
 {: .fs-3 }
 
-### Exercício 7 (desafio): validação de ISBN
+### Exercício 11 (desafio): validação de ISBN
 {: .fw-500 }
 
 Agora explore a validação de ISBN-10 lendo o método `validateIsbn10` na
 classe `Book` que você copiou. Se o algoritmo do dígito verificador não
 ficar claro, peça a uma IA (por exemplo, o chat do Cursor ou outro
 assistente) para explicar passo a passo como o ISBN-10 calcula e confere
-seu dígito verificador — isso ajuda a entender por que cada caso de teste
+seu dígito verificador; isso ajuda a entender por que cada caso de teste
 abaixo deve passar ou lançar exceção. Escreva:
 {: .fs-3 }
 
@@ -708,16 +735,6 @@ abaixo deve passar ou lançar exceção. Escreva:
   trocado (por exemplo, troque o último dígito de `0-306-40615-2`).
 * `shouldAcceptIsbnWithCheckDigitX`: um ISBN-10 válido cujo dígito
   verificador seja `X`, usando `assertDoesNotThrow`.
-{: .fs-3 }
-
-### Dicas
-
-* Não é necessário Mockito nestes exercícios: `Book` não tem dependências
-  externas.
-* Se travar no Exercício 7, releia a seção **Assertivas** e o método
-  `validateIsbn10` de `Book.java` antes de tentar de novo. Uma IA pode
-  ajudar a gerar exemplos de ISBNs válidos e inválidos para os seus casos
-  de teste.
 {: .fs-3 }
 
 ## Teste seus conhecimentos

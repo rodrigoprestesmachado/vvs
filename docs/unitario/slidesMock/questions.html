@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js"></script>
+    <script>quizdown.init();</script>
+    <title>Questões: Mock</title>
+</head>
+<body>
+    <div class="quizdown">
+### Qual é a finalidade principal dos objetos mock em testes unitários?
+
+> Dica: revise a introdução da página e o slide Por que usar mocks?
+
+- [ ] Realizar testes de integração com o banco real
+- [x] Simular o comportamento de dependências externas
+- [ ] Medir a performance do código
+- [ ] Gerar dados de teste aleatórios
+
+### No cenário do BookService, quais são as dependências mockáveis?
+
+> Dica: revise a seção Exercícios práticos: testando BookService e o slide Cenário: BookService
+
+- [ ] Book e BookServiceTest
+- [x] BookRepository e NotificationService
+- [ ] Book e InvalidBookException
+- [ ] BookServiceTest e MockitoExtension
+
+### Qual anotação do Mockito cria e injeta instâncias simuladas em uma classe/interface?
+
+> Dica: revise a seção @Mock e o slide @Mock
+
+- [ ] @Spy
+- [ ] @InjectMocks
+- [x] @Mock
+- [ ] @Captor
+
+### O que a anotação @InjectMocks faz no contexto dos testes com Mockito?
+
+> Dica: revise a seção @InjectMocks e o slide @InjectMocks
+
+- [ ] Cria um mock e injeta dependências reais
+- [ ] Cria um mock e injeta mocks nas dependências
+- [x] Cria uma instância real e injeta mocks nas dependências
+- [ ] Cria uma instância real e injeta dependências reais
+
+### Em qual situação você utilizaria a anotação @Spy no exercício do BookRepository?
+
+> Dica: revise a seção Exercício 6: @Spy em um repositório real e o slide @Spy
+
+- [ ] Quando você precisa capturar argumentos de um método
+- [x] Quando quer manter o comportamento real de uma implementação em memória e apenas monitorar chamadas
+- [ ] Quando você precisa criar um mock totalmente simulado
+- [ ] Quando não há nenhuma dependência a ser testada
+
+### Qual anotação é usada para capturar o argumento passado a um método de um mock?
+
+> Dica: revise a seção @Captor e o Exercício 5: @Captor no livro salvo
+
+- [ ] @Spy
+- [ ] @InjectMocks
+- [ ] @Mock
+- [x] @Captor
+
+### No Exercício 5, o que shouldDecrementCopiesWhenBookIsBorrowed verifica com o ArgumentCaptor?
+
+> Dica: revise o Exercício 5: @Captor no livro salvo
+
+- [ ] Que o e-mail do leitor está correto
+- [ ] Que o repositório não foi chamado
+- [x] Que o Book salvo teve copiesAvailable decrementado em uma unidade
+- [ ] Que uma exceção foi lançada
+
+### Qual método é usado no Mockito para definir o comportamento de um método simulado?
+
+> Dica: revise o Exemplo 1 da seção @Mock
+
+- [ ] `verify`
+- [x] `when`
+- [ ] `assertEquals`
+- [ ] `mock`
+
+### Qual método do Mockito verifica se um método de um mock foi chamado com argumentos específicos?
+
+> Dica: revise a seção verify vs. assert
+
+- [ ] `when`
+- [ ] `mock`
+- [ ] `assertEquals`
+- [x] `verify`
+
+### Qual é a diferença entre assert e verify?
+
+> Dica: revise a seção verify vs. assert e o slide de mesmo nome
+
+- [ ] Ambos verificam exatamente a mesma coisa
+- [x] assert verifica o resultado retornado; verify verifica a interação com uma dependência
+- [ ] assert só funciona com Mockito; verify só funciona com JUnit
+- [ ] verify substitui completamente o uso de assert
+
+### No Exercício 7, por que o teste combina assert e verify?
+
+> Dica: revise o Exercício 7: assert e verify juntos
+
+- [ ] Porque um teste só pode ter uma assertiva por vez
+- [ ] Porque verify sempre precisa vir antes de assert
+- [x] Porque só assert não garante que o leitor foi notificado, e só verify não garante que o retorno está correto
+- [ ] Porque assert e verify são sinônimos no Mockito
+
+### Qual é o comportamento padrão de um método de mock sem stub definido?
+
+> Dica: revise o parágrafo após o Exemplo 1 da seção @Mock
+
+- [ ] Lança uma exceção
+- [x] Retorna o valor padrão do tipo de retorno (null, 0, false etc.)
+- [ ] Retorna sempre `null`, mesmo para tipos primitivos
+- [ ] Interrompe a execução do teste
+    </div>
+</body>
+</html>

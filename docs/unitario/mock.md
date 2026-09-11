@@ -8,6 +8,19 @@ nav_order: 10
 
 # Mock 🧪
 
+<center>
+    <iframe src="https://vvs.rpmhub.dev/unitario/slidesMock/index.html#/"
+    title="Mock"
+    width="90%" height="500" style="border:none;">
+    </iframe>
+</center>
+
+Os slides acima apresentam uma visão geral de mocks e do Mockito. Nas seções
+a seguir, você aprofunda cada tópico e, nos exercícios práticos, aplica os
+conceitos sobre um `BookService` que reaproveita a classe `Book` já
+apresentada na seção de [Teste Unitário](junit.html).
+{: .fs-3 }
+
 Imagine que você quer testar uma classe que envia e-mails, consulta um banco
 de dados ou consome uma API externa. Se essas dependências fizerem parte do
 teste, o resultado pode variar conforme o ambiente, a conexão ou o estado do
@@ -124,7 +137,7 @@ esperado:
 @ExtendWith(MockitoExtension.class)
 public class MockitoSpyTest {
 
-    // list é uma ArrayList real — @Spy apenas a monitora
+    // list é uma ArrayList real, @Spy apenas a monitora
     @Spy
     private final List<String> list = new ArrayList<>();
 
@@ -142,7 +155,7 @@ public class MockitoSpyTest {
         verify(list).add("one");
         verify(list).add("two");
 
-        // assertEquals confirma o estado real da lista — size() retorna 2
+        // assertEquals confirma o estado real da lista: size() retorna 2
         // porque os itens foram de fato adicionados (código real executado)
         Assert.assertEquals(2, list.size());
     }
@@ -173,10 +186,10 @@ public class MockitoSpyStubTest {
     @Test
     public void shouldReturnDifferentSizeWhenStubbed() {
 
-        // Sobrescreve size() com um stub — apenas este método é simulado
+        // Sobrescreve size() com um stub; apenas este método é simulado
         when(list.size()).thenReturn(100);
 
-        // add() continua usando o código real — os itens são de fato inseridos
+        // add() continua usando o código real; os itens são de fato inseridos
         list.add("one");
         list.add("two");
 
@@ -301,7 +314,7 @@ public class EmailService {
         if (html) {
             format = Format.HTML;
         }
-        // Email é construído internamente — o teste não tem acesso a ele
+        // Email é construído internamente; o teste não tem acesso a ele
         Email email = new Email(to, subject, body);
         email.setFormat(format);
         platform.deliver(email);
@@ -311,7 +324,7 @@ public class EmailService {
 ```
 
 O que queremos testar é se o `Email` foi montado corretamente antes de ser
-entregue — em especial, se o formato foi definido como `HTML` quando o
+entregue, em especial, se o formato foi definido como `HTML` quando o
 parâmetro `html` for `true`. Sem `@Captor`, não há como acessar esse objeto
 no teste. Com `@Captor`, o Mockito intercepta a chamada a `deliver()` e
 guarda o argumento para que possamos inspecioná-lo:
@@ -321,7 +334,7 @@ guarda o argumento para que possamos inspecioná-lo:
 @ExtendWith(MockitoExtension.class)
 public class EmailServiceUnitTest {
 
-    // Simula a plataforma de entrega — não queremos enviar e-mails de verdade
+    // Simula a plataforma de entrega; não queremos enviar e-mails de verdade
     @Mock
     DeliveryPlatform platform;
 
@@ -346,7 +359,7 @@ public class EmailServiceUnitTest {
         // Passo 3: recupera o objeto Email capturado
         Email emailEnviado = emailCaptor.getValue();
 
-        // Passo 4: inspeciona o objeto — o formato deve ser HTML
+        // Passo 4: inspeciona o objeto; o formato deve ser HTML
         assertEquals(Format.HTML, emailEnviado.getFormat());
     }
 }
@@ -358,6 +371,20 @@ ocorreu e guardam o argumento, e `assertEquals` valida o conteúdo do objeto
 capturado. Remover qualquer uma dessas etapas enfraquece o teste: sem
 `verify`, o captor nunca é acionado; sem `assertEquals`, você confirma que
 `deliver` foi chamado mas não verifica se o e-mail estava correto.
+{: .fs-3 }
+
+### Quando usar cada anotação
+
+Antes de seguir para os exercícios práticos, vale fixar rapidamente o
+papel de cada anotação:
+{: .fs-3 }
+
+| Anotação        | Papel                                            | Use quando...                                                        |
+|-----------------|---------------------------------------------------|-----------------------------------------------------------------------|
+| `@Mock`         | Cria uma dependência totalmente simulada          | A classe testada depende de um recurso externo que você quer isolar   |
+| `@Spy`          | Envolve um objeto **real** com monitoramento      | O comportamento real importa, mas você quer verificar interações      |
+| `@InjectMocks`  | Monta a classe testada e injeta os mocks nela     | Você já declarou `@Mock`/`@Spy` e quer evitar montar o objeto na mão   |
+| `@Captor`       | Captura o argumento passado a um método do mock   | O método simulado não retorna o dado que você quer inspecionar        |
 {: .fs-3 }
 
 ## `verify` vs. `assert`
@@ -397,7 +424,7 @@ public class OrderServiceTest {
         // assert: verifica o RESULTADO retornado pelo método testado
         assertEquals("TX-001", confirmation);
 
-        // verify: verifica o COMPORTAMENTO — se o gateway foi chamado
+        // verify: verifica o COMPORTAMENTO, se o gateway foi chamado
         // com o valor correto, exatamente uma vez
         verify(gateway, times(1)).charge(150.0);
     }
@@ -416,6 +443,377 @@ resultado produzido; um teste que só usa `assert` pode passar mesmo que a
 dependência nunca tenha sido chamada.
 {: .fs-3 }
 
+## Exercícios práticos: testando `BookService`
+
+Agora é a sua vez de escrever testes com Mockito. O cenário reaproveita a
+classe `Book` já apresentada na seção de
+[Teste Unitário](junit.html#exercícios-práticos-testando-book), mas agora
+ela é manipulada por um `BookService` que depende de duas colaborações
+externas: um repositório e um serviço de notificação. É justamente esse
+tipo de dependência externa que faz do Mockito uma ferramenta necessária.
+{: .fs-3 }
+
+### Preparação do projeto
+
+Crie um projeto Quarkus simples do zero, não é necessário clonar nenhum
+repositório:
+{: .fs-3 }
+
+```bash
+mvn io.quarkus.platform:quarkus-maven-plugin:3.15.1:create \
+    -DprojectGroupId=dev.ifrs.mockito \
+    -DprojectArtifactId=book-mockito \
+    -DclassName="dev.ifrs.mockito.GreetingResource" \
+    -Dextensions="resteasy-reactive"
+cd book-mockito
+code .
+```
+
+O arquétipo do Quarkus já traz o JUnit 5, mas não o Mockito. Adicione a
+dependência abaixo ao `pom.xml` gerado:
+{: .fs-3 }
+
+```xml
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>5.14.1</version>
+    <scope>test</scope>
+</dependency>
+```
+
+### Classes que serão testadas
+
+Copie as classes abaixo para o seu projeto. `Book` é uma versão
+simplificada da mesma classe usada na seção de Teste Unitário (sem a
+validação completa de ISBN-10, para manter o foco no uso de mocks).
+{: .fs-3 }
+
+Crie `src/main/java/dev/ifrs/mockito/exception/InvalidBookException.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.exception;
+
+public class InvalidBookException extends RuntimeException {
+
+    public InvalidBookException(final String message) {
+        super(message);
+    }
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/exception/BookNotFoundException.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.exception;
+
+public class BookNotFoundException extends RuntimeException {
+
+    public BookNotFoundException(final String message) {
+        super(message);
+    }
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/exception/NoCopiesAvailableException.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.exception;
+
+public class NoCopiesAvailableException extends RuntimeException {
+
+    public NoCopiesAvailableException(final String message) {
+        super(message);
+    }
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/model/Book.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.model;
+
+import dev.ifrs.mockito.exception.InvalidBookException;
+
+import java.time.Year;
+import java.util.Objects;
+
+public final class Book {
+
+    private static final int MAX_TITLE_LENGTH = 200;
+
+    private final String isbn;
+    private final String title;
+    private final String author;
+    private final int publicationYear;
+    private final int copiesAvailable;
+
+    private Book(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+        this.copiesAvailable = copiesAvailable;
+    }
+
+    public static Book of(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        validate(isbn, title, author, publicationYear, copiesAvailable);
+        return new Book(isbn, title, author, publicationYear, copiesAvailable);
+    }
+
+    private static void validate(
+            final String isbn,
+            final String title,
+            final String author,
+            final int publicationYear,
+            final int copiesAvailable) {
+        if (isbn == null || isbn.isBlank()) {
+            throw new InvalidBookException("ISBN cannot be blank");
+        }
+        if (title == null || title.isBlank()) {
+            throw new InvalidBookException("Title cannot be blank");
+        }
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new InvalidBookException(
+                    "Title cannot be longer than " + MAX_TITLE_LENGTH
+                            + " characters");
+        }
+        if (author == null || author.isBlank()) {
+            throw new InvalidBookException("Author cannot be blank");
+        }
+        int currentYear = Year.now().getValue();
+        if (publicationYear < 1 || publicationYear > currentYear) {
+            throw new InvalidBookException(
+                    "Publication year must be between 1 and " + currentYear);
+        }
+        if (copiesAvailable < 0) {
+            throw new InvalidBookException(
+                    "Copies available cannot be negative");
+        }
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPublicationYear() {
+        return publicationYear;
+    }
+
+    public int getCopiesAvailable() {
+        return copiesAvailable;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        Book book = (Book) o;
+        return isbn.equals(book.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
+    }
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/repository/BookRepository.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.repository;
+
+import dev.ifrs.mockito.model.Book;
+
+import java.util.Optional;
+
+public interface BookRepository {
+
+    Optional<Book> findByIsbn(String isbn);
+
+    void save(Book book);
+}
+```
+
+Crie
+`src/main/java/dev/ifrs/mockito/notification/NotificationService.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.notification;
+
+public interface NotificationService {
+
+    void notify(String recipient, String message);
+}
+```
+
+Crie `src/main/java/dev/ifrs/mockito/service/BookService.java`:
+{: .fs-3 }
+
+```java
+package dev.ifrs.mockito.service;
+
+import dev.ifrs.mockito.exception.BookNotFoundException;
+import dev.ifrs.mockito.exception.NoCopiesAvailableException;
+import dev.ifrs.mockito.model.Book;
+import dev.ifrs.mockito.notification.NotificationService;
+import dev.ifrs.mockito.repository.BookRepository;
+
+public class BookService {
+
+    private final BookRepository repository;
+    private final NotificationService notifier;
+
+    public BookService(
+            final BookRepository repository,
+            final NotificationService notifier) {
+        this.repository = repository;
+        this.notifier = notifier;
+    }
+
+    public void registerBook(final Book book) {
+        repository.save(book);
+        notifier.notify(
+                "librarian@library.dev",
+                "Book registered: " + book.getTitle());
+    }
+
+    public Book borrowBook(final String isbn, final String patronEmail) {
+        Book book = repository.findByIsbn(isbn)
+                .orElseThrow(() -> new BookNotFoundException(
+                        "Book not found for ISBN: " + isbn));
+
+        if (book.getCopiesAvailable() == 0) {
+            throw new NoCopiesAvailableException(
+                    "No copies available for ISBN: " + isbn);
+        }
+
+        Book updated = Book.of(
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPublicationYear(),
+                book.getCopiesAvailable() - 1);
+
+        repository.save(updated);
+        notifier.notify(patronEmail, "You borrowed: " + updated.getTitle());
+
+        return updated;
+    }
+}
+```
+
+### Preparação dos testes
+
+1. Crie a classe `BookServiceTest` em
+   `src/test/java/dev/ifrs/mockito/service/BookServiceTest.java`.
+2. Anote a classe com `@ExtendWith(MockitoExtension.class)`, como nos
+   exemplos apresentados anteriormente.
+3. Resolva os exercícios **na ordem**: eles vão do mais simples ao mais
+   desafiador e reaproveitam o que você aprendeu no exercício anterior.
+4. Depois de cada exercício, execute `mvn test` (ou use o VS Code) e só
+   avance quando o teste passar.
+{: .fs-3 }
+
+### Exercício 1: `@Mock` e `@InjectMocks` básicos
+{: .fw-500 }
+
+Declare `@Mock BookRepository repository`, `@Mock NotificationService
+notifier` e `@InjectMocks BookService bookService`. Escreva
+`shouldSaveBookWhenRegistering`: crie um `Book` válido, chame
+`bookService.registerBook(book)` e use `verify` para confirmar que
+`repository.save(book)` foi chamado exatamente uma vez.
+{: .fs-3 }
+
+### Exercício 2: livro não encontrado
+{: .fw-500 }
+
+Escreva `shouldThrowWhenBookNotFound`: configure
+`when(repository.findByIsbn(anyString())).thenReturn(Optional.empty())` e
+use `assertThrows` para verificar que `bookService.borrowBook(...)` lança
+`BookNotFoundException`.
+{: .fs-3 }
+
+### Exercício 3: sem cópias disponíveis
+{: .fw-500 }
+
+Escreva `shouldThrowWhenNoCopiesAvailable`: configure o *stub* de
+`findByIsbn` para retornar um `Book` com `copiesAvailable` igual a `0` e
+use `assertThrows` para verificar que `NoCopiesAvailableException` é
+lançada.
+{: .fs-3 }
+
+### Exercício 4: `verify` da notificação
+{: .fw-500 }
+
+Escreva `shouldNotifyPatronWhenBookIsBorrowed`: configure o *stub* de
+`findByIsbn` para retornar um `Book` válido com ao menos uma cópia
+disponível, chame `borrowBook`, e use `verify` para confirmar que
+`notifier.notify(...)` foi chamado com o e-mail do leitor.
+{: .fs-3 }
+
+### Exercício 5: `@Captor` no livro salvo
+{: .fw-500 }
+
+Declare `@Captor ArgumentCaptor<Book> bookCaptor`. Escreva
+`shouldDecrementCopiesWhenBookIsBorrowed`: repita o cenário do exercício
+anterior, use `verify(repository).save(bookCaptor.capture())` e, com
+`bookCaptor.getValue()`, use `assertEquals` para confirmar que
+`copiesAvailable` foi decrementado em exatamente uma unidade.
+{: .fs-3 }
+
+### Exercício 6: `@Spy` em um repositório real
+{: .fw-500 }
+
+Crie uma implementação em memória de `BookRepository` (por exemplo,
+baseada em `HashMap<String, Book>`), sem usar Mockito. Em um novo teste,
+declare `@Spy` sobre essa implementação real (em vez de `@Mock`),
+adicione um `Book` a ela previamente, chame `bookService.borrowBook(...)`
+e use `verify(repository).save(any(Book.class))` para confirmar a
+interação, enquanto `findByIsbn` e `save` continuam executando o código
+real da sua implementação em memória.
+{: .fs-3 }
+
+### Exercício 7: `assert` e `verify` juntos
+{: .fw-500 }
+
+Escreva `shouldReturnUpdatedBookAndNotifyPatron`, combinando as duas
+formas de verificação estudadas nesta página: use `assertEquals` para
+conferir que o `Book` retornado por `borrowBook` tem uma cópia a menos, e
+use `verify` para confirmar que `notifier.notify` foi chamado. Um teste
+que só usasse `assert` não garantiria que o leitor foi avisado; um teste
+que só usasse `verify` não garantiria que o retorno estava correto.
+{: .fs-3 }
+
 ## Código completo e repositório
 
 Para obter o código completo dos exemplos apresentados:
@@ -427,7 +825,7 @@ Para obter o código completo dos exemplos apresentados:
 ## Teste seus conhecimentos 🧠
 
 <center>
-    <iframe src="https://vvs.rpmhub.dev/unitario/questionsMock.html"
+    <iframe src="https://vvs.rpmhub.dev/unitario/slidesMock/questions.html"
         title="Questões sobre Mockito"
         width="90%" height="500"
         style="border:none;">
