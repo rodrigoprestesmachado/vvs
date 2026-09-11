@@ -27,13 +27,14 @@ teste, o resultado pode variar conforme o ambiente, a conexão ou o estado do
 sistema, tornando o teste lento, imprevisível e difícil de reproduzir.
 Objetos *mock* resolvem esse problema: eles simulam o comportamento das
 dependências para que você teste apenas o trecho de código que realmente
-importa.
+importa. Esse é exatamente o argumento do slide **Por que usar mocks?**.
 {: .fs-3 }
 
 Em Java, o [Mockito](https://site.mockito.org) é o *framework* mais utilizado
 para construir objetos *mock*. Também existem alternativas como
 [EasyMock](https://easymock.org) e [JMock](https://jmock.org), mas o Mockito
-se destaca pela legibilidade e pela integração com o JUnit.
+se destaca pela legibilidade e pela integração com o JUnit (veja o slide
+**O que é Mockito?**).
 {: .fs-3 }
 
 Um conceito central no Mockito é o *stub*: por meio de
@@ -65,39 +66,50 @@ esse recurso do teste.
 Se você já viu o exemplo hexagonal da disciplina, `@Mock` é o que você usa
 para simular as **portas de saída** (`domain.ports.out`, como
 `BookRepository` ou `EmailNotification`): o teste não fala com um banco ou
-serviço de e-mail de verdade, só com um duplo controlado pelo Mockito.
+serviço de e-mail de verdade, só com um duplo controlado pelo Mockito. Os
+slides **`@Mock`** e **Exemplo de `@Mock` com BookService** resumem essa
+ideia.
 {: .fs-3 }
 
 ```java
 // Estende o JUnit para suportar injeção de dependências com Mockito
 @ExtendWith(MockitoExtension.class)
-public class AppTest {
+public class BookRepositoryMockTest {
 
-    // Cria um objeto mock da interface DataBase
+    // Cria um objeto mock da porta de saída BookRepository
+    // (a mesma interface usada nos exercícios práticos, mais adiante)
     @Mock
-    DataBase base;
+    BookRepository repository;
 
     @Test
-    public void create() {
-        // Define o comportamento esperado do método createUser (stub)
-        when(base.createUser("Rodrigo")).thenReturn("Rodrigo");
-        assertEquals("Rodrigo", base.createUser("Rodrigo"));
+    public void shouldReturnBookWhenFound() {
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
+
+        // Define o comportamento esperado do método findByIsbn (stub)
+        when(repository.findByIsbn("0-306-40615-2"))
+                .thenReturn(Optional.of(book));
+
+        assertEquals(book, repository.findByIsbn("0-306-40615-2").get());
     }
 
     @Test
-    public void delete() {
-        when(base.deleteUser(5L)).thenReturn(false);
-        assertEquals(false, base.deleteUser(5L));
+    public void shouldReturnEmptyWhenBookNotFound() {
+        when(repository.findByIsbn("0-000-00000-0"))
+                .thenReturn(Optional.empty());
+
+        assertTrue(repository.findByIsbn("0-000-00000-0").isEmpty());
     }
 
     @Test
-    public void deleteProblem() {
-        // Configura o mock para lançar exceção com argumento inválido
-        when(base.deleteUser(-1L)).thenThrow(new IllegalArgumentException());
+    public void shouldThrowWhenRepositoryFails() {
+        // Configura o mock para lançar exceção em vez de retornar um valor
+        when(repository.findByIsbn("invalid"))
+                .thenThrow(new IllegalArgumentException());
 
         // Verifica se a exceção lançada é a esperada
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            base.deleteUser(-1L);
+            repository.findByIsbn("invalid");
         });
     }
 }
@@ -133,43 +145,61 @@ Com `@Spy` você consegue, ao mesmo tempo:
 **porta de saída** (por exemplo, um `BookRepository` em memória, sem
 banco de verdade) e quer testar o serviço de aplicação usando esse
 comportamento real, mas ainda assim confirmar as interações com `verify`.
+Veja o slide **`@Spy`**.
 {: .fs-3 }
 
 **Exemplo 1: monitorando chamadas sem alterar o comportamento real**
 {: .fs-3 }
 
-No exemplo abaixo, `list` é uma `ArrayList` real. O `@Spy` não muda nada no
-funcionamento dela: `add` de fato adiciona os itens e `size` de fato retorna
-o tamanho correto. O que muda é que o Mockito registra cada chamada,
-permitindo usar `verify` para confirmar que as interações aconteceram como
-esperado:
+No exemplo abaixo, `InMemoryBookRepository` é uma implementação **real** de
+`BookRepository`, baseada em um `HashMap` (sem banco de dados nenhum). O
+`@Spy` não muda nada no funcionamento dela: `save` de fato guarda o livro e
+`findByIsbn` de fato o recupera. O que muda é que o Mockito registra cada
+chamada, permitindo usar `verify` para confirmar que as interações
+aconteceram como esperado:
 {: .fs-3 }
 
 ```java
-@ExtendWith(MockitoExtension.class)
-public class MockitoSpyTest {
+public class InMemoryBookRepository implements BookRepository {
 
-    // list é uma ArrayList real, @Spy apenas a monitora
+    private final Map<String, Book> books = new HashMap<>();
+
+    @Override
+    public Optional<Book> findByIsbn(final String isbn) {
+        return Optional.ofNullable(books.get(isbn));
+    }
+
+    @Override
+    public void save(final Book book) {
+        books.put(book.getIsbn(), book);
+    }
+}
+```
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class InMemoryBookRepositorySpyTest {
+
+    // InMemoryBookRepository é real, @Spy apenas a monitora
     @Spy
-    private final List<String> list = new ArrayList<>();
+    private final InMemoryBookRepository repository =
+            new InMemoryBookRepository();
 
     @Test
-    public void shouldAddItemsToListSuccessfully() {
+    public void shouldSaveAndFindBookSuccessfully() {
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
 
-        // Executa o código real: os itens são de fato adicionados à lista
-        list.add("one");
-        list.add("two");
+        // Executa o código real: o livro é de fato salvo no HashMap
+        repository.save(book);
 
-        // verify confirma que add() foi chamado 2 vezes com qualquer String
-        verify(list, times(2)).add(anyString());
+        // verify confirma que save() foi chamado com o livro esperado
+        verify(repository).save(book);
 
-        // verify confirma que add() foi chamado com cada valor específico
-        verify(list).add("one");
-        verify(list).add("two");
-
-        // assertEquals confirma o estado real da lista: size() retorna 2
-        // porque os itens foram de fato adicionados (código real executado)
-        Assert.assertEquals(2, list.size());
+        // assertEquals confirma o estado real do repositório: findByIsbn
+        // encontra o livro porque save() de fato o persistiu (código real
+        // executado)
+        Assert.assertEquals(book, repository.findByIsbn("0-306-40615-2").get());
     }
 }
 ```
@@ -183,42 +213,43 @@ difícil de controlar. Com `@Spy` é possível sobrescrever apenas esse método
 via `when(...).thenReturn(...)`, mantendo o comportamento real dos demais.
 {: .fs-3 }
 
-No exemplo abaixo, `add` continua funcionando de verdade (os itens são
-adicionados), mas `size` é substituído por um *stub* que sempre retorna
-`100`:
+No exemplo abaixo, `save` continua funcionando de verdade (o livro é de
+fato guardado no `HashMap`), mas `findByIsbn` é substituído por um *stub*
+que sempre retorna vazio, simulando um repositório que "esqueceu" o livro:
 {: .fs-3 }
 
 ```java
 @ExtendWith(MockitoExtension.class)
-public class MockitoSpyStubTest {
+public class InMemoryBookRepositoryStubTest {
 
     @Spy
-    private final List<String> list = new ArrayList<>();
+    private final InMemoryBookRepository repository =
+            new InMemoryBookRepository();
 
     @Test
-    public void shouldReturnDifferentSizeWhenStubbed() {
+    public void shouldReturnEmptyWhenStubbed() {
 
-        // Sobrescreve size() com um stub; apenas este método é simulado
-        when(list.size()).thenReturn(100);
+        // Sobrescreve findByIsbn() com um stub; apenas este método é simulado
+        when(repository.findByIsbn(anyString())).thenReturn(Optional.empty());
 
-        // add() continua usando o código real; os itens são de fato inseridos
-        list.add("one");
-        list.add("two");
+        // save() continua usando o código real; o livro é de fato inserido
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
+        repository.save(book);
 
-        // verify confirma as interações com add(), que executou normalmente
-        verify(list, times(2)).add(anyString());
-        verify(list).add("one");
-        verify(list).add("two");
+        // verify confirma a interação com save(), que executou normalmente
+        verify(repository).save(book);
 
-        // size() retorna 100 (stub), não 2 (valor real)
-        // isso permite simular cenários sem depender do estado interno da lista
-        Assertions.assertEquals(100, list.size());
+        // findByIsbn() retorna vazio (stub), mesmo com o livro salvo de
+        // verdade; isso permite simular cenários sem depender do estado
+        // interno do repositório
+        Assertions.assertTrue(repository.findByIsbn("0-306-40615-2").isEmpty());
     }
 }
 ```
 
 A diferença fundamental entre os dois exemplos é: no primeiro, **tudo é
-real**; no segundo, **apenas `size` é simulado**, enquanto o restante
+real**; no segundo, **apenas `findByIsbn` é simulado**, enquanto o restante
 continua executando código real. Prefira `@Spy` quando o comportamento real
 do objeto é importante para o teste e você só precisa monitorar ou ajustar
 partes específicas. Se você se pegar substituindo muitos métodos via *stub*,
@@ -236,31 +267,29 @@ nela os mocks declarados no mesmo teste. Funciona como encaixar peças em um
 quebra-cabeça, onde o Mockito encontra o lugar certo para cada peça simulada.
 {: .fs-3 }
 
-No exemplo abaixo, a interface `Network` é uma dependência da classe
-`Communication`:
+No exemplo abaixo, `BookService` depende de duas portas de saída,
+`BookRepository` e `NotificationService` (as mesmas interfaces definidas
+por completo na seção de exercícios práticos, mais adiante):
 {: .fs-3 }
 
 ```java
-public interface Network {
+public class BookService {
 
-    public boolean send(String message);
+    private final BookRepository repository;
+    private final NotificationService notifier;
 
-}
-```
+    public BookService(
+            final BookRepository repository,
+            final NotificationService notifier) {
+        this.repository = repository;
+        this.notifier = notifier;
+    }
 
-```java
-public class Communication {
-
-    private Network network;
-
-    public boolean send(String message) {
-        boolean result = false;
-        try {
-            result = network.send(message);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return result;
+    public void registerBook(final Book book) {
+        repository.save(book);
+        notifier.notify(
+                "librarian@library.dev",
+                "Book registered: " + book.getTitle());
     }
 
 }
@@ -268,20 +297,27 @@ public class Communication {
 
 ```java
 @ExtendWith(MockitoExtension.class)
-public class MockitoInjectMocksTest {
+public class BookServiceInjectMocksTest {
 
-    // A interface Network será simulada
+    // As duas portas de saída serão simuladas
     @Mock
-    Network network;
+    BookRepository repository;
+    @Mock
+    NotificationService notifier;
 
-    // O Mockito cria Communication e injeta o mock de Network automaticamente
+    // O Mockito cria BookService e injeta os dois mocks automaticamente
     @InjectMocks
-    Communication communication;
+    BookService bookService;
 
     @Test
-    public void injectMocksTest() {
-        when(network.send("message")).thenReturn(true);
-        Assertions.assertEquals(true, communication.send("message"));
+    public void shouldSaveBookWhenRegistering() {
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
+
+        bookService.registerBook(book);
+
+        verify(repository).save(book);
+        verify(notifier).notify(anyString(), anyString());
     }
 
 }
@@ -298,7 +334,7 @@ o **serviço de aplicação** (como `BooksService`), a classe concreta que
 **implementa um ou mais casos de uso** (as portas de entrada,
 `domain.ports.in`, como `AddBookUseCase`). O teste não instancia o serviço
 na mão; o Mockito monta o serviço e já injeta as portas de saída mockadas
-nele.
+nele. Veja o slide **`@InjectMocks`**.
 {: .fs-3 }
 
 ### `@Captor`
@@ -312,87 +348,94 @@ usada em conjunto com `ArgumentCaptor`, faz exatamente isso: captura o
 argumento passado para um método de uma dependência simulada para que você
 possa inspecioná-lo. É especialmente comum quando o serviço de aplicação
 apenas repassa um objeto de domínio para uma porta de saída (como
-`repository.save(book)`) sem devolvê-lo diretamente.
+`repository.save(book)`) sem devolvê-lo diretamente. Os slides
+**`@Captor`** e **Exemplo de `@Captor`** trazem esse mesmo raciocínio.
 {: .fs-3 }
 
-Para entender o problema que `@Captor` resolve, considere a classe abaixo.
-O método `send` recebe dados simples (destinatário, assunto, corpo e um
-sinalizador HTML), monta um objeto `Email` internamente e o entrega à
-plataforma. O objeto `Email` nunca é retornado; ele simplesmente some para
-dentro de `platform.deliver()`:
+Para entender o problema que `@Captor` resolve, considere um `BookService`
+com um método `borrowBook` que registra um empréstimo. Ele não devolve a
+mensagem enviada ao leitor; ela simplesmente some dentro de
+`notifier.notify(...)`:
 {: .fs-3 }
 
 ```java
-public class EmailService {
+public class BookService {
 
-    private DeliveryPlatform platform;
+    private final BookRepository repository;
+    private final NotificationService notifier;
 
-    public EmailService(DeliveryPlatform platform) {
-        this.platform = platform;
+    public BookService(
+            final BookRepository repository,
+            final NotificationService notifier) {
+        this.repository = repository;
+        this.notifier = notifier;
     }
 
-    public void send(String to, String subject, String body, boolean html) {
-        Format format = Format.TEXT_ONLY;
-        if (html) {
-            format = Format.HTML;
-        }
-        // Email é construído internamente; o teste não tem acesso a ele
-        Email email = new Email(to, subject, body);
-        email.setFormat(format);
-        platform.deliver(email);
+    public Book borrowBook(final String isbn, final String patronEmail) {
+        Book book = repository.findByIsbn(isbn).orElseThrow();
+
+        // A mensagem é construída internamente; o teste não tem acesso a ela
+        notifier.notify(patronEmail, "You borrowed: " + book.getTitle());
+
+        return book;
     }
 
 }
 ```
 
-O que queremos testar é se o `Email` foi montado corretamente antes de ser
-entregue, em especial, se o formato foi definido como `HTML` quando o
-parâmetro `html` for `true`. Sem `@Captor`, não há como acessar esse objeto
-no teste. Com `@Captor`, o Mockito intercepta a chamada a `deliver()` e
-guarda o argumento para que possamos inspecioná-lo:
+O que queremos testar é se a mensagem enviada ao leitor menciona o título
+correto do livro. Sem `@Captor`, não há como acessar essa `String` no
+teste. Com `@Captor`, o Mockito intercepta a chamada a `notify()` e guarda
+o argumento para que possamos inspecioná-lo:
 {: .fs-3 }
 
 ```java
 @ExtendWith(MockitoExtension.class)
-public class EmailServiceUnitTest {
+public class BookServiceCaptorTest {
 
-    // Simula a plataforma de entrega; não queremos enviar e-mails de verdade
+    // Simula o notificador; não queremos enviar notificações de verdade
     @Mock
-    DeliveryPlatform platform;
+    NotificationService notifier;
+    @Mock
+    BookRepository repository;
 
-    // Cria EmailService e injeta o mock de platform automaticamente
+    // Cria BookService e injeta os mocks automaticamente
     @InjectMocks
-    EmailService emailService;
+    BookService bookService;
 
-    // Declara um captor tipado: vai interceptar argumentos do tipo Email
+    // Declara um captor tipado: vai interceptar a mensagem enviada
     @Captor
-    ArgumentCaptor<Email> emailCaptor;
+    ArgumentCaptor<String> messageCaptor;
 
     @Test
-    public void whenDoesSupportHtml_expectHTMLEmailFormat() {
+    public void shouldNotifyPatronWithBookTitle() {
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
+        when(repository.findByIsbn("0-306-40615-2"))
+                .thenReturn(Optional.of(book));
 
         // Passo 1: executa o método que queremos testar
-        emailService.send("info@baeldung.com", "Assunto", "Corpo", true);
+        bookService.borrowBook("0-306-40615-2", "ana@ifrs.edu.br");
 
-        // Passo 2: usa verify para confirmar que deliver() foi chamado e,
-        // ao mesmo tempo, captura o Email que foi passado como argumento
-        verify(platform).deliver(emailCaptor.capture());
+        // Passo 2: usa verify para confirmar que notify() foi chamado e,
+        // ao mesmo tempo, captura a mensagem passada como argumento
+        verify(notifier).notify(eq("ana@ifrs.edu.br"), messageCaptor.capture());
 
-        // Passo 3: recupera o objeto Email capturado
-        Email emailEnviado = emailCaptor.getValue();
+        // Passo 3: recupera a mensagem capturada
+        String message = messageCaptor.getValue();
 
-        // Passo 4: inspeciona o objeto; o formato deve ser HTML
-        assertEquals(Format.HTML, emailEnviado.getFormat());
+        // Passo 4: inspeciona a mensagem; ela deve citar o título do livro
+        assertTrue(message.contains("Clean Code"));
     }
 }
 ```
 
 O fluxo segue três responsabilidades bem separadas: `@InjectMocks` monta o
-objeto testado, `verify` + `emailCaptor.capture()` confirmam que a interação
-ocorreu e guardam o argumento, e `assertEquals` valida o conteúdo do objeto
+objeto testado, `verify` + `messageCaptor.capture()` confirmam que a
+interação ocorreu e guardam o argumento, e `assertTrue` valida o conteúdo
 capturado. Remover qualquer uma dessas etapas enfraquece o teste: sem
-`verify`, o captor nunca é acionado; sem `assertEquals`, você confirma que
-`deliver` foi chamado mas não verifica se o e-mail estava correto.
+`verify`, o captor nunca é acionado; sem a asserção final, você confirma
+que `notify` foi chamado mas não verifica se a mensagem estava correta.
 {: .fs-3 }
 
 ### Quando usar cada anotação
@@ -424,31 +467,38 @@ devolveu o que eu esperava?"*
 O **`verify`** (Mockito) verifica o **comportamento**: ele confirma que um
 determinado método de um *mock* foi chamado, quantas vezes e com quais
 argumentos. A pergunta que responde é *"a interação com a dependência ocorreu
-como planejado?"*
+como planejado?"* Essa distinção é o tema do slide **`verify` vs. `assert`**.
 {: .fs-3 }
 
 ```java
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+public class BookServiceVerifyVsAssertTest {
 
     @Mock
-    PaymentGateway gateway;
+    BookRepository repository;
+    @Mock
+    NotificationService notifier;
 
     @InjectMocks
-    OrderService orderService;
+    BookService bookService;
 
     @Test
-    public void shouldChargeAndReturnConfirmation() {
-        when(gateway.charge(150.0)).thenReturn("TX-001");
+    public void shouldReturnBookAndNotifyPatron() {
+        Book book = Book.of(
+                "0-306-40615-2", "Clean Code", "Robert Martin", 2008, 5);
+        when(repository.findByIsbn("0-306-40615-2"))
+                .thenReturn(Optional.of(book));
 
-        String confirmation = orderService.placeOrder(150.0);
+        Book borrowed = bookService.borrowBook(
+                "0-306-40615-2", "ana@ifrs.edu.br");
 
         // assert: verifica o RESULTADO retornado pelo método testado
-        assertEquals("TX-001", confirmation);
+        assertEquals("Clean Code", borrowed.getTitle());
 
-        // verify: verifica o COMPORTAMENTO, se o gateway foi chamado
-        // com o valor correto, exatamente uma vez
-        verify(gateway, times(1)).charge(150.0);
+        // verify: verifica o COMPORTAMENTO, se o leitor foi notificado
+        // exatamente uma vez
+        verify(notifier, times(1))
+                .notify(eq("ana@ifrs.edu.br"), anyString());
     }
 }
 ```
@@ -456,7 +506,7 @@ public class OrderServiceTest {
 Use `assert` quando o método testado retorna um valor que você pode comparar
 diretamente. Use `verify` quando o método não retorna o dado de interesse, mas
 você precisa garantir que a dependência foi acionada corretamente, por
-exemplo, que um e-mail foi enviado, que um log foi registrado ou que um
+exemplo, que uma notificação foi enviada, que um log foi registrado ou que um
 repositório foi chamado para persistir um objeto.
 {: .fs-3 }
 
@@ -476,8 +526,9 @@ portas de entrada (`RegisterBookUseCase`, `BorrowBookUseCase`) descrevem os
 casos de uso; duas portas de saída (`BookRepository`,
 `NotificationService`) abstraem as dependências externas; e um único
 serviço de aplicação, `BookService`, implementa os casos de uso orquestrando
-as portas de saída. É justamente a dependência dessas portas de saída que
-faz do Mockito uma ferramenta necessária.
+as portas de saída (veja o slide **Cenário: portas e casos de uso**). É
+justamente a dependência dessas portas de saída que faz do Mockito uma
+ferramenta necessária, como resume o slide **Exercício prático**.
 {: .fs-3 }
 
 ### Preparação do projeto
@@ -887,13 +938,19 @@ que só usasse `verify` não garantiria que o retorno estava correto.
 
 ## Código completo e repositório
 
-Para obter o código completo dos exemplos apresentados:
+Os exemplos desta página já trazem o código completo de cada teste, usando
+sempre `Book` e suas portas (`BookRepository`, `NotificationService`). Se
+quiser ver outras variações clássicas de uso do Mockito (fora do contexto
+de `Book`), consulte o repositório de exemplos da disciplina:
 {: .fs-3 }
 
     git clone -b dev https://github.com/rodrigoprestesmachado/vvs
     code vvs/exemplos/mockito/
 
 ## Teste seus conhecimentos 🧠
+
+Revise o texto e os slides e responda às questões teóricas abaixo.
+{: .fs-3 }
 
 <center>
     <iframe src="https://vvs.rpmhub.dev/unitario/slidesMock/questions.html"
