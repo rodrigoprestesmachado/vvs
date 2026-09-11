@@ -73,29 +73,26 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="white" data-transition="convex"  -->
-## Exemplo de `@Mock` com BookService
+## Exemplo de `@Mock`
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
 @ExtendWith(MockitoExtension.class)
-class BookServiceTest {
+class BookRepositoryMockTest {
 
     @Mock
     BookRepository repository;
-    @Mock
-    NotificationService notifier;
-    @InjectMocks
-    BookService bookService;
 
     @Test
-    void shouldSaveBookWhenRegistering() {
+    void shouldReturnBookWhenFound() {
         Book book = Book.of("123", "Clean Code", "R. Martin", 2008, 5);
-        bookService.registerBook(book);
-        verify(repository).save(book);
+        when(repository.findByIsbn("123")).thenReturn(Optional.of(book));
+
+        assertEquals(book, repository.findByIsbn("123").get());
     }
 }
 ```
-<!-- .element: style="margin-bottom:50px; font-size: 16px; color:black" -->
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
@@ -110,6 +107,45 @@ class BookServiceTest {
 
 - Útil para uma implementação em memória de `BookRepository`, por exemplo.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="white" data-transition="convex"  -->
+## Exemplo de `@Spy`
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
+
+```java
+public class InMemoryBookRepository implements BookRepository {
+    private final Map<String, Book> books = new HashMap<>();
+
+    public Optional<Book> findByIsbn(String isbn) {
+        return Optional.ofNullable(books.get(isbn));
+    }
+
+    public void save(Book book) {
+        books.put(book.getIsbn(), book);
+    }
+}
+```
+<!-- .element: style="margin-bottom:20px; font-size: 18px; color:black" -->
+
+```java
+@ExtendWith(MockitoExtension.class)
+class InMemoryBookRepositorySpyTest {
+
+    @Spy
+    InMemoryBookRepository repository = new InMemoryBookRepository();
+
+    @Test
+    void shouldSaveAndFindBookSuccessfully() {
+        Book book = Book.of("123", "Clean Code", "R. Martin", 2008, 5);
+        repository.save(book);
+
+        verify(repository).save(book);
+        assertEquals(book, repository.findByIsbn("123").get());
+    }
+}
+```
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
@@ -127,6 +163,34 @@ class BookServiceTest {
 
 - É o **serviço de aplicação** que implementa os casos de uso (portas de entrada).
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="white" data-transition="convex"  -->
+## Exemplo de `@InjectMocks`
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
+
+```java
+@ExtendWith(MockitoExtension.class)
+class BookServiceInjectMocksTest {
+
+    @Mock
+    BookRepository repository;
+    @Mock
+    NotificationService notifier;
+    @InjectMocks
+    BookService bookService;
+
+    @Test
+    void shouldSaveBookWhenRegistering() {
+        Book book = Book.of("123", "Clean Code", "R. Martin", 2008, 5);
+        bookService.registerBook(book);
+
+        verify(repository).save(book);
+        verify(notifier).notify(anyString(), anyString());
+    }
+}
+```
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
@@ -148,19 +212,32 @@ class BookServiceTest {
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
-@Captor
-ArgumentCaptor<Book> bookCaptor;
+@ExtendWith(MockitoExtension.class)
+class BookServiceCaptorTest {
 
-@Test
-void shouldDecrementCopiesWhenBookIsBorrowed() {
-    // ...stub de findByIsbn retornando um Book com 5 cópias...
-    bookService.borrowBook("123", "ana@ifrs.edu.br");
+    @Mock
+    NotificationService notifier;
+    @Mock
+    BookRepository repository;
+    @InjectMocks
+    BookService bookService;
 
-    verify(repository).save(bookCaptor.capture());
-    assertEquals(4, bookCaptor.getValue().getCopiesAvailable());
+    @Captor
+    ArgumentCaptor<String> messageCaptor;
+
+    @Test
+    void shouldNotifyPatronWithBookTitle() {
+        Book book = Book.of("123", "Clean Code", "R. Martin", 2008, 5);
+        when(repository.findByIsbn("123")).thenReturn(Optional.of(book));
+
+        bookService.borrowBook("123", "ana@ifrs.edu.br");
+
+        verify(notifier).notify(eq("ana@ifrs.edu.br"), messageCaptor.capture());
+        assertTrue(messageCaptor.getValue().contains("Clean Code"));
+    }
 }
 ```
-<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
+<!-- .element: style="margin-bottom:50px; font-size: 16px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
@@ -175,6 +252,28 @@ void shouldDecrementCopiesWhenBookIsBorrowed() {
 
 - Um bom teste combina os dois quando faz sentido, como em `borrowBook`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
+
+
+<!-- .slide: data-background="white" data-transition="convex"  -->
+## Exemplo de `verify` vs. `assert`
+<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:black" -->
+
+```java
+@Test
+void shouldReturnBookAndNotifyPatron() {
+    Book book = Book.of("123", "Clean Code", "R. Martin", 2008, 5);
+    when(repository.findByIsbn("123")).thenReturn(Optional.of(book));
+
+    Book borrowed = bookService.borrowBook("123", "ana@ifrs.edu.br");
+
+    // assert: verifica o RESULTADO retornado pelo método testado
+    assertEquals("Clean Code", borrowed.getTitle());
+
+    // verify: verifica o COMPORTAMENTO, se o leitor foi notificado
+    verify(notifier, times(1)).notify(eq("ana@ifrs.edu.br"), anyString());
+}
+```
+<!-- .element: style="margin-bottom:50px; font-size: 18px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->

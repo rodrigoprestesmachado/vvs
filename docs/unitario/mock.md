@@ -67,8 +67,7 @@ Se você já viu o exemplo hexagonal da disciplina, `@Mock` é o que você usa
 para simular as **portas de saída** (`domain.ports.out`, como
 `BookRepository` ou `EmailNotification`): o teste não fala com um banco ou
 serviço de e-mail de verdade, só com um duplo controlado pelo Mockito. Os
-slides **`@Mock`** e **Exemplo de `@Mock` com BookService** resumem essa
-ideia.
+slides **`@Mock`** e **Exemplo de `@Mock`** resumem essa ideia.
 {: .fs-3 }
 
 ```java
@@ -145,7 +144,7 @@ Com `@Spy` você consegue, ao mesmo tempo:
 **porta de saída** (por exemplo, um `BookRepository` em memória, sem
 banco de verdade) e quer testar o serviço de aplicação usando esse
 comportamento real, mas ainda assim confirmar as interações com `verify`.
-Veja o slide **`@Spy`**.
+Veja os slides **`@Spy`** e **Exemplo de `@Spy`**.
 {: .fs-3 }
 
 **Exemplo 1: monitorando chamadas sem alterar o comportamento real**
@@ -334,7 +333,7 @@ o **serviço de aplicação** (como `BooksService`), a classe concreta que
 **implementa um ou mais casos de uso** (as portas de entrada,
 `domain.ports.in`, como `AddBookUseCase`). O teste não instancia o serviço
 na mão; o Mockito monta o serviço e já injeta as portas de saída mockadas
-nele. Veja o slide **`@InjectMocks`**.
+nele. Veja os slides **`@InjectMocks`** e **Exemplo de `@InjectMocks`**.
 {: .fs-3 }
 
 ### `@Captor`
@@ -467,7 +466,8 @@ devolveu o que eu esperava?"*
 O **`verify`** (Mockito) verifica o **comportamento**: ele confirma que um
 determinado método de um *mock* foi chamado, quantas vezes e com quais
 argumentos. A pergunta que responde é *"a interação com a dependência ocorreu
-como planejado?"* Essa distinção é o tema do slide **`verify` vs. `assert`**.
+como planejado?"* Essa distinção é o tema dos slides **`verify` vs.
+`assert`** e **Exemplo de `verify` vs. `assert`**.
 {: .fs-3 }
 
 ```java
