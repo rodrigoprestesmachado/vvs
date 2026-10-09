@@ -1,6 +1,6 @@
 <!-- .slide:  data-background-opacity="0.35" data-background-image="img/title.jpg"
 data-transition="convex"  -->
-# JaCoCo 🪲
+# JaCoCo 🏠
 <!-- .element: style="margin-bottom:100px; font-size: 50px; color:white; font-family: Marker Felt;" -->
 
 Pressione 'F' para tela cheia
@@ -11,16 +11,16 @@ Pressione 'F' para tela cheia
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## O besouro-lanterna
+## A planta da casa
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- O código é um museu de vidro. Os testes são os visitantes.
+- O código é a planta de uma casa. Os testes são quem entra e acende a luz.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- O JaCoCo é o besouro-lanterna que acende o chão por onde alguém passou.
+- O JaCoCo desenha essa planta: onde alguém passou, a luz fica acesa.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Sala verde: percorrida por inteiro. Porta âmbar: entrou, mas não abriu todas as portas. Sala escura: nenhum teste chegou lá.
+- Cômodo verde: percorrido por inteiro. Interruptor âmbar: entrou, mas não abriu todas as portas. Cômodo escuro: nenhum teste chegou lá.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -34,7 +34,7 @@ Pressione 'F' para tela cheia
 - Linha: o corredor. Ramo: cada porta de um `if`, `else` ou `switch`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Método e classe: a sala e a ala do museu.
+- Método e classe: o cômodo e a ala da casa.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -114,7 +114,7 @@ Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um test
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Salas que o besouro pode ignorar
+## Cômodos fora da planta
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 - DTOs e código gerado não são regra de negócio.
@@ -128,7 +128,7 @@ Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um test
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Luz acesa não é museu sem vazamento
+## Luz acesa não é casa em ordem
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
 - 100% de cobertura diz que os testes passaram por ali.
@@ -142,10 +142,10 @@ Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um test
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Exercícios, um corredor por vez
+## Exercícios, um cômodo por vez
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- 1. Gere o relatório e ache a sala escura.
+- 1. Gere o relatório e ache o cômodo escuro.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - 2. Acenda um método inteiro. 3. Feche o losango âmbar. 4. Cubra a exceção.

@@ -6,7 +6,7 @@ grand_parent: Teste de desenvolvimento
 nav_order: 14
 ---
 
-# JaCoCo 🪲
+# JaCoCo 🏠
 
 <center>
     <iframe src="https://vvs.rpmhub.dev/jacoco/slides/index.html#/"
@@ -20,44 +20,44 @@ Quarkus. Nas seções a seguir, a mesma ideia aparece com mais calma e, nos
 exercícios, você acende o relatório de um `FareService` aos poucos.
 {: .fs-3 }
 
-## O besouro-lanterna
+## A planta da casa
 
-Imagine o código como um museu de vidro, à noite. Cada método é uma sala.
-Cada `if` é uma porta. Os testes são os visitantes: eles entram, atravessam
-um corredor e saem.
+Imagine o código como a planta de uma casa, à noite. Cada método é um
+cômodo. Cada `if` é uma porta. Os testes são quem entra e acende a luz.
 {: .fs-3 }
 
-O [JaCoCo](https://www.jacoco.org/jacoco/) (*Java Code Coverage*) é o
-besouro-lanterna que vai atrás desses visitantes. Onde alguém pisou, o chão
-acende. O relatório é o mapa dessa luz.
+O [JaCoCo](https://www.jacoco.org/jacoco/) (*Java Code Coverage*) desenha
+essa planta: onde alguém passou, a luz fica acesa. O relatório é esse
+desenho.
 {: .fs-3 }
 
-- Sala **verde**: o método foi percorrido por inteiro.
-- Porta **âmbar**: alguém entrou na sala, mas deixou uma porta fechada.
-- Sala **escura**: nenhum teste chegou lá.
+- Cômodo **verde**: o método foi percorrido por inteiro.
+- Interruptor **âmbar**: alguém entrou, mas deixou uma porta fechada.
+- Cômodo **escuro**: nenhum teste chegou lá.
 {: .fs-3 }
 
-Esse é o argumento do slide **O besouro-lanterna**. A moral fica para o
-fim da página: acender todas as salas não prova que o museu está sem
-vazamento. Cobertura mede o que foi executado. Quem diz se o resultado
-está certo é o `assert`.
+Esse é o argumento do slide **A planta da casa**. A moral fica para o
+fim da página: acender todas as luzes não prova que a casa está em ordem.
+Cobertura mede o que foi executado. Quem diz se o resultado está certo é
+o `assert`.
 {: .fs-3 }
 
-## O que o besouro acende
+## O que a planta mostra
 
 O relatório HTML mostra vários contadores. Você não precisa decorar a
 fórmula de cada um. Precisa saber o que está olhando. O slide **O que ele
 mede** resume os cinco que mais aparecem.
 {: .fs-3 }
 
-- **Instrução.** A menor marca no chão: uma instrução de bytecode. Várias
-  instruções cabem numa única linha de Java.
+- **Instrução.** O passo mais curto no chão: uma instrução de bytecode.
+  Várias instruções cabem numa única linha de Java.
 - **Linha.** O corredor. Uma linha conta como coberta quando pelo menos uma
   instrução dela rodou.
 - **Ramo.** Cada porta. Um `if`, um `else` e cada saída de um `switch` são
   ramos. O losango desenhado na linha é esse contador.
-- **Método.** A sala. Entra na conta quando o método é chamado.
-- **Classe.** A ala. Entra na conta quando pelo menos um método dela roda.
+- **Método.** O cômodo. Entra na conta quando o método é chamado.
+- **Classe.** A ala da casa. Entra na conta quando pelo menos um método
+  dela roda.
 {: .fs-3 }
 
 Há ainda a coluna de complexidade (ciclomática): um número de caminhos
@@ -120,7 +120,7 @@ configuração da nota lá embaixo. Os dois instrumentam a mesma classe, e o
 teste quebra com erro de classe já instrumentada.
 {: .fs-3 }
 
-## Ligando o besouro no projeto
+## Ligando as luzes no projeto
 
 No `pom.xml`, a dependência fica no escopo de teste. A versão vem do BOM
 do Quarkus, então não é preciso declará-la. O slide **Como ligar** traz o
@@ -157,7 +157,7 @@ Se você mudar essa propriedade, o `index.html` passa a nascer no caminho
 novo. O slide **Onde fica o relatório** lista os dois arquivos.
 {: .fs-3 }
 
-## Salas que não precisam de visita
+## Cômodos fora da planta
 
 Um DTO, um código gerado ou uma classe só de configuração acendem pouco e
 dizem pouco sobre a regra de negócio. Dá para tirá-los do mapa com
@@ -171,19 +171,18 @@ quarkus.jacoco.excludes=**/dto/**/*
 
 `**/dto/**/*` deixa de fora as classes do pacote `dto` e dos pacotes
 abaixo dele. `quarkus.jacoco.includes` faz o contrário: quando está
-ausente, tudo entra. O slide **Salas que o besouro pode ignorar** é esse
-recorte.
+ausente, tudo entra. O slide **Cômodos fora da planta** é esse recorte.
 {: .fs-3 }
 
-## Luz acesa não é museu sem vazamento
+## Luz acesa não é casa em ordem
 
 Três limites valem mais do que perseguir 100% (slide **Luz acesa não é
-museu sem vazamento**):
+casa em ordem**):
 {: .fs-3 }
 
 - Cobertura alta com assert fraco só prova que o código rodou. Um teste
-  que chama `quote(2.0)` e não confere o valor devolvido acende a sala e
-  deixa o vazamento quieto.
+  que chama `quote(2.0)` e não confere o valor devolvido acende o cômodo e
+  deixa o problema quieto.
 - Cobrir cada ramo de um método enorme é sinal de que o método tem portas
   demais, não de que a meta é 100%.
 - O modo nativo do Quarkus não gera esse relatório. A cobertura desta
@@ -232,7 +231,7 @@ Você vai criar um projeto Quarkus e observar o `FareService` acender no
 relatório. Os exercícios vão do mais simples ao mais exigente. Resolva na
 ordem. Depois de cada um, rode `./mvnw verify`, abra
 `target/jacoco-report/index.html` e só avance quando o que o enunciado
-pede estiver visível no mapa. O slide **Exercícios, um corredor por vez**
+pede estiver visível na planta. O slide **Exercícios, um cômodo por vez**
 é a lista curta.
 {: .fs-3 }
 
@@ -252,7 +251,7 @@ code .
 ```
 
 O projeto gerado já traz um `GreetingResource` e um teste que o cobre.
-Essa sala começa verde. O trabalho é com o frete.
+Esse cômodo começa verde. O trabalho é com o frete.
 {: .fs-3 }
 
 Copie as três classes abaixo.
@@ -311,11 +310,11 @@ public class FareRequest {
 para o exercício 5.
 {: .fs-3 }
 
-### Exercício 1: achar a sala escura
+### Exercício 1: achar o cômodo escuro
 {: .fw-500 }
 
 Adicione `quarkus-jacoco` ao `pom.xml`, no escopo `test`, como na seção
-**Ligando o besouro no projeto**. Rode `./mvnw verify` e abra
+**Ligando as luzes no projeto**. Rode `./mvnw verify` e abra
 `target/jacoco-report/index.html`. Localize `FareService`: `baseFare` e
 `quote` devem estar vermelhos, porque nenhum teste os chamou.
 {: .fs-3 }
@@ -350,8 +349,9 @@ public class FareServiceTest {
 }
 ```
 
-Rode `./mvnw verify` de novo. No relatório, `baseFare` fica verde: a sala
-não tem porta, então uma visita basta. `quote` continua vermelho.
+Rode `./mvnw verify` de novo. No relatório, `baseFare` fica verde: o
+cômodo não tem porta, então acender a luz uma vez basta. `quote` continua
+vermelho.
 {: .fs-3 }
 
 ### Exercício 3: o losango âmbar
@@ -402,7 +402,7 @@ public void shouldRejectNonPositiveWeight() {
 }
 ```
 
-Os dois losangos de `quote` ficam verdes. A sala do frete foi percorrida
+Os dois losangos de `quote` ficam verdes. O cômodo do frete foi percorrido
 por inteiro, e cada teste ainda confere o resultado ou a exceção.
 {: .fs-3 }
 
