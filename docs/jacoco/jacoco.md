@@ -158,7 +158,7 @@ arquivo.
 ## Como ligar neste projeto
 
 Este projeto é Quarkus, então a forma certa de ligar o JaCoCo muda em
-relação a um Maven comum. O caminho, em `exemplos/hexagonal`, é a extensão
+relação a um Maven comum. O caminho, em [`exemplos/hexagonal`](https://github.com/rodrigoprestesmachado/vvs/tree/dev/exemplos/hexagonal), é a extensão
 `quarkus-jacoco` junto com o `jacoco-maven-plugin`. A extensão cobre os
 testes `@QuarkusTest` (`BookResourceTest`). O plugin cobre os testes JUnit
 comuns (`BooksServiceTest`, onde também está a validação de `Book`) e grava
@@ -247,8 +247,9 @@ quarkus.jacoco.excludes=**/BookRequest.class
 ```
 
 Os curingas seguem o formato do JaCoCo, por exemplo `**/domain/model/*`.
-A seção **Cômodos fora da planta** explica por que um DTO como
-`BookRequest` pode sair do mapa.
+`BookRequest` é um DTO: não é a regra de `Book`, então pode sair do
+relatório. Nos exercícios, a exclusão equivalente fica no `report` do
+`jacoco-maven-plugin`.
 {: .fs-3 }
 
 ### Limite mínimo
@@ -293,55 +294,16 @@ plugin, em `target/site/jacoco/index.html`. O arranjo desta seção é o do
 projeto inteiro, quando extensão e plugin rodam juntos.
 {: .fs-3 }
 
-## Cômodos fora da planta
-
-Um DTO, um código gerado ou uma classe só de configuração acendem pouco e
-dizem pouco sobre a regra de negócio. Dá para tirá-los do mapa com
-`quarkus.jacoco.excludes`, em `src/main/resources/application.properties`.
-O padrão segue o do guia do Quarkus: `*` e `?` funcionam como curinga.
-{: .fs-3 }
-
-```properties
-quarkus.jacoco.excludes=**/BookRequest.class
-```
-
-`BookRequest` é o DTO da porta REST. No teste de API ele acende, porque o
-POST chama `isbn()` e `title()`. No teste unitário de `Book` ele fica
-apagado, porque ninguém o carrega. Nos dois casos não é a regra de
-negócio, e o padrão acima tira a classe do relatório da extensão.
-`quarkus.jacoco.includes` faz o contrário: quando está ausente, tudo entra.
-O slide **Cômodos fora da planta** é esse recorte. Nos exercícios, a
-exclusão equivalente fica no `report` do `jacoco-maven-plugin`.
-{: .fs-3 }
-
-## Luz acesa não é casa em ordem
-
-Três limites valem mais do que perseguir 100% (slide **Luz acesa não é
-casa em ordem**):
-{: .fs-3 }
-
-- Cobertura alta com assert fraco só prova que o código rodou. Um teste
-  que chama `service.add(book)` e não confere o livro devolvido acende o
-  cômodo e deixa o problema quieto.
-- Cobrir cada ramo de um método enorme é sinal de que o método tem portas
-  demais, não de que a meta é 100%.
-- O modo nativo do Quarkus não gera esse relatório. A cobertura desta
-  página é a dos testes na JVM. O `BookResourceIT` também fica de fora:
-  `skipITs` está `true`.
-{: .fs-3 }
-
----
-
 ## Exercícios práticos: o cadastro de livros
 
-Os exercícios acontecem no projeto que já existe, em `exemplos/hexagonal`.
+Os exercícios acontecem no projeto que já existe, em [`exemplos/hexagonal`](https://github.com/rodrigoprestesmachado/vvs/tree/dev/exemplos/hexagonal).
 A pasta tem nome de arquitetura; o sistema é o cadastro de livros. Você não
 cria outro projeto e não sobe a API. Tudo é teste unitário em
 `BooksServiceTest`, no grupo `BookValidation`, chamando `Book.of`. Os
 exercícios vão do mais simples ao mais exigente. Resolva na ordem. Depois
 de cada um, rode o comando abaixo, abra `target/site/jacoco/index.html` e
-só avance quando o que o enunciado pede estiver visível na planta. O slide
-**Exercícios, um cômodo por vez** é a lista curta.
+só avance quando o relatório mostrar o que o enunciado pede. O slide
+**Exercícios** é a lista curta.
 {: .fs-3 }
 
 ```bash
@@ -369,11 +331,11 @@ Ele monta `BooksService` com um repositório em memória. A validação de
 aí, ao lado de `shouldRejectBlankTitle`.
 {: .fs-3 }
 
-### Exercício 1: achar o cômodo escuro
+### Exercício 1: localizar o ramo do autor
 {: .fw-500 }
 
-Adicione o `jacoco-maven-plugin` ao `pom.xml` de `exemplos/hexagonal`. O
-`prepare-agent` acende as classes carregadas pelo Surefire. O `report`,
+Adicione o `jacoco-maven-plugin` ao `pom.xml` de [`exemplos/hexagonal`](https://github.com/rodrigoprestesmachado/vvs/tree/dev/exemplos/hexagonal). O
+`prepare-agent` instrumenta as classes carregadas pelo Surefire. O `report`,
 na fase `test`, escreve o HTML. O Surefire desse projeto já usa
 `@{argLine}`, então o agente entra no teste unitário.
 {: .fs-3 }
@@ -407,7 +369,7 @@ existem sempre mandam um autor preenchido, então o `throw` continua
 vermelho.
 {: .fs-3 }
 
-### Exercício 2: acender o corredor do autor em branco
+### Exercício 2: cobrir o autor em branco
 {: .fw-500 }
 
 Dentro de `BookValidation`, acrescente o teste do autor vazio.
@@ -423,16 +385,17 @@ void shouldRejectBlankAuthor() {
 ```
 
 Rode o mesmo `./mvnw test -Dtest=BooksServiceTest -Dskip.frontend=true`.
-O `throw` do autor em branco fica verde. O losango do `||` continua âmbar:
-`author == null` ainda não foi visitado. Anote o percentual de linhas e o
+O `throw` do autor em branco fica verde. O ramo do `||` continua parcial:
+`author == null` ainda não foi executado. Anote o percentual de linhas e o
 de ramos de `validate`. Você usa esses dois números no exercício 6.
 {: .fs-3 }
 
-### Exercício 3: a outra porta do `||`
+### Exercício 3: cobrir `author == null`
 {: .fw-500 }
 
-Acrescente o teste em que o autor é nulo. As duas entradas de
-`author == null || author.isBlank()` ficam acesas e o losango fica verde.
+Acrescente o teste em que o autor é nulo. Os dois lados de
+`author == null || author.isBlank()` passam a contar como cobertos e o
+ramo fica verde.
 {: .fs-3 }
 
 ```java
@@ -445,11 +408,11 @@ void shouldRejectNullAuthor() {
 
 {: .fs-3 }
 
-### Exercício 4: a porta do ano anterior a 1
+### Exercício 4: cobrir `publicationYear < 1`
 {: .fw-500 }
 
-`shouldRejectFuturePublicationYear` já entra no `throw` com o ano 9999.
-A outra porta, `publicationYear < 1`, continua fechada. Cubra esse caminho
+`shouldRejectFuturePublicationYear` já executa o `throw` com o ano 9999.
+O outro lado, `publicationYear < 1`, ainda não roda. Cubra esse ramo
 com um ano zero.
 {: .fs-3 }
 
@@ -461,14 +424,14 @@ void shouldRejectPublicationYearBeforeOne() {
 }
 ```
 
-O losango de `publicationYear < 1 || publicationYear > currentYear` fica
+O ramo de `publicationYear < 1 || publicationYear > currentYear` fica
 verde, e o teste continua conferindo que `Book.of` rejeita o ano.
 {: .fs-3 }
 
-### Exercício 5: tirar o DTO da planta
+### Exercício 5: excluir `BookRequest` do relatório
 {: .fw-500 }
 
-`BookRequest` aparece no relatório apagado: nenhum teste unitário o
+`BookRequest` aparece no relatório sem cobertura: nenhum teste unitário o
 carrega. É a forma do JSON, não a regra do livro. No `report` do plugin,
 exclua a classe e rode o teste outra vez.
 {: .fs-3 }
@@ -489,7 +452,7 @@ exclua a classe e rode o teste outra vez.
 ```
 
 `BookRequest` sai do relatório. `Book` permanece, com a cobertura que
-`BookValidation` acendeu.
+`BookValidation` produziu.
 {: .fs-3 }
 
 ### Exercício 6: uma frase sobre linha e ramo
@@ -499,7 +462,7 @@ Sem escrever código novo, volte aos percentuais que você anotou no
 exercício 2, depois só do autor vazio, antes do autor nulo. Escreva uma
 frase dizendo por que a cobertura de linhas de `validate` e a de ramos não
 coincidem. A pista está na seção **Linha e ramo não são a mesma coisa**: a
-linha do `if` já conta como executada quando uma única porta do `||` abre.
+linha do `if` já conta como executada quando só um lado do `||` rodou.
 {: .fs-3 }
 
 

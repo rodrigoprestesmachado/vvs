@@ -108,47 +108,19 @@ if (author == null || author.isBlank()) {
 ```
 <!-- .element: style="font-size: 18px; color:black" -->
 
-Um teste com autor vazio abre só uma porta do `||`. O losango fica âmbar até o autor ir nulo.
+Um teste com autor vazio cobre só um lado do `||`. O ramo fica parcial até o autor ir nulo.
 <!-- .element: style="font-size: 22px; color:black" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Cômodos fora da planta
+## Exercícios
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- No teste unitário, `BookRequest` fica apagado: não é a regra do `Book`.
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-- `quarkus.jacoco.excludes` tira essas classes do relatório.
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-- Exemplo: `**/BookRequest.class`
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-
-<!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Luz acesa não é casa em ordem
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
-
-- 100% de cobertura diz que os testes passaram por ali.
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-- Não diz que o resultado está certo. Quem confere o comportamento é o `assert`.
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-- O modo nativo do Quarkus não gera esse relatório.
-<!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
-
-
-<!-- .slide: data-background="#185449" data-transition="convex"  -->
-## Exercícios, um cômodo por vez
-<!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
-
-- 1. No `BooksServiceTest`, gere o relatório e ache o autor escuro em `Book.validate`.
+- 1. No `BooksServiceTest`, gere o relatório e ache o autor sem cobertura em `Book.validate`.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- 2. Teste o autor vazio. 3. Feche o `||` com autor nulo. 4. Cubra o ano anterior a 1.
+- 2. Teste o autor vazio. 3. Cubra `author == null`. 4. Cubra o ano anterior a 1.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- 5. Tire `BookRequest` da planta. 6. Explique por que linha e ramo não andam juntos.
+- 5. Exclua `BookRequest` do relatório. 6. Explique por que linha e ramo não andam juntos.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
