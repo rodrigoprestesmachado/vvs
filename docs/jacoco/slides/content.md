@@ -56,13 +56,13 @@ Pressione 'F' para tela cheia
 ## Por que a extensão no Quarkus?
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- O Quarkus carrega as classes com o próprio classloader.
+- `prepare-agent` espera na porta da frente, o classloader do Surefire. `report` só desenha a planta depois.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- A extensão `quarkus-jacoco` instrumenta esses testes `@QuarkusTest` sem o plugin Maven.
+- O `@QuarkusTest` carrega as classes pela porta de serviço, o `QuarkusClassLoader`. O agente do plugin não acompanha essa carga.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Ligar a extensão e o `jacoco-maven-plugin` ao mesmo tempo instrumenta a classe duas vezes.
+- A extensão `quarkus-jacoco` instrumenta essa porta. Os dois juntos, sem ajuste, marcam a mesma classe duas vezes.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -102,14 +102,13 @@ Depois: `./mvnw verify`
 <!-- .element: style="margin-bottom:20px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
-if (weightKg <= 5) {
-    return baseFare();
+if (title == null || title.isBlank()) {
+    throw new InvalidBookException("Title cannot be blank");
 }
-return baseFare() + 1500;
 ```
-<!-- .element: style="font-size: 22px; color:black" -->
+<!-- .element: style="font-size: 18px; color:black" -->
 
-Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um teste com mais de 5 kg.
+Um POST com título vazio abre só uma porta do `||`. O losango fica âmbar até o título ir nulo.
 <!-- .element: style="font-size: 22px; color:black" -->
 
 
@@ -117,13 +116,13 @@ Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um test
 ## Cômodos fora da planta
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- DTOs e código gerado não são regra de negócio.
+- No cadastro de livros, `BookRequest` é DTO: acende, mas não é a regra do `Book`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - `quarkus.jacoco.excludes` tira essas classes do relatório.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- Exemplo: `**/dto/**/*`
+- Exemplo: `**/BookRequest.class`
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 
@@ -145,11 +144,11 @@ Um teste com 2 kg abre só uma porta. O losango fica âmbar até existir um test
 ## Exercícios, um cômodo por vez
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- 1. Gere o relatório e ache o cômodo escuro.
+- 1. No `exemplos/hexagonal`, gere o relatório e ache o título escuro em `Book.validate`.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- 2. Acenda um método inteiro. 3. Feche o losango âmbar. 4. Cubra a exceção.
+- 2. POST com título vazio. 3. Feche o `||` com título nulo. 4. Cubra exemplar negativo.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- 5. Exclua o DTO. 6. Explique por que linha e ramo não andam juntos.
+- 5. Tire `BookRequest` da planta. 6. Explique por que linha e ramo não andam juntos.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->

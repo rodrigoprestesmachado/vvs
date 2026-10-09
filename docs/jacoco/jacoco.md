@@ -16,8 +16,11 @@ nav_order: 14
 </center>
 
 Os slides acima apresentam a cobertura de código com o JaCoCo num projeto
-Quarkus. Nas seções a seguir, a mesma ideia aparece com mais calma e, nos
-exercícios, você acende o relatório de um `FareService` aos poucos.
+Quarkus. O exemplo é o cadastro de livros em
+[`exemplos/hexagonal`](https://github.com/rodrigoprestesmachado/vvs/tree/dev/exemplos/hexagonal):
+a pasta se chama hexagonal, e o sistema é a livraria (`Book`,
+`BooksService`, `BookResource`). Nas seções a seguir, a mesma ideia aparece
+com mais calma e, nos exercícios, você acende o relatório desse projeto.
 {: .fs-3 }
 
 ## A planta da casa
@@ -70,18 +73,22 @@ meta dos exercícios desta página.
 A linha do `if` acende assim que a condição é avaliada, mesmo que só um
 lado tenha sido tomado. O ramo só fica verde quando as duas portas abrem.
 Por isso a cobertura de linhas pode parecer boa enquanto a de ramos ainda
-está pela metade. O slide **O losango âmbar** mostra o caso do frete:
+está pela metade. O slide **O losango âmbar** usa a validação de título
+do `Book`, no cadastro de livros:
 {: .fs-3 }
 
 ```java
-if (weightKg <= 5) {
-    return baseFare();
+if (title == null || title.isBlank()) {
+    throw new InvalidBookException("Title cannot be blank");
 }
-return baseFare() + 1500;
 ```
 
-Um teste com 2 kg executa a linha do `if` e o primeiro `return`. O losango
-continua âmbar, porque ninguém passou pela porta do pacote pesado.
+Um POST com título `""` executa a linha do `if` e o `throw`. O losango
+continua âmbar: a porta `title == null` não abriu, porque `||` tem duas
+entradas. O `BooksService.add` tem a mesma forma de porta em
+`opt.isPresent()`. No `BookResourceTest` ela já fica verde, porque existem
+o POST que cria o livro (201) e o POST repetido (409).
+{: .fs-3 }
 {: .fs-3 }
 
 ## Como ler as cores
@@ -103,21 +110,51 @@ quando quiser uma leitura rápida dos corredores.
 
 ## Por que a extensão, e não o plugin sozinho
 
-Em muitos projetos Maven o JaCoCo entra como `jacoco-maven-plugin`, com os
-goals `prepare-agent` e `report`. Numa aplicação Quarkus esse caminho
-sozinho não enxerga os testes `@QuarkusTest`: o framework carrega as
-classes com o próprio classloader, e o agente do plugin não acompanha essa
-carga.
+Num projeto Maven comum, o JaCoCo entra como `jacoco-maven-plugin` e faz
+dois trabalhos, cada um num goal:
+{: .fs-3 }
+
+- `prepare-agent` sobe um agente Java antes dos testes. Esse agente
+  reescreve o bytecode no momento em que a classe é carregada e anota, em
+  um arquivo `.exec`, cada instrução que rodou. O Surefire recebe essa
+  configuração pela propriedade `argLine`.
+- `report` lê o `.exec` depois dos testes e monta o HTML. Sem esse goal,
+  os dados existem, mas a planta não aparece no navegador.
+{: .fs-3 }
+
+Esse arranjo funciona quando o teste e o código de produção são carregados
+pelo mesmo classloader, o da JVM do Surefire. No cadastro de livros, o
+`BooksServiceTest` é esse caso: ele monta o `BooksService` na mão, sem
+subir a aplicação. A classe entra pela porta da frente, o agente está nessa
+porta e acende a luz.
+{: .fs-3 }
+
+O `@QuarkusTest` muda a porta. O Quarkus sobe a aplicação dentro do teste e
+carrega as classes já aumentadas pelo próprio classloader,
+`QuarkusClassLoader`. O agente pendurado pelo `prepare-agent` continua na
+porta da frente. Ele não acompanha o que entra pela porta de serviço, então
+o teste pode passar e o cômodo da aplicação continuar escuro no relatório.
+O slide **Por que a extensão no Quarkus?** resume esse desvio.
 {: .fs-3 }
 
 A extensão [`quarkus-jacoco`](https://quarkus.io/guides/tests-with-coverage/)
-faz esse trabalho. Ela prepara o agente, grava a execução e gera o HTML.
-O slide **Por que a extensão no Quarkus?** é essa ideia em três frases.
+fica do lado de dentro dessa subida. Ela faz, para o `@QuarkusTest`, o que
+os dois goals fariam à mão: instrumenta a classe quando o
+`QuarkusClassLoader` a carrega, grava `target/jacoco-quarkus.exec` e gera
+o HTML em `target/jacoco-report`. No cadastro de livros, quem passa por
+essa porta é o `BookResourceTest`. O `BooksServiceTest` instancia
+`BooksService` direto, sem `@QuarkusTest`, então a extensão sozinha não
+acende esses testes. Por isso, nos exercícios desta página, a dependência
+da extensão basta e os testes novos entram no `BookResourceTest`. Não é
+preciso declarar `prepare-agent`.
 {: .fs-3 }
 
-Não ligue a extensão e o `jacoco-maven-plugin` ao mesmo tempo sem a
-configuração da nota lá embaixo. Os dois instrumentam a mesma classe, e o
-teste quebra com erro de classe já instrumentada.
+Os dois juntos, sem a nota lá embaixo, instrumentam a mesma classe duas
+vezes. O segundo passe encontra o bytecode que o primeiro já marcou e o
+teste quebra com erro de classe já instrumentada. A configuração da nota
+serve só ao caso misto: a extensão cobre o `@QuarkusTest`, e o plugin cobre
+o JUnit que não sobe o Quarkus, ignorando o `QuarkusClassLoader` para não
+repetir a marcação.
 {: .fs-3 }
 
 ## Ligando as luzes no projeto
@@ -166,12 +203,14 @@ O padrão segue o do guia do Quarkus: `*` e `?` funcionam como curinga.
 {: .fs-3 }
 
 ```properties
-quarkus.jacoco.excludes=**/dto/**/*
+quarkus.jacoco.excludes=**/BookRequest.class
 ```
 
-`**/dto/**/*` deixa de fora as classes do pacote `dto` e dos pacotes
-abaixo dele. `quarkus.jacoco.includes` faz o contrário: quando está
-ausente, tudo entra. O slide **Cômodos fora da planta** é esse recorte.
+No cadastro de livros, `BookRequest` é o DTO da porta REST: o POST chama
+`isbn()`, `title()` e os outros acessores, então o cômodo acende, mas ele
+não é a regra de negócio. O padrão acima tira essa classe do relatório.
+`quarkus.jacoco.includes` faz o contrário: quando está ausente, tudo entra.
+O slide **Cômodos fora da planta** é esse recorte.
 {: .fs-3 }
 
 ## Luz acesa não é casa em ordem
@@ -180,9 +219,9 @@ Três limites valem mais do que perseguir 100% (slide **Luz acesa não é
 casa em ordem**):
 {: .fs-3 }
 
-- Cobertura alta com assert fraco só prova que o código rodou. Um teste
-  que chama `quote(2.0)` e não confere o valor devolvido acende o cômodo e
-  deixa o problema quieto.
+- Cobertura alta com assert fraco só prova que o código rodou. Um POST em
+  `/books` que só confere o status 201, sem olhar o ISBN devolvido, acende
+  o cômodo do `add` e deixa o problema quieto.
 - Cobrir cada ramo de um método enorme é sinal de que o método tem portas
   demais, não de que a meta é 100%.
 - O modo nativo do Quarkus não gera esse relatório. A cobertura desta
@@ -225,211 +264,180 @@ basta.
 
 ---
 
-## Exercícios práticos: a tarifa de frete
+## Exercícios práticos: o cadastro de livros
 
-Você vai criar um projeto Quarkus e observar o `FareService` acender no
-relatório. Os exercícios vão do mais simples ao mais exigente. Resolva na
-ordem. Depois de cada um, rode `./mvnw verify`, abra
+Os exercícios acontecem no projeto que já existe, em `exemplos/hexagonal`.
+A pasta tem nome de arquitetura; o sistema é o cadastro de livros. Você não
+cria outro projeto. Os exercícios vão do mais simples ao mais exigente.
+Resolva na ordem. Depois de cada um, rode `./mvnw test` nessa pasta, abra
 `target/jacoco-report/index.html` e só avance quando o que o enunciado
 pede estiver visível na planta. O slide **Exercícios, um cômodo por vez**
 é a lista curta.
 {: .fs-3 }
 
-### Preparação do projeto
+`./mvnw test` sobe o MySQL de teste pelo Dev Services. É preciso Docker,
+como no restante desse projeto.
+{: .fs-3 }
+{: .fs-3 }
 
-Crie um projeto Quarkus do zero. Não é necessário clonar repositório.
+### Preparação
+
+Entre na pasta do cadastro de livros e abra o projeto.
 {: .fs-3 }
 
 ```bash
-mvn io.quarkus.platform:quarkus-maven-plugin:3.15.1:create \
-    -DprojectGroupId=dev.ifrs.jacoco \
-    -DprojectArtifactId=fare-jacoco \
-    -DclassName="dev.ifrs.jacoco.GreetingResource" \
-    -Dextensions="resteasy-reactive"
-cd fare-jacoco
+cd exemplos/hexagonal
 code .
 ```
 
-O projeto gerado já traz um `GreetingResource` e um teste que o cobre.
-Esse cômodo começa verde. O trabalho é com o frete.
-{: .fs-3 }
-
-Copie as três classes abaixo.
-{: .fs-3 }
-
-```java
-package dev.ifrs.jacoco;
-
-public class InvalidWeightException extends RuntimeException {
-
-    public InvalidWeightException(String message) {
-        super(message);
-    }
-}
-```
-
-```java
-package dev.ifrs.jacoco;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class FareService {
-
-    public int baseFare() {
-        return 1000;
-    }
-
-    public int quote(double weightKg) {
-        if (weightKg <= 0) {
-            throw new InvalidWeightException(
-                    "O peso precisa ser maior que zero.");
-        }
-        if (weightKg <= 5) {
-            return baseFare();
-        }
-        return baseFare() + 1500;
-    }
-}
-```
-
-```java
-package dev.ifrs.jacoco.dto;
-
-public class FareRequest {
-
-    public double weightKg;
-
-    public String summary() {
-        return "peso=" + weightKg;
-    }
-}
-```
-
-`FareRequest` é um DTO de propósito. Nenhum teste deve chamá-lo. Ele existe
-para o exercício 5.
+O domínio está em `Book` e `BooksService`. A API está em `BookResource`,
+com o DTO `BookRequest`. O teste que a extensão enxerga é o
+`BookResourceTest`, anotado com `@QuarkusTest`. O `BooksServiceTest` fica
+de fora desse relatório até a configuração da nota sobre testes que não
+sobem o Quarkus.
 {: .fs-3 }
 
 ### Exercício 1: achar o cômodo escuro
 {: .fw-500 }
 
-Adicione `quarkus-jacoco` ao `pom.xml`, no escopo `test`, como na seção
-**Ligando as luzes no projeto**. Rode `./mvnw verify` e abra
-`target/jacoco-report/index.html`. Localize `FareService`: `baseFare` e
-`quote` devem estar vermelhos, porque nenhum teste os chamou.
+Adicione `quarkus-jacoco` ao `pom.xml` de `exemplos/hexagonal`, no escopo
+`test`, como na seção **Ligando as luzes no projeto**. Rode `./mvnw test`
+e abra `target/jacoco-report/index.html`. Em `Book.validate`, a linha
+`if (title == null || title.isBlank())` fica amarela: os POSTs que já
+existem mandam um título preenchido, então a porta do `throw` continua
+fechada.
 {: .fs-3 }
 
-### Exercício 2: acender um método inteiro
+### Exercício 2: acender o corredor do título em branco
 {: .fw-500 }
 
-Crie `src/test/java/dev/ifrs/jacoco/FareServiceTest.java` com um
-`@QuarkusTest` que injeta `FareService` e confere `baseFare()`.
-{: .fs-3 }
-
-```java
-package dev.ifrs.jacoco;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-
-@QuarkusTest
-public class FareServiceTest {
-
-    @Inject
-    FareService service;
-
-    @Test
-    public void shouldReturnBaseFare() {
-        assertEquals(1000, service.baseFare());
-    }
-}
-```
-
-Rode `./mvnw verify` de novo. No relatório, `baseFare` fica verde: o
-cômodo não tem porta, então acender a luz uma vez basta. `quote` continua
-vermelho.
-{: .fs-3 }
-
-### Exercício 3: o losango âmbar
-{: .fw-500 }
-
-Acrescente um teste para o pacote leve e pare para olhar o mapa antes de
-cobrir o pacote pesado.
+No `BookResourceTest`, acrescente um POST com título vazio. O
+`BookExceptionMapper` traduz `InvalidBookException` em HTTP 400.
 {: .fs-3 }
 
 ```java
 @Test
-public void shouldChargeBaseFareForLightPackage() {
-    assertEquals(1000, service.quote(2.0));
+void shouldReturn400WhenTitleIsBlank() {
+    String json = """
+            {
+              "isbn": "020161622X",
+              "title": "",
+              "author": "Andrew Hunt",
+              "publicationYear": 1999,
+              "copiesAvailable": 3
+            }
+            """;
+
+    given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .post("/books")
+            .then()
+            .statusCode(400)
+            .body("message", notNullValue());
 }
 ```
 
-No relatório, a linha `if (weightKg <= 5)` fica amarela e o losango, âmbar:
-só a porta do peso até 5 kg abriu. Anote o percentual de linhas e o de
-ramos de `quote`. Você usa esses dois números no exercício 6.
+Rode `./mvnw test`. O `throw` do título em branco fica verde. O losango do
+`||` continua âmbar: `title == null` ainda não foi visitado. Anote o
+percentual de linhas e o de ramos de `validate`. Você usa esses dois
+números no exercício 6.
 {: .fs-3 }
 
-Agora acrescente o pacote pesado.
+### Exercício 3: a outra porta do `||`
+{: .fw-500 }
+
+Acrescente o POST em que o título vem nulo. As duas entradas de
+`title == null || title.isBlank()` ficam acesas e o losango fica verde.
 {: .fs-3 }
 
 ```java
 @Test
-public void shouldChargeExtraForHeavyPackage() {
-    assertEquals(2500, service.quote(8.0));
+void shouldReturn400WhenTitleIsNull() {
+    String json = """
+            {
+              "isbn": "020161622X",
+              "title": null,
+              "author": "Andrew Hunt",
+              "publicationYear": 1999,
+              "copiesAvailable": 3
+            }
+            """;
+
+    given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .post("/books")
+            .then()
+            .statusCode(400)
+            .body("message", notNullValue());
 }
 ```
 
-O losango de `weightKg <= 5` fica verde. O de `weightKg <= 0` continua
-âmbar: os dois testes passaram pela condição, mas nenhum entrou no
-`throw`.
 {: .fs-3 }
 
-### Exercício 4: a porta da exceção
+### Exercício 4: a porta dos exemplares negativos
 {: .fw-500 }
 
-Cubra o peso que não é positivo. Importe `assertThrows` de
-`org.junit.jupiter.api.Assertions`.
+`copiesAvailable < 0` ainda está escuro: nenhum teste da API manda
+exemplar negativo. Cubra essa exceção com outro POST, conferindo o 400.
 {: .fs-3 }
 
 ```java
 @Test
-public void shouldRejectNonPositiveWeight() {
-    assertThrows(InvalidWeightException.class, () -> service.quote(0));
+void shouldReturn400WhenCopiesAreNegative() {
+    String json = """
+            {
+              "isbn": "020161622X",
+              "title": "The Pragmatic Programmer",
+              "author": "Andrew Hunt",
+              "publicationYear": 1999,
+              "copiesAvailable": -1
+            }
+            """;
+
+    given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .post("/books")
+            .then()
+            .statusCode(400)
+            .body("message", notNullValue());
 }
 ```
 
-Os dois losangos de `quote` ficam verdes. O cômodo do frete foi percorrido
-por inteiro, e cada teste ainda confere o resultado ou a exceção.
+O `throw` de exemplares negativos fica verde, e o teste continua dizendo
+qual resposta a API devolveu.
 {: .fs-3 }
 
-### Exercício 5: fechar o depósito
+### Exercício 5: tirar o DTO da planta
 {: .fw-500 }
 
-`FareRequest.summary` aparece no relatório, vermelho. Essa classe não é
-regra de negócio. Em `src/main/resources/application.properties`, exclua o
-pacote e rode `./mvnw verify` outra vez.
+`BookRequest` aparece no relatório porque `BookResource.addBook` chama os
+acessores. É a forma do JSON, não a regra do livro. Em
+`src/main/resources/application.properties`, exclua a classe e rode
+`./mvnw test` outra vez.
 {: .fs-3 }
 
 ```properties
-quarkus.jacoco.excludes=**/dto/**/*
+quarkus.jacoco.excludes=**/BookRequest.class
 ```
 
-`FareRequest` sai do relatório. `FareService` permanece, com a cobertura
-que você construiu nos exercícios anteriores.
+`BookRequest` sai do relatório. `Book` e `BooksService` permanecem, com a
+cobertura que os testes da API acenderam.
 {: .fs-3 }
 
 ### Exercício 6: uma frase sobre linha e ramo
 {: .fw-500 }
 
 Sem escrever código novo, volte aos percentuais que você anotou no
-exercício 3, depois só do teste com 2 kg. Escreva uma frase dizendo por
-que a cobertura de linhas de `quote` e a de ramos não coincidem. A pista
-está na seção **Linha e ramo não são a mesma coisa**: a linha do `if` já
-conta como executada quando uma única porta abre.
+exercício 2, depois só do título vazio, antes do título nulo. Escreva uma
+frase dizendo por que a cobertura de linhas de `validate` e a de ramos não
+coincidem. A pista está na seção **Linha e ramo não são a mesma coisa**: a
+linha do `if` já conta como executada quando uma única porta do `||` abre.
 {: .fs-3 }
 
 ## Teste seus conhecimentos 🧠
