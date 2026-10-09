@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+
+  <!-- Q01 -->
+  <question type="multichoice">
+    <name>
+      <text>Q01 - Calculadora.multiplicar (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Considere a classe abaixo:</p>
+<pre><code>public class Calculadora {
+    public int multiplicar(int a, int b) {
+        return a * b;
+    }
+}</code></pre>
+<p>Qual das alternativas abaixo é um teste unitário JUnit 5 <strong>correto</strong> para verificar que <code>multiplicar(3, 4)</code> retorna 12?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>O valor esperado deve corresponder ao produto real: 3 * 4 = 12. O JUnit compara o valor esperado com o valor retornado pelo método usando <code>assertEquals(esperado, atual)</code>.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals(7, calculadora.multiplicar(3, 4));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: 3 * 4 = 12, não 7.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<pre><code>assertEquals(12, calculadora.multiplicar(3, 4));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Correto: o valor esperado (12) é comparado ao resultado do método.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertTrue(calculadora.multiplicar(3, 4));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: assertTrue exige um valor booleano, não um int.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertNull(calculadora.multiplicar(3, 4));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o método retorna um int, nunca nulo.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q02 -->
+  <question type="multichoice">
+    <name>
+      <text>Q02 - UtilTexto.contarCaracteres (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Considere a classe abaixo:</p>
+<pre><code>public class UtilTexto {
+    public int contarCaracteres(String texto) {
+        return texto.length();
+    }
+}</code></pre>
+<p>Qual asserção verifica corretamente que <code>contarCaracteres("java")</code> retorna 4?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>A palavra "java" possui 4 caracteres. <code>assertEquals(esperado, atual)</code> compara o valor esperado (4) ao valor retornado pelo método.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<pre><code>assertEquals(4, util.contarCaracteres("java"));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Correto: "java" possui 4 caracteres.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals("java", util.contarCaracteres(4));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: os argumentos estão invertidos e os tipos não correspondem.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertTrue(util.contarCaracteres("java") == "4");</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: não se compara int com String usando ==.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals(5, util.contarCaracteres("java"));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: "java" tem 4 caracteres, não 5.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q03 -->
+  <question type="multichoice">
+    <name>
+      <text>Q03 - Verificador.ehPositivo (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Considere a classe abaixo:</p>
+<pre><code>public class Verificador {
+    public boolean ehPositivo(int numero) {
+        return numero > 0;
+    }
+}</code></pre>
+<p>Analise o teste incompleto:</p>
+<pre><code>@Test
+void testEhPositivo() {
+    Verificador v = new Verificador();
+    // linha 1
+    // linha 2
+}</code></pre>
+<p>Qual alternativa completa corretamente as linhas 1 e 2, verificando que <code>ehPositivo(5)</code> é <code>true</code> e <code>ehPositivo(-3)</code> é <code>false</code>?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Como 5 é positivo, <code>ehPositivo(5)</code> deve ser <code>true</code> (assertTrue); como -3 não é positivo, <code>ehPositivo(-3)</code> deve ser <code>false</code> (assertFalse).</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<pre><code>assertTrue(v.ehPositivo(5));
+assertFalse(v.ehPositivo(-3));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Correto: 5 é positivo (true) e -3 não é positivo (false).]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertFalse(v.ehPositivo(5));
+assertTrue(v.ehPositivo(-3));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: os valores esperados estão invertidos.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertTrue(v.ehPositivo(-3));
+assertFalse(v.ehPositivo(5));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: os valores esperados estão invertidos.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals(5, v.ehPositivo(-3));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: comparação de tipos incompatível (int com boolean) e não testa os dois casos.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q04 -->
+  <question type="multichoice">
+    <name>
+      <text>Q04 - Calculadora.dividir - assertThrows (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Considere a classe abaixo:</p>
+<pre><code>public class Calculadora {
+    public int dividir(int a, int b) {
+        return a / b;
+    }
+}</code></pre>
+<p>Qual trecho de teste verifica corretamente, usando <code>assertThrows</code>, que <code>dividir(10, 0)</code> lança <code>ArithmeticException</code>?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p><code>assertThrows(Classe.class, () -&gt; ...)</code> recebe a classe da exceção esperada e uma expressão lambda com a chamada que deve lançá-la. Sem a lambda, a expressão seria avaliada antes da chamada de assertThrows, lançando a exceção fora do controle do teste.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<pre><code>assertThrows(ArithmeticException.class, () -&gt; calculadora.dividir(10, 0));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Correto: assertThrows recebe a classe da exceção e uma lambda com a chamada que deve lançá-la.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertThrows(ArithmeticException.class, calculadora.dividir(10, 0));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: sem a lambda, a expressão é avaliada antes da chamada de assertThrows, lançando a exceção fora do teste.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertThrows(() -&gt; calculadora.dividir(10, 0), ArithmeticException.class);</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: a ordem dos parâmetros está invertida.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals(ArithmeticException.class, calculadora.dividir(10, 0).getClass());</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: a divisão por zero lançaria a exceção antes de getClass() ser chamado; essa não é a forma idiomática de testar exceções.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>dificil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q05 -->
+  <question type="multichoice">
+    <name>
+      <text>Q05 - Repositorio.buscar - assertThrows com mensagem (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Considere a classe abaixo:</p>
+<pre><code>public class Repositorio {
+    public Object buscar(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        return null;
+    }
+}</code></pre>
+<p>Qual trecho de teste verifica corretamente <strong>o tipo da exceção</strong> e <strong>a mensagem</strong> lançada quando <code>buscar(null)</code> é chamado?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p><code>assertThrows</code> retorna a própria exceção capturada. Guardando esse retorno em uma variável, é possível chamar <code>getMessage()</code> e comparar com <code>assertEquals</code> a mensagem esperada.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100" format="html">
+      <text><![CDATA[<pre><code>IllegalArgumentException ex = assertThrows(
+    IllegalArgumentException.class,
+    () -&gt; repositorio.buscar(null)
+);
+assertEquals("ID não pode ser nulo", ex.getMessage());</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Correto: assertThrows retorna a exceção capturada, permitindo verificar sua mensagem com getMessage().]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertThrows(
+    IllegalArgumentException.class,
+    () -&gt; repositorio.buscar(null).getMessage()
+);</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: não verifica o conteúdo da mensagem, apenas que a exceção ocorreu.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertEquals("ID não pode ser nulo", repositorio.buscar(null));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: buscar(null) lança exceção antes de retornar qualquer valor comparável.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[<pre><code>assertThrows(NullPointerException.class, () -&gt; repositorio.buscar(null));</code></pre>]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o código lança IllegalArgumentException, não NullPointerException.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>dificil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q06 -->
+  <question type="multichoice">
+    <name>
+      <text>Q06 - @ExtendWith(MockitoExtension.class) (Mockito)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de código:</p>
+<pre><code>@ExtendWith(MockitoExtension.class)
+class RepositorioServiceTest {
+
+    @Mock
+    private Repositorio repositorio;
+
+    // ...testes...
+}</code></pre>
+<p>Qual é a finalidade da anotação <code>@ExtendWith(MockitoExtension.class)</code> nesse trecho?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Essa extensão do JUnit 5 inicializa automaticamente os campos anotados com <code>@Mock</code>, habilitando o uso das anotações do Mockito na classe de teste.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Habilitar o uso das anotações do Mockito, como @Mock, na classe de teste.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa extensão do JUnit 5 inicializa os mocks anotados com @Mock.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Executar os testes em paralelo automaticamente.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: essa anotação não controla paralelismo de execução.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Substituir o JUnit por outro framework de testes.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: a extensão trabalha em conjunto com o JUnit 5, não o substitui.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Gerar relatórios de cobertura de código.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: cobertura de código é responsabilidade de ferramentas como JaCoCo.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>mockito</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q07 -->
+  <question type="multichoice">
+    <name>
+      <text>Q07 - when().thenReturn() (Mockito)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de código:</p>
+<pre><code>@Mock
+private Repositorio repositorio;
+
+@Test
+void testBuscarNome() {
+    when(repositorio.buscarNome(1)).thenReturn("Maria");
+    assertEquals("Maria", repositorio.buscarNome(1));
+}</code></pre>
+<p>O que a linha <code>when(repositorio.buscarNome(1)).thenReturn("Maria")</code> faz?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p><code>when(...).thenReturn(...)</code> define o comportamento simulado de um mock: sempre que o método indicado for chamado com os argumentos especificados, o mock retornará o valor configurado, sem executar código real.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Executa o método real buscarNome(1) do repositório.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: como repositorio é um mock, o método real nunca é executado.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Configura o mock para retornar "Maria" sempre que buscarNome(1) for chamado.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa é a definição de comportamento simulado do Mockito.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Verifica se o método buscarNome já foi chamado anteriormente.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: essa verificação seria feita com verify(), não com when().thenReturn().]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Cria uma nova instância real de Repositorio.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o mock já foi criado pela anotação @Mock, sem instância real.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>mockito</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q08 -->
+  <question type="multichoice">
+    <name>
+      <text>Q08 - @Mock vs @Spy (Mockito)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de código:</p>
+<pre><code>@Mock
+private Repositorio repositorioMock;
+
+@Spy
+private Repositorio repositorioSpy = new Repositorio();</code></pre>
+<p>Com base no trecho, qual afirmação está correta sobre a diferença entre <code>repositorioMock</code> e <code>repositorioSpy</code>?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p><code>@Mock</code> cria um objeto totalmente simulado, sem executar código real. <code>@Spy</code> envolve uma instância real (por isso exige um objeto já construído), executando o código real por padrão, mas permitindo sobrescrever comportamentos pontuais com when().thenReturn() ou doReturn().when().</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Ambos executam sempre o código real dos métodos.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o @Mock não executa código real, apenas o @Spy pode fazê-lo.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[repositorioMock é totalmente simulado; repositorioSpy envolve uma instância real, permitindo sobrescrever comportamentos pontuais.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa é a diferença fundamental entre @Mock e @Spy no Mockito.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[repositorioSpy não pode ter métodos configurados com when().thenReturn().]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: é possível configurar comportamentos pontuais em um @Spy.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[repositorioMock precisa de uma instância real para funcionar, enquanto repositorioSpy não.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: é o contrário; @Spy exige uma instância real, @Mock não.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>dificil</text></tag>
+      <tag><text>mockito</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q09 -->
+  <question type="multichoice">
+    <name>
+      <text>Q09 - Definição de V&amp;V</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>O que representa "V&V" no contexto de desenvolvimento de software?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>V&V é a sigla para Validação e Verificação, duas atividades complementares usadas para garantir a qualidade de um produto de software.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Versão e Velocidade]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Validação e Verificação]]></text>
+      <feedback format="html"><text><![CDATA[Correto: V&V significa Validação e Verificação.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Visualização e Versatilidade]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Valor e Viabilidade]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>conceitual</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q10 -->
+  <question type="multichoice">
+    <name>
+      <text>Q10 - Verificação vs Validação</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Qual afirmativa descreve melhor a diferença entre verificação e validação?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Verificação responde à pergunta "estamos construindo o produto corretamente?" (atende requisitos e especificações). Validação responde "estamos construindo o produto correto?" (atende às necessidades do usuário).</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Verificação se concentra no código em execução, enquanto validação se concentra somente em documentos.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Verificação é uma atividade dinâmica; validação é estática.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Verificação avalia se o produto atende requisitos e especificações; validação se preocupa se atende às necessidades do usuário.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa é a distinção clássica entre verificação e validação.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Verificação é feita somente por testes manuais; validação é sempre automatizada.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>conceitual</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q11 -->
+  <question type="multichoice">
+    <name>
+      <text>Q11 - Inspeções em V&amp;V</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>O que são inspeções no contexto de V&V?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Inspeções são revisões formais e sistemáticas de artefatos (documentos, código, etc.), realizadas para identificar erros e inconsistências antes de etapas posteriores do desenvolvimento.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Testes automatizados para garantir desempenho sob carga.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Revisões formais e sistemáticas de artefatos como documentos ou código, procurando erros e inconsistências.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa é a definição de inspeções.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Simulações com usuários finais para verificar usabilidade.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Compilação e execução de código em diferentes ambientes.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>conceitual</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q12 -->
+  <question type="multichoice">
+    <name>
+      <text>Q12 - Plugin no pom.xml (Maven)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de configuração abaixo:</p>
+<pre><code>&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.3.0&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+<p>Em qual arquivo de um projeto Maven esse trecho XML normalmente é declarado?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>O pom.xml é o arquivo central de um projeto Maven: nele são declaradas dependências, plugins e demais configurações de build.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[settings.xml]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: settings.xml configura o ambiente do Maven, não os plugins do projeto.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[pom.xml]]></text>
+      <feedback format="html"><text><![CDATA[Correto: o pom.xml é o arquivo central que contém configurações, dependências e plugins do projeto.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[build.gradle]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: build.gradle é usado pelo Gradle, não pelo Maven.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[project.json]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: esse arquivo não é utilizado pelo Maven.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>maven</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q13 -->
+  <question type="multichoice">
+    <name>
+      <text>Q13 - Ciclo de vida clean (Maven)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise a saída de um comando executado no terminal:</p>
+<pre><code>$ mvn clean
+[INFO] --- maven-clean-plugin:3.2.0:clean ---
+[INFO] Deleting target directory</code></pre>
+<p>Qual ciclo de vida do Maven está sendo executado nesse comando?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>O ciclo de vida clean é responsável por remover artefatos gerados por builds anteriores, como o diretório target.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[default]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o ciclo default é responsável por compilar, testar e empacotar.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[site]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o ciclo site gera a documentação do projeto.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[clean]]></text>
+      <feedback format="html"><text><![CDATA[Correto: o ciclo clean é responsável por limpar artefatos de builds anteriores, como o diretório target.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[verify]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: verify é uma fase do ciclo default, não um ciclo de vida.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>maven</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q14 -->
+  <question type="multichoice">
+    <name>
+      <text>Q14 - Checkstyle integrado ao Maven</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de configuração do pom.xml:</p>
+<pre><code>&lt;plugin&gt;
+    &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;validate&lt;/phase&gt;
+            &lt;goals&gt;&lt;goal&gt;check&lt;/goal&gt;&lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+<p>Qual é o objetivo dessa configuração integrada ao ciclo de build do Maven?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>Ao vincular o goal check do Checkstyle à fase validate, o Maven garante automaticamente que o código segue os padrões de estilo definidos antes de avançar no build.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Executar testes unitários automaticamente na fase validate.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: testes unitários são executados na fase test, não validate.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[Garantir que o processo de build verifique automaticamente se o código segue padrões de estilo antes de avançar.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: essa é a principal vantagem de integrar o Checkstyle ao ciclo de build do Maven.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Substituir o compilador Java padrão.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o Checkstyle não compila código, apenas analisa estilo.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[Gerar relatórios de cobertura de testes.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: cobertura de testes é responsabilidade de ferramentas como JaCoCo.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>checkstyle</text></tag>
+    </tags>
+  </question>
+
+  <!-- Q15 -->
+  <question type="multichoice">
+    <name>
+      <text>Q15 - Anotação @Disabled (JUnit)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Analise o trecho de código:</p>
+<pre><code>@Disabled
+@Test
+void testFuturaFuncionalidade() {
+    assertTrue(false);
+}</code></pre>
+<p>Qual é o efeito da anotação <code>@Disabled</code> nesse método?</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>@Disabled impede que o método de teste anotado seja executado pelo JUnit, sendo útil para desabilitar temporariamente testes que ainda não devem rodar.</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.0000000</penalty>
+    <hidden>0</hidden>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <answer fraction="0" format="html">
+      <text><![CDATA[O teste é executado normalmente, mas o resultado é ignorado.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o método nem chega a ser executado.]]></text></feedback>
+    </answer>
+    <answer fraction="100" format="html">
+      <text><![CDATA[O método de teste não será executado durante a execução da suíte de testes.]]></text>
+      <feedback format="html"><text><![CDATA[Correto: @Disabled impede a execução do método de teste anotado.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[O teste será executado apenas em ambiente de produção.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: @Disabled não tem relação com ambientes de execução.]]></text></feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text><![CDATA[A anotação força o teste a sempre passar.]]></text>
+      <feedback format="html"><text><![CDATA[Incorreto: o teste simplesmente não é executado, não é forçado a passar.]]></text></feedback>
+    </answer>
+    <tags>
+      <tag><text>facil</text></tag>
+      <tag><text>junit</text></tag>
+    </tags>
+  </question>
+
+</quiz>
