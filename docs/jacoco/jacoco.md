@@ -147,19 +147,31 @@ acende esses testes. Os exercícios desta página são unitários e usam o
 `jacoco-maven-plugin`, que enxerga essa porta da frente.
 {: .fs-3 }
 
-Os dois juntos, sem a nota lá embaixo, instrumentam a mesma classe duas
-vezes. O segundo passe encontra o bytecode que o primeiro já marcou e o
-teste quebra com erro de classe já instrumentada. A configuração da nota
-serve só ao caso misto: a extensão cobre o `@QuarkusTest`, e o plugin cobre
-o JUnit que não sobe o Quarkus, ignorando o `QuarkusClassLoader` para não
-repetir a marcação.
+Os dois juntos, sem a configuração da seção **Como ligar neste projeto**,
+instrumentam a mesma classe duas vezes. O segundo passe encontra o
+bytecode que o primeiro já marcou e o teste quebra com erro de classe já
+instrumentada. Com `exclClassLoaders`, a extensão cobre o `@QuarkusTest` e
+o plugin cobre o JUnit que não sobe o Quarkus, gravando os dois no mesmo
+arquivo.
 {: .fs-3 }
 
-## Ligando as luzes no projeto
+## Como ligar neste projeto
 
-No `pom.xml`, a dependência fica no escopo de teste. A versão vem do BOM
-do Quarkus, então não é preciso declará-la. O slide **Como ligar** traz o
-mesmo bloco.
+Este projeto é Quarkus, então a forma certa de ligar o JaCoCo muda em
+relação a um Maven comum. O caminho, em `exemplos/hexagonal`, é a extensão
+`quarkus-jacoco` junto com o `jacoco-maven-plugin`. A extensão cobre os
+testes `@QuarkusTest` (`BookResourceTest`). O plugin cobre os testes JUnit
+comuns (`BooksServiceTest`, onde também está a validação de `Book`) e grava
+tudo no mesmo arquivo de execução. O `@{argLine}` que já está no Surefire e
+no Failsafe deve permanecer: é ele que recebe o agente do JaCoCo. O slide
+**Como ligar** resume a dependência; o arranjo completo é o desta seção.
+{: .fs-3 }
+
+### Dependência
+
+A versão vem do BOM do Quarkus já importado no `pom.xml`
+(`quarkus.platform.version`, 3.34.1 neste repositório). Não declare versão
+na dependência.
 {: .fs-3 }
 
 ```xml
@@ -170,26 +182,115 @@ mesmo bloco.
 </dependency>
 ```
 
-Gere o relatório com o ciclo que executa os testes:
+### Propriedade e plugin
+
+Em `<properties>`:
 {: .fs-3 }
+
+```xml
+<jacoco.version>0.8.15</jacoco.version>
+```
+
+A 0.8.15 é a release estável atual e cobre o Java 25 deste `pom.xml`.
+{: .fs-3 }
+
+Em `<build><plugins>`, ao lado do Surefire:
+{: .fs-3 }
+
+```xml
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>${jacoco.version}</version>
+    <executions>
+        <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+                <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
+                <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
+                <append>true</append>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+O `exclClassLoaders` faz o agente do plugin ignorar as classes carregadas
+pelo Quarkus. Sem isso, as mesmas classes são instrumentadas duas vezes e o
+build quebra. O `destFile` é o arquivo padrão da extensão
+(`target/jacoco-quarkus.exec`), então a cobertura dos dois tipos de teste
+fica no mesmo lugar. O relatório HTML é gerado pela extensão, desde que
+rode pelo menos um `@QuarkusTest`.
+{: .fs-3 }
+
+### Gerar o relatório
 
 ```bash
 ./mvnw verify
 ```
 
-### O relatório
-
-Dois arquivos importam:
+O HTML fica em `target/jacoco-report/index.html`. Os dados brutos ficam em
+`target/jacoco-quarkus.exec`. Esse diretório é o padrão de
+`quarkus.jacoco.report-location`. O slide **Onde fica o relatório** lista
+os dois arquivos.
 {: .fs-3 }
 
-- `target/jacoco-report/index.html` é o mapa. Abra no navegador.
-- `target/jacoco-quarkus.exec` são os dados brutos. O HTML é montado a
-  partir dele.
+Para limitar o que entra no relatório, use
+`src/main/resources/application.properties` (ou o profile de teste):
 {: .fs-3 }
 
-O diretório do HTML é o valor padrão de `quarkus.jacoco.report-location`.
-Se você mudar essa propriedade, o `index.html` passa a nascer no caminho
-novo. O slide **Onde fica o relatório** lista os dois arquivos.
+```properties
+quarkus.jacoco.excludes=**/BookRequest.class
+```
+
+Os curingas seguem o formato do JaCoCo, por exemplo `**/domain/model/*`.
+A seção **Cômodos fora da planta** explica por que um DTO como
+`BookRequest` pode sair do mapa.
+{: .fs-3 }
+
+### Limite mínimo
+
+Se quiser falhar o build quando a cobertura ficar abaixo de um piso,
+inclua outra `<execution>` no mesmo plugin, apontando para o mesmo arquivo:
+{: .fs-3 }
+
+```xml
+<execution>
+    <id>jacoco-check</id>
+    <goals>
+        <goal>check</goal>
+    </goals>
+    <phase>verify</phase>
+    <configuration>
+        <dataFile>${project.build.directory}/jacoco-quarkus.exec</dataFile>
+        <rules>
+            <rule>
+                <element>BUNDLE</element>
+                <limits>
+                    <limit>
+                        <counter>LINE</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.80</minimum>
+                    </limit>
+                </limits>
+            </rule>
+        </rules>
+    </configuration>
+</execution>
+```
+
+O `BookResourceIT` (`@QuarkusIntegrationTest`) não entra nesse relatório:
+`skipITs` está `true` no `pom.xml`. Cobertura em modo nativo também não é
+suportada.
+{: .fs-3 }
+
+Os exercícios mais abaixo continuam unitários, só com `BooksServiceTest`,
+para não subir a API. O HTML que eles abrem é o do goal `report` do
+plugin, em `target/site/jacoco/index.html`. O arranjo desta seção é o do
+projeto inteiro, quando extensão e plugin rodam juntos.
 {: .fs-3 }
 
 ## Cômodos fora da planta
@@ -225,42 +326,8 @@ casa em ordem**):
 - Cobrir cada ramo de um método enorme é sinal de que o método tem portas
   demais, não de que a meta é 100%.
 - O modo nativo do Quarkus não gera esse relatório. A cobertura desta
-  página é a dos testes na JVM.
-{: .fs-3 }
-
----
-
-**Testes que não sobem o Quarkus.** A extensão, sozinha, cobre testes
-`@QuarkusTest`. Um teste JUnit puro, sem essa anotação, precisa do
-`jacoco-maven-plugin` apontando para o mesmo arquivo de dados e ignorando
-o classloader do Quarkus. Só use os dois juntos com essa configuração, como
-no [guia de cobertura do Quarkus](https://quarkus.io/guides/tests-with-coverage/):
-{: .fs-3 }
-
-```xml
-<plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.12</version>
-    <executions>
-        <execution>
-            <id>default-prepare-agent</id>
-            <goals>
-                <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-                <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
-                <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
-                <append>true</append>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-```
-
-Os exercícios abaixo são testes unitários de `Book`, dentro de
-`BooksServiceTest`. Eles usam o `jacoco-maven-plugin`. A extensão fica
-para o `@QuarkusTest`.
+  página é a dos testes na JVM. O `BookResourceIT` também fica de fora:
+  `skipITs` está `true`.
 {: .fs-3 }
 
 ---
@@ -315,7 +382,7 @@ na fase `test`, escreve o HTML. O Surefire desse projeto já usa
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.12</version>
+    <version>0.8.15</version>
     <executions>
         <execution>
             <goals>
