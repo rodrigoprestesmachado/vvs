@@ -102,13 +102,13 @@ Depois: `./mvnw verify`
 <!-- .element: style="margin-bottom:20px; font-size: 40px; font-family: Marker Felt; color:black" -->
 
 ```java
-if (title == null || title.isBlank()) {
-    throw new InvalidBookException("Title cannot be blank");
+if (author == null || author.isBlank()) {
+    throw new InvalidBookException("Author cannot be blank");
 }
 ```
 <!-- .element: style="font-size: 18px; color:black" -->
 
-Um POST com título vazio abre só uma porta do `||`. O losango fica âmbar até o título ir nulo.
+Um teste com autor vazio abre só uma porta do `||`. O losango fica âmbar até o autor ir nulo.
 <!-- .element: style="font-size: 22px; color:black" -->
 
 
@@ -116,7 +116,7 @@ Um POST com título vazio abre só uma porta do `||`. O losango fica âmbar até
 ## Cômodos fora da planta
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- No cadastro de livros, `BookRequest` é DTO: acende, mas não é a regra do `Book`.
+- No teste unitário, `BookRequest` fica apagado: não é a regra do `Book`.
 <!-- .element: style="margin-bottom:50px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - `quarkus.jacoco.excludes` tira essas classes do relatório.
@@ -144,10 +144,10 @@ Um POST com título vazio abre só uma porta do `||`. O losango fica âmbar até
 ## Exercícios, um cômodo por vez
 <!-- .element: style="margin-bottom:50px; font-size: 40px; font-family: Marker Felt; color:#F5F5F5" -->
 
-- 1. No `exemplos/hexagonal`, gere o relatório e ache o título escuro em `Book.validate`.
+- 1. No `BooksServiceTest`, gere o relatório e ache o autor escuro em `Book.validate`.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
-- 2. POST com título vazio. 3. Feche o `||` com título nulo. 4. Cubra exemplar negativo.
+- 2. Teste o autor vazio. 3. Feche o `||` com autor nulo. 4. Cubra o ano anterior a 1.
 <!-- .element: style="margin-bottom:28px; font-size: 23px; font-family: system-ui; color:#F5F5F5" -->
 
 - 5. Tire `BookRequest` da planta. 6. Explique por que linha e ramo não andam juntos.

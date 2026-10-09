@@ -73,22 +73,21 @@ meta dos exercícios desta página.
 A linha do `if` acende assim que a condição é avaliada, mesmo que só um
 lado tenha sido tomado. O ramo só fica verde quando as duas portas abrem.
 Por isso a cobertura de linhas pode parecer boa enquanto a de ramos ainda
-está pela metade. O slide **O losango âmbar** usa a validação de título
+está pela metade. O slide **O losango âmbar** usa a validação de autor
 do `Book`, no cadastro de livros:
 {: .fs-3 }
 
 ```java
-if (title == null || title.isBlank()) {
-    throw new InvalidBookException("Title cannot be blank");
+if (author == null || author.isBlank()) {
+    throw new InvalidBookException("Author cannot be blank");
 }
 ```
 
-Um POST com título `""` executa a linha do `if` e o `throw`. O losango
-continua âmbar: a porta `title == null` não abriu, porque `||` tem duas
-entradas. O `BooksService.add` tem a mesma forma de porta em
-`opt.isPresent()`. No `BookResourceTest` ela já fica verde, porque existem
-o POST que cria o livro (201) e o POST repetido (409).
-{: .fs-3 }
+Um teste unitário com autor `""` executa a linha do `if` e o `throw`. O
+losango continua âmbar: a porta `author == null` não abriu, porque `||`
+tem duas entradas. O `BooksService.add` tem a mesma forma de porta em
+`opt.isPresent()`. O `BooksServiceTest` já acende as duas: ISBN novo e
+ISBN repetido.
 {: .fs-3 }
 
 ## Como ler as cores
@@ -144,9 +143,8 @@ os dois goals fariam à mão: instrumenta a classe quando o
 o HTML em `target/jacoco-report`. No cadastro de livros, quem passa por
 essa porta é o `BookResourceTest`. O `BooksServiceTest` instancia
 `BooksService` direto, sem `@QuarkusTest`, então a extensão sozinha não
-acende esses testes. Por isso, nos exercícios desta página, a dependência
-da extensão basta e os testes novos entram no `BookResourceTest`. Não é
-preciso declarar `prepare-agent`.
+acende esses testes. Os exercícios desta página são unitários e usam o
+`jacoco-maven-plugin`, que enxerga essa porta da frente.
 {: .fs-3 }
 
 Os dois juntos, sem a nota lá embaixo, instrumentam a mesma classe duas
@@ -206,11 +204,13 @@ O padrão segue o do guia do Quarkus: `*` e `?` funcionam como curinga.
 quarkus.jacoco.excludes=**/BookRequest.class
 ```
 
-No cadastro de livros, `BookRequest` é o DTO da porta REST: o POST chama
-`isbn()`, `title()` e os outros acessores, então o cômodo acende, mas ele
-não é a regra de negócio. O padrão acima tira essa classe do relatório.
+`BookRequest` é o DTO da porta REST. No teste de API ele acende, porque o
+POST chama `isbn()` e `title()`. No teste unitário de `Book` ele fica
+apagado, porque ninguém o carrega. Nos dois casos não é a regra de
+negócio, e o padrão acima tira a classe do relatório da extensão.
 `quarkus.jacoco.includes` faz o contrário: quando está ausente, tudo entra.
-O slide **Cômodos fora da planta** é esse recorte.
+O slide **Cômodos fora da planta** é esse recorte. Nos exercícios, a
+exclusão equivalente fica no `report` do `jacoco-maven-plugin`.
 {: .fs-3 }
 
 ## Luz acesa não é casa em ordem
@@ -219,9 +219,9 @@ Três limites valem mais do que perseguir 100% (slide **Luz acesa não é
 casa em ordem**):
 {: .fs-3 }
 
-- Cobertura alta com assert fraco só prova que o código rodou. Um POST em
-  `/books` que só confere o status 201, sem olhar o ISBN devolvido, acende
-  o cômodo do `add` e deixa o problema quieto.
+- Cobertura alta com assert fraco só prova que o código rodou. Um teste
+  que chama `service.add(book)` e não confere o livro devolvido acende o
+  cômodo e deixa o problema quieto.
 - Cobrir cada ramo de um método enorme é sinal de que o método tem portas
   demais, não de que a meta é 100%.
 - O modo nativo do Quarkus não gera esse relatório. A cobertura desta
@@ -258,8 +258,9 @@ no [guia de cobertura do Quarkus](https://quarkus.io/guides/tests-with-coverage/
 </plugin>
 ```
 
-Os exercícios abaixo usam só `@QuarkusTest`. A dependência da extensão
-basta.
+Os exercícios abaixo são testes unitários de `Book`, dentro de
+`BooksServiceTest`. Eles usam o `jacoco-maven-plugin`. A extensão fica
+para o `@QuarkusTest`.
 {: .fs-3 }
 
 ---
@@ -268,21 +269,25 @@ basta.
 
 Os exercícios acontecem no projeto que já existe, em `exemplos/hexagonal`.
 A pasta tem nome de arquitetura; o sistema é o cadastro de livros. Você não
-cria outro projeto. Os exercícios vão do mais simples ao mais exigente.
-Resolva na ordem. Depois de cada um, rode `./mvnw test` nessa pasta, abra
-`target/jacoco-report/index.html` e só avance quando o que o enunciado
-pede estiver visível na planta. O slide **Exercícios, um cômodo por vez**
-é a lista curta.
+cria outro projeto e não sobe a API. Tudo é teste unitário em
+`BooksServiceTest`, no grupo `BookValidation`, chamando `Book.of`. Os
+exercícios vão do mais simples ao mais exigente. Resolva na ordem. Depois
+de cada um, rode o comando abaixo, abra `target/site/jacoco/index.html` e
+só avance quando o que o enunciado pede estiver visível na planta. O slide
+**Exercícios, um cômodo por vez** é a lista curta.
 {: .fs-3 }
 
-`./mvnw test` sobe o MySQL de teste pelo Dev Services. É preciso Docker,
-como no restante desse projeto.
-{: .fs-3 }
+```bash
+./mvnw test -Dtest=BooksServiceTest -Dskip.frontend=true
+```
+
+`-Dtest=BooksServiceTest` deixa de fora o `BookResourceTest`. Sem esse
+teste de API, o Docker e o MySQL não entram no caminho.
 {: .fs-3 }
 
 ### Preparação
 
-Entre na pasta do cadastro de livros e abra o projeto.
+Entre na pasta do cadastro de livros.
 {: .fs-3 }
 
 ```bash
@@ -290,155 +295,146 @@ cd exemplos/hexagonal
 code .
 ```
 
-O domínio está em `Book` e `BooksService`. A API está em `BookResource`,
-com o DTO `BookRequest`. O teste que a extensão enxerga é o
-`BookResourceTest`, anotado com `@QuarkusTest`. O `BooksServiceTest` fica
-de fora desse relatório até a configuração da nota sobre testes que não
-sobem o Quarkus.
+O teste unitário já está em
+`src/test/java/dev/ifrs/hexagonal/domain/service/BooksServiceTest.java`.
+Ele monta `BooksService` com um repositório em memória. A validação de
+`Book` fica na classe interna `BookValidation`. Os métodos novos entram
+aí, ao lado de `shouldRejectBlankTitle`.
 {: .fs-3 }
 
 ### Exercício 1: achar o cômodo escuro
 {: .fw-500 }
 
-Adicione `quarkus-jacoco` ao `pom.xml` de `exemplos/hexagonal`, no escopo
-`test`, como na seção **Ligando as luzes no projeto**. Rode `./mvnw test`
-e abra `target/jacoco-report/index.html`. Em `Book.validate`, a linha
-`if (title == null || title.isBlank())` fica amarela: os POSTs que já
-existem mandam um título preenchido, então a porta do `throw` continua
-fechada.
+Adicione o `jacoco-maven-plugin` ao `pom.xml` de `exemplos/hexagonal`. O
+`prepare-agent` acende as classes carregadas pelo Surefire. O `report`,
+na fase `test`, escreve o HTML. O Surefire desse projeto já usa
+`@{argLine}`, então o agente entra no teste unitário.
 {: .fs-3 }
 
-### Exercício 2: acender o corredor do título em branco
+```xml
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.12</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+        </execution>
+        <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+                <goal>report</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+Rode `./mvnw test -Dtest=BooksServiceTest -Dskip.frontend=true` e abra
+`target/site/jacoco/index.html`. Em `Book.validate`, a linha
+`if (author == null || author.isBlank())` fica amarela: os testes que já
+existem sempre mandam um autor preenchido, então o `throw` continua
+vermelho.
+{: .fs-3 }
+
+### Exercício 2: acender o corredor do autor em branco
 {: .fw-500 }
 
-No `BookResourceTest`, acrescente um POST com título vazio. O
-`BookExceptionMapper` traduz `InvalidBookException` em HTTP 400.
+Dentro de `BookValidation`, acrescente o teste do autor vazio.
+`VALID_ISBN` já está nessa classe.
 {: .fs-3 }
 
 ```java
 @Test
-void shouldReturn400WhenTitleIsBlank() {
-    String json = """
-            {
-              "isbn": "020161622X",
-              "title": "",
-              "author": "Andrew Hunt",
-              "publicationYear": 1999,
-              "copiesAvailable": 3
-            }
-            """;
-
-    given()
-            .contentType(ContentType.JSON)
-            .body(json)
-            .when()
-            .post("/books")
-            .then()
-            .statusCode(400)
-            .body("message", notNullValue());
+void shouldRejectBlankAuthor() {
+    assertThrows(InvalidBookException.class,
+            () -> Book.of(VALID_ISBN, "Clean Code", "", 2008, 5));
 }
 ```
 
-Rode `./mvnw test`. O `throw` do título em branco fica verde. O losango do
-`||` continua âmbar: `title == null` ainda não foi visitado. Anote o
-percentual de linhas e o de ramos de `validate`. Você usa esses dois
-números no exercício 6.
+Rode o mesmo `./mvnw test -Dtest=BooksServiceTest -Dskip.frontend=true`.
+O `throw` do autor em branco fica verde. O losango do `||` continua âmbar:
+`author == null` ainda não foi visitado. Anote o percentual de linhas e o
+de ramos de `validate`. Você usa esses dois números no exercício 6.
 {: .fs-3 }
 
 ### Exercício 3: a outra porta do `||`
 {: .fw-500 }
 
-Acrescente o POST em que o título vem nulo. As duas entradas de
-`title == null || title.isBlank()` ficam acesas e o losango fica verde.
+Acrescente o teste em que o autor é nulo. As duas entradas de
+`author == null || author.isBlank()` ficam acesas e o losango fica verde.
 {: .fs-3 }
 
 ```java
 @Test
-void shouldReturn400WhenTitleIsNull() {
-    String json = """
-            {
-              "isbn": "020161622X",
-              "title": null,
-              "author": "Andrew Hunt",
-              "publicationYear": 1999,
-              "copiesAvailable": 3
-            }
-            """;
-
-    given()
-            .contentType(ContentType.JSON)
-            .body(json)
-            .when()
-            .post("/books")
-            .then()
-            .statusCode(400)
-            .body("message", notNullValue());
+void shouldRejectNullAuthor() {
+    assertThrows(InvalidBookException.class,
+            () -> Book.of(VALID_ISBN, "Clean Code", null, 2008, 5));
 }
 ```
 
 {: .fs-3 }
 
-### Exercício 4: a porta dos exemplares negativos
+### Exercício 4: a porta do ano anterior a 1
 {: .fw-500 }
 
-`copiesAvailable < 0` ainda está escuro: nenhum teste da API manda
-exemplar negativo. Cubra essa exceção com outro POST, conferindo o 400.
+`shouldRejectFuturePublicationYear` já entra no `throw` com o ano 9999.
+A outra porta, `publicationYear < 1`, continua fechada. Cubra esse caminho
+com um ano zero.
 {: .fs-3 }
 
 ```java
 @Test
-void shouldReturn400WhenCopiesAreNegative() {
-    String json = """
-            {
-              "isbn": "020161622X",
-              "title": "The Pragmatic Programmer",
-              "author": "Andrew Hunt",
-              "publicationYear": 1999,
-              "copiesAvailable": -1
-            }
-            """;
-
-    given()
-            .contentType(ContentType.JSON)
-            .body(json)
-            .when()
-            .post("/books")
-            .then()
-            .statusCode(400)
-            .body("message", notNullValue());
+void shouldRejectPublicationYearBeforeOne() {
+    assertThrows(InvalidBookException.class,
+            () -> Book.of(VALID_ISBN, "Clean Code", "Robert Martin", 0, 5));
 }
 ```
 
-O `throw` de exemplares negativos fica verde, e o teste continua dizendo
-qual resposta a API devolveu.
+O losango de `publicationYear < 1 || publicationYear > currentYear` fica
+verde, e o teste continua conferindo que `Book.of` rejeita o ano.
 {: .fs-3 }
 
 ### Exercício 5: tirar o DTO da planta
 {: .fw-500 }
 
-`BookRequest` aparece no relatório porque `BookResource.addBook` chama os
-acessores. É a forma do JSON, não a regra do livro. Em
-`src/main/resources/application.properties`, exclua a classe e rode
-`./mvnw test` outra vez.
+`BookRequest` aparece no relatório apagado: nenhum teste unitário o
+carrega. É a forma do JSON, não a regra do livro. No `report` do plugin,
+exclua a classe e rode o teste outra vez.
 {: .fs-3 }
 
-```properties
-quarkus.jacoco.excludes=**/BookRequest.class
+```xml
+<execution>
+    <id>report</id>
+    <phase>test</phase>
+    <goals>
+        <goal>report</goal>
+    </goals>
+    <configuration>
+        <excludes>
+            <exclude>**/BookRequest.class</exclude>
+        </excludes>
+    </configuration>
+</execution>
 ```
 
-`BookRequest` sai do relatório. `Book` e `BooksService` permanecem, com a
-cobertura que os testes da API acenderam.
+`BookRequest` sai do relatório. `Book` permanece, com a cobertura que
+`BookValidation` acendeu.
 {: .fs-3 }
 
 ### Exercício 6: uma frase sobre linha e ramo
 {: .fw-500 }
 
 Sem escrever código novo, volte aos percentuais que você anotou no
-exercício 2, depois só do título vazio, antes do título nulo. Escreva uma
+exercício 2, depois só do autor vazio, antes do autor nulo. Escreva uma
 frase dizendo por que a cobertura de linhas de `validate` e a de ramos não
 coincidem. A pista está na seção **Linha e ramo não são a mesma coisa**: a
 linha do `if` já conta como executada quando uma única porta do `||` abre.
 {: .fs-3 }
+
 
 ## Teste seus conhecimentos 🧠
 

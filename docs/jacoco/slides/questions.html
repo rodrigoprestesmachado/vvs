@@ -64,13 +64,13 @@
 - [x] `test`
 - [ ] `provided`
 
-### Depois de `./mvnw verify`, onde você abre o relatório HTML?
+### Depois de `./mvnw test -Dtest=BooksServiceTest`, onde você abre o relatório HTML?
 
-> Dica: revise a seção O relatório e o slide Onde fica o relatório
+> Dica: revise o Exercício 1
 
 - [ ] `src/main/resources/index.html`
-- [ ] `target/site/surefire-report.html`
-- [x] `target/jacoco-report/index.html`
+- [ ] `target/jacoco-report/index.html`
+- [x] `target/site/jacoco/index.html`
 - [ ] `target/quarkus-app/jacoco.html`
 
 ### Para que serve `quarkus.jacoco.excludes`?
@@ -91,13 +91,13 @@
 - [ ] Porque 100% só vale para a coluna de instruções
 - [ ] Porque o relatório HTML arredonda os percentuais para cima
 
-### O que o Exercício 3 pede para você observar em `title == null || title.isBlank()`?
+### O que o Exercício 3 pede para você observar em `author == null || author.isBlank()`?
 
 > Dica: revise o Exercício 3 e o slide O losango âmbar
 
 - [ ] Que o `BooksService.add` continue vermelho
-- [x] Que o título vazio deixa o losango âmbar, e o título nulo fecha a outra porta do `||`
-- [ ] Que o POST de título nulo devolva 201
+- [x] Que o autor vazio deixa o losango âmbar, e o autor nulo fecha a outra porta do `||`
+- [ ] Que `Book.of` com autor nulo devolva o livro
 - [ ] Que a classe `BookRequest` suma do relatório
 
 ### A extensão `quarkus-jacoco`, sozinha, cobre qual tipo de teste?
