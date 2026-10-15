@@ -15,9 +15,11 @@ nav_order: 12
 
 ## O que é o Rest Assured?
 
-Rest Assured é uma biblioteca Java criada para automatizar testes de **APIs REST**. Com ela, podemos enviar requisições HTTP (GET, POST, PUT, DELETE, etc.) e verificar se as respostas voltam como esperávamos.
+Rest Assured é uma biblioteca Java criada para automatizar testes de **APIs REST**. Com ela, podemos enviar requisições HTTP (GET, POST, PUT, DELETE, etc.) e verificar se as respostas voltam exatamente como esperávamos.
 
-### Uma analogia para entender
+Em outras palavras: em vez de abrir um cliente HTTP manualmente, disparar a chamada e olhar o resultado com os próprios olhos, o Rest Assured faz isso de forma automática, repetível e dentro dos nossos testes JUnit.
+
+### Uma analogia para entender 🍕
 
 Imagine que uma API REST é um **restaurante** e que você é o cliente:
 
@@ -25,24 +27,26 @@ Imagine que uma API REST é um **restaurante** e que você é o cliente:
 * A **resposta** é o prato que chega à mesa.
 * O **teste** é a sua avaliação: o pedido chegou? É realmente uma pizza? É de mussarela? Está na temperatura certa?
 
-O Rest Assured é o "cliente experiente" que faz o pedido, recebe o prato e confere cada detalhe automaticamente, sem que você precise fazer isso na mão a cada refeição.
+O Rest Assured é o cliente experiente que faz o pedido, recebe o prato e confere cada detalhe automaticamente, sem que você precise fazer isso na mão a cada refeição.
 
 ### Por que usar Rest Assured?
 
-* **Sintaxe fluente e legível**: o código se parece com a descrição do teste em inglês (`given... when... then...`).
+* **Sintaxe fluente e legível**: o código se parece com a descrição do teste em português ou inglês (`given... when... then...`).
 * **Integração natural com JUnit**: roda junto com os outros testes do seu projeto.
 * **Validações poderosas**: permite verificar status, cabeçalhos, cookies, JSON, XML, tempo de resposta, entre outros.
 * **Pouca configuração**: basta adicionar a dependência no `pom.xml` e começar a escrever testes.
 
 ### A estrutura Given, When, Then
 
-Todo teste com Rest Assured segue um padrão chamado **BDD (Behavior Driven Development)**, que organiza o teste em três etapas:
+Todo teste com Rest Assured segue um padrão chamado **BDD** (Behavior Driven Development), que organiza o teste em três etapas bem definidas:
 
 | Etapa     | Significado                                        | Analogia do restaurante         |
-|-----------|----------------------------------------------------|---------------------------------|
-| `given()` | Dado um contexto (cabeçalhos, parâmetros, corpo)   | Como você se prepara para pedir |
-| `when()`  | Quando uma ação acontece (GET, POST, etc.)         | O momento em que faz o pedido   |
-| `then()`  | Então valide o resultado                           | A conferência do prato          |
+|-----------|-----------------------------------------------------|----------------------------------|
+| `given()` | Dado um contexto (cabeçalhos, parâmetros, corpo)    | Como você se prepara para pedir |
+| `when()`  | Quando uma ação acontece (GET, POST, etc.)          | O momento em que faz o pedido   |
+| `then()`  | Então valide o resultado                            | A conferência do prato          |
+
+> 💡 **Resumo rápido:** se você conseguir ler um teste em voz alta como "dado isso, quando eu fizer aquilo, então deve acontecer isto", você já entendeu a lógica do Rest Assured.
 
 ### O que podemos validar?
 
@@ -54,6 +58,8 @@ Com Rest Assured é possível validar:
 * **Campos específicos** dentro do JSON.
 * **Cookies** retornados pelo servidor.
 * O **tempo de resposta**.
+
+Nas próximas seções, cada um desses pontos vai aparecer em um exemplo prático, sempre seguindo a mesma lógica: primeiro mostramos o código, depois explicamos linha a linha o que ele faz.
 
 ---
 
@@ -120,7 +126,7 @@ public void validateJsonFields() {
 
 ### 3. Enviando cabeçalhos personalizados (ex.: token JWT)
 
-Em APIs reais, muitos endpoints exigem autenticação por token. É como entrar em uma área VIP de uma boate: você precisa apresentar o **selo** (token) na porta.
+Em APIs reais, muitos endpoints exigem autenticação por token. É como entrar em uma área VIP de uma boate: você precisa apresentar o selo (token) na porta.
 
 ```java
 @Test
@@ -172,7 +178,7 @@ public void autenticaUsuarioComSucesso() {
     given()
         .auth().basic("usuario", "senha")
     .when()
-        .get("/api/area-restrita")
+        .get("/api/area/restrita")
     .then()
         .statusCode(200)
         .body("mensagem", equalTo("Acesso permitido"));
@@ -285,7 +291,7 @@ public void criaNovoUsuario() {
 Os **matchers** são as expressões que aparecem dentro de `body(...)`, `cookie(...)`, etc. Eles vêm da biblioteca **Hamcrest**, que o Rest Assured usa por baixo dos panos.
 
 | Matcher                   | Para que serve                                     |
-|---------------------------|----------------------------------------------------|
+|----------------------------|-----------------------------------------------------|
 | `equalTo(x)`              | Valor exatamente igual a `x`                       |
 | `containsString("abc")`   | A string contém o trecho `"abc"`                   |
 | `startsWith("abc")`       | A string começa com `"abc"`                        |
@@ -298,14 +304,16 @@ Os **matchers** são as expressões que aparecem dentro de `body(...)`, `cookie(
 
 ---
 
-## Exercícios 📝
+## Exercícios de fixação 📝
 
-Considere o sistema de uma **biblioteca** que expõe uma API REST em `http://localhost:8080` para gerenciar o acervo de livros (CRUD completo). Implemente os testes usando Rest Assured e JUnit.
+Agora que você já viu os nove exemplos acima, chegou a hora de praticar. Para manter o mesmo fio condutor usado em outras partes do curso (veja o modelo de `Book` em [Teste Unitário](../unitario/junit.html)), os exercícios a seguir giram em torno do sistema de uma **biblioteca**, que expõe uma API REST em `http://localhost:8080` para gerenciar o acervo de livros (CRUD completo).
+
+Cada exercício abaixo revisita, na prática, um conceito já apresentado em um dos exemplos anteriores. Implemente os testes usando Rest Assured e JUnit.
 
 **Endpoints disponíveis:**
 
 | Método | Endpoint        | Descrição                          |
-|--------|-----------------|------------------------------------|
+|--------|------------------|--------------------------------------|
 | GET    | `/books`        | Lista todos os livros              |
 | GET    | `/books/{id}`   | Busca um livro pelo ID             |
 | POST   | `/books`        | Cadastra um novo livro             |
@@ -328,11 +336,11 @@ Considere o sistema de uma **biblioteca** que expõe uma API REST em `http://loc
 
 ### Exercício 1: Status code
 
-Escreva um teste que verifique se o endpoint `GET /books` retorna o status HTTP `200`.
+*Revisa o exemplo 1.* Escreva um teste que verifique se o endpoint `GET /books` retorna o status HTTP `200`.
 
 ### Exercício 2: Validação de campo simples
 
-A API responde a `GET /books/1` com:
+*Revisa o exemplo 2.* A API responde a `GET /books/1` com:
 
 ```json
 {
@@ -354,7 +362,7 @@ Escreva um teste que valide:
 
 ### Exercício 3: Query params
 
-Escreva um teste para `GET /books?author=Machado+de+Assis&available=true` que verifique:
+*Revisa o exemplo 6.* Escreva um teste para `GET /books?author=Machado+de+Assis&available=true` que verifique:
 
 * O status `200`.
 * A resposta contém pelo menos um livro (`size()` maior que 0).
@@ -364,7 +372,7 @@ Escreva um teste para `GET /books?author=Machado+de+Assis&available=true` que ve
 
 ### Exercício 4: Criação de livro (POST)
 
-Envie uma requisição `POST /books` com o corpo:
+*Revisa o exemplo 9.* Envie uma requisição `POST /books` com o corpo:
 
 ```json
 {
@@ -405,11 +413,11 @@ Crie um teste que envie `DELETE /books/1` e valide:
 
 * O status retornado é `204 No Content`.
 
-Em seguida, faça um `GET /books/1` no mesmo teste e verifique que agora a resposta é `404`.
+Em seguida, faça um `GET /books/1` no mesmo teste e verifique que agora a resposta é `404` (*revisa o exemplo 8*).
 
 ### Exercício 7: Autenticação obrigatória
 
-Crie um teste para `GET /loans` que:
+*Revisa os exemplos 3 e 5.* Crie um teste para `GET /loans` que:
 
 * Envie o cabeçalho `Authorization: Bearer abc.123.xyz`.
 * Espere o status `200`.
@@ -418,7 +426,7 @@ Em seguida, crie um segundo teste, **sem** o cabeçalho, e verifique que o statu
 
 ### Exercício 8: Erro 404
 
-Escreva um teste para `GET /books/99999` que verifique:
+*Revisa o exemplo 8.* Escreva um teste para `GET /books/99999` que verifique:
 
 * O status `404`.
 * O corpo contém o campo `error` com a mensagem `"Book not found"`.
@@ -434,6 +442,17 @@ Combine vários conceitos em um único fluxo de teste que represente o trabalho 
 5. Valide que cada etapa retornou o status esperado.
 
 > 💡 **Dica:** use `.extract().path("token")` para capturar o token e `.extract().path("id")` para capturar o ID do livro recém criado.
+
+---
+
+## Questões teóricas 📚
+
+Antes de seguir para a próxima seção, confira seu entendimento sobre os conceitos apresentados. As questões abaixo não exigem código, apenas o domínio da teoria.
+
+<center>
+<iframe src="https://vvs.rpmhub.dev/componente/questions.html"
+    title="Questões teóricas: Rest Assured" width="90%" height="500" style="border:none;"></iframe>
+</center>
 
 ---
 

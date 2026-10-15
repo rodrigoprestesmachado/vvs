@@ -77,6 +77,9 @@ Todo teste segue um padrão chamado **BDD** (Behavior Driven Development):
 * **then()** → Então valide o resultado → *a conferência do prato que chega.*
 <!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
 
+💡 Se você conseguir ler o teste em voz alta como "dado isso, quando eu fizer aquilo, então deve acontecer isto", você já entendeu a lógica do Rest Assured.
+<!-- .element: style="margin-bottom:30px; font-size: 18px; font-family: arial; color:#C9E66A" -->
+
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
 ## O que podemos validar?
@@ -249,7 +252,7 @@ public void autenticaUsuarioComSucesso() {
     given()
         .auth().basic("usuario", "senha")
     .when()
-        .get("/api/area-restrita")
+        .get("/api/area/restrita")
     .then()
         .statusCode(200)
         .body("mensagem", equalTo("Acesso permitido"));
@@ -382,18 +385,21 @@ public void criaNovoUsuario() {
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="zoom"  -->
-# Exercícios 📝
+# Exercícios de fixação 📝
 <!-- .element: style="margin-bottom:30px; font-size: 45px; font-family: Marker Felt;" -->
 
-Considere uma API REST em `http://localhost:8080` para uma loja virtual. Implemente os testes com Rest Assured + JUnit.
+Para manter o mesmo fio condutor usado em outras partes do curso, os exercícios giram em torno do sistema de uma biblioteca, com API REST em `http://localhost:8080`. Implemente os testes com Rest Assured + JUnit.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
+
+**Endpoints:** `GET/POST /books`, `GET/PUT/DELETE /books/{id}`, `POST /login`, `GET /loans`.
+<!-- .element: style="margin-bottom:30px; font-size: 18px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
 ## Exercício 1: Status code
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-Escreva um teste que verifique se o endpoint `GET /produtos` retorna o status HTTP `200`.
+*Revisa o exemplo 1.* Escreva um teste que verifique se o endpoint `GET /books` retorna o status HTTP `200`.
 <!-- .element: style="margin-bottom:30px; font-size: 24px; font-family: arial;" -->
 
 
@@ -401,18 +407,18 @@ Escreva um teste que verifique se o endpoint `GET /produtos` retorna o status HT
 ## Exercício 2: Validação de campos
 <!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
 
-A API responde a `GET /produtos/1` com:
+*Revisa o exemplo 2.* A API responde a `GET /books/1` com:
 <!-- .element: style="margin-bottom:10px; font-size: 22px; font-family: arial;" -->
 
 ```json
-{ "id": 1, "nome": "Notebook", "preco": 3500.00 }
+{ "id": 1, "title": "Dom Casmurro", "author": "Machado de Assis", "year": 1899, "available": true }
 ```
-<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 18px; font-family: arial; color:black"  -->
+<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 15px; font-family: arial; color:black"  -->
 
 Valide:
 * O status `200`.
-* O campo `nome` é igual a `"Notebook"`.
-* O campo `preco` é maior que `3000`.
+* O campo `title` é igual a `"Dom Casmurro"`.
+* O campo `year` é menor que `1900`.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
@@ -420,13 +426,14 @@ Valide:
 ## Exercício 3: Query params
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-Escreva um teste para
-`GET /produtos?categoria=eletronicos&precoMax=5000`
+*Revisa o exemplo 6.* Escreva um teste para
+`GET /books?author=Machado+de+Assis&available=true`
 que verifique:
 <!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
 
 * O status `200`.
-* A resposta contém pelo menos um produto (`size()` maior que 0).
+* A resposta contém pelo menos um livro (`size()` maior que 0).
+* Todos os livros retornados têm `available` igual a `true`.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
@@ -434,26 +441,51 @@ que verifique:
 ## Exercício 4: Criação (POST)
 <!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
 
-Envie `POST /produtos` com o corpo:
+*Revisa o exemplo 9.* Envie `POST /books` com o corpo:
 <!-- .element: style="margin-bottom:10px; font-size: 22px; font-family: arial;" -->
 
 ```json
-{ "nome": "Mouse", "preco": 120.00 }
+{ "title": "1984", "author": "George Orwell", "year": 1949, "available": true }
 ```
-<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 18px; font-family: arial; color:black"  -->
+<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 16px; font-family: arial; color:black"  -->
 
 Valide:
 * O status é `201`.
-* O campo `nome` retornado é `"Mouse"`.
-* O campo `id` não é nulo.
+* O campo `title` retornado é `"1984"`.
+* O campo `id` não é nulo (`notNullValue()`).
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 5: Autenticação
+## Exercício 5: Atualização (PUT)
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-Crie um teste para `GET /pedidos` que:
+Suponha que o livro com `id = 1` já existe. Envie `PUT /books/1` marcando `available` como `false` (livro emprestado).
+<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
+
+Valide que:
+* O status é `200`.
+* O campo `available` agora é `false`.
+<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
+## Exercício 6: Remoção (DELETE)
+<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
+
+Crie um teste que envie `DELETE /books/1` e valide:
+* O status retornado é `204 No Content`.
+<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
+
+Em seguida, faça `GET /books/1` no mesmo teste e verifique que agora a resposta é `404` (*revisa o exemplo 8*).
+<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
+## Exercício 7: Autenticação
+<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
+
+*Revisa os exemplos 3 e 5.* Crie um teste para `GET /loans` que:
 * Envie o cabeçalho `Authorization: Bearer abc.123.xyz`.
 * Espere o status `200`.
 <!-- .element: style="margin-bottom:25px; font-size: 22px; font-family: arial;" -->
@@ -463,31 +495,33 @@ Crie um **segundo teste**, sem o cabeçalho, e verifique que o status retornado 
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 6: Erro 404
+## Exercício 8: Erro 404
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-Escreva um teste para `GET /produtos/99999` que verifique:
+*Revisa o exemplo 8.* Escreva um teste para `GET /books/99999` que verifique:
 <!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
 
 * O status `404`.
-* O corpo contém o campo `erro` com a mensagem `"Produto não encontrado"`.
+* O corpo contém o campo `error` com a mensagem `"Book not found"`.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 7: Desafio 🚀
+## Exercício 9: Desafio 🚀
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-Combine vários conceitos em um único teste:
+Combine vários conceitos no fluxo de um bibliotecário real:
 <!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
 
-1. Faz `POST /login` enviando JSON com `usuario` e `senha`, e **captura o token JWT** retornado.
-2. Usa esse token para fazer `GET /pedidos`.
-3. Valida status `200` e ao menos um pedido na lista.
-<!-- .element: style="margin-bottom:20px; font-size: 21px; font-family: arial;" -->
+1. `POST /login` com `username` e `password`, **capturando o token JWT**.
+2. Use o token para `POST /books` e cadastrar um livro. Capture o `id`.
+3. `GET /books/{id}` para confirmar a criação.
+4. `DELETE /books/{id}` para remover o livro.
+5. Valide o status esperado em cada etapa.
+<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
 
-💡 Dica: use `.extract().path("token")` para capturar o valor.
-<!-- .element: style="margin-bottom:30px; font-size: 20px; font-family: arial;" -->
+💡 Dica: use `.extract().path("token")` e `.extract().path("id")` para capturar os valores.
+<!-- .element: style="margin-bottom:30px; font-size: 18px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="zoom"  -->

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+	src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js">
+	</script>
+	<script>quizdown.init();</script>
+    <title>Questões teóricas: Rest Assured</title>
+</head>
+<body>
+    <div class="quizdown">
+        # Qual é o padrão usado pelo Rest Assured para organizar um teste em três etapas?
+        - [ ] MVC (Model, View, Controller).
+        - [x] BDD, com given(), when() e then().
+        - [ ] CRUD (Create, Read, Update, Delete).
+        - [ ] AAA (Arrange, Act, Assert) exclusivo do JUnit.
+
+        > Dica: o padrão BDD organiza o teste como uma frase legível em três etapas.
+
+        # Na etapa given(), o que normalmente é preparado?
+        - [x] O contexto da requisição: cabeçalhos, parâmetros e corpo.
+        - [ ] A validação do resultado retornado pelo servidor.
+        - [ ] O disparo da chamada HTTP.
+        - [ ] Apenas o status code esperado.
+
+        # Qual método dispara a chamada HTTP dentro de um teste com Rest Assured?
+        - [ ] then().
+        - [ ] given().
+        - [x] when(), seguido do verbo HTTP, como get() ou post().
+        - [ ] assert().
+
+        # Qual matcher deve ser usado para verificar se um campo contém um trecho de texto, sem precisar ser idêntico?
+        - [ ] equalTo().
+        - [x] containsString().
+        - [ ] notNullValue().
+        - [ ] is().
+
+        > Dica: equalTo exige igualdade exata; containsString é mais flexível.
+
+        # Como validar, em uma única linha, que um campo numérico de um JSON é maior que um valor?
+        - [ ] body("campo", equalTo(10)).
+        - [x] body("campo", greaterThan(10)).
+        - [ ] body("campo", startsWith(10)).
+        - [ ] body("campo", hasItems(10)).
+
+        # Qual código de status HTTP é esperado após a criação bem sucedida de um recurso com POST?
+        - [ ] 200.
+        - [x] 201.
+        - [ ] 204.
+        - [ ] 404.
+
+        # Qual código de status HTTP é esperado após a remoção bem sucedida de um recurso com DELETE, sem corpo de resposta?
+        - [ ] 200.
+        - [ ] 201.
+        - [x] 204.
+        - [ ] 401.
+
+        # Para enviar um token JWT em uma requisição com Rest Assured, qual chamada é usada?
+        - [ ] .queryParam("token", jwt).
+        - [x] .header("Authorization", "Bearer " + jwt).
+        - [ ] .cookie("token", jwt).
+        - [ ] .auth().basic(jwt, "").
+
+        # O que a chamada .auth().basic(usuario, senha) faz em uma requisição?
+        - [x] Envia usuário e senha codificados em Base64 no cabeçalho da requisição.
+        - [ ] Envia usuário e senha como parâmetros de consulta na URL.
+        - [ ] Gera automaticamente um token JWT para a requisição.
+        - [ ] Criptografa o corpo da requisição com AES.
+
+        > Dica: autenticação básica não é segura sem HTTPS, pois os dados viajam praticamente em texto plano.
+
+        # Como validar que todos os itens de uma lista JSON possuem um campo igual a true?
+        - [ ] body("campo", equalTo(true)).
+        - [x] body("campo", everyItem(equalTo(true))).
+        - [ ] body("campo", hasItems(true)).
+        - [ ] body("campo", is(true)).
+
+        # Qual chamada permite extrair, após a execução da requisição, um valor do corpo da resposta, como um token ou um id?
+        - [ ] .then().statusCode(200).
+        - [x] .extract().path("campo").
+        - [ ] .given().body("campo").
+        - [ ] .when().get("campo").
+
+    </div>
+</body>
+</html>
