@@ -417,7 +417,7 @@ Cada endpoint recebe valores (por query param, corpo JSON ou path) e devolve `{ 
 ## Exercício 1: Status code e query params
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa os exemplos 1 e 6.* Chame `GET /conta/deposito?saldo=100&valor=50` e valide:
+*Revise os exemplos 1 e 6.* Chame `GET /conta/deposito?saldo=100&valor=50` e valide:
 * O status `200`.
 * O campo `resultado` é igual a `150.0`.
 <!-- .element: style="margin-bottom:30px; font-size: 24px; font-family: arial;" -->
@@ -427,7 +427,7 @@ Cada endpoint recebe valores (por query param, corpo JSON ou path) e devolve `{ 
 ## Exercício 2: Validando erro de negócio
 <!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 8.* Chame `GET /conta/saque?saldo=100&valor=150` e valide:
+*Revise o exemplo 8.* Chame `GET /conta/saque?saldo=100&valor=150` e valide:
 * O status `400`.
 * O campo `mensagem` é igual a `"Saldo insuficiente"`.
 <!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
@@ -440,7 +440,7 @@ Depois, chame com `valor=40` e valide status `200` e `resultado` igual a `60.0`.
 ## Exercício 3: JSON no corpo (POST)
 <!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 9.* Envie `POST /conta/fatura` com o corpo:
+*Revise o exemplo 9.* Envie `POST /conta/fatura` com o corpo:
 <!-- .element: style="margin-bottom:10px; font-size: 22px; font-family: arial;" -->
 
 ```json
@@ -456,7 +456,7 @@ Valide status `200` e `resultado` maior que `60`. Depois, envie `[]` e valide st
 ## Exercício 4: Parâmetro na URL
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 2.* Chame `GET /conta/rendimento/5` e valide:
+*Revise o exemplo 2.* Chame `GET /conta/rendimento/5` e valide:
 * O status `200`.
 * O campo `resultado` é igual a `1050.0` (juros simples de 1% ao mês, por 5 meses).
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
@@ -466,7 +466,7 @@ Valide status `200` e `resultado` maior que `60`. Depois, envie `[]` e valide st
 ## Exercício 5: Autenticação
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa os exemplos 3 e 5.* Chame `GET /conta/extrato?saldo=500` com o cabeçalho `Authorization: Bearer abc.123.xyz` e valide status `200` e `resultado` igual a `490.0`.
+*Revise os exemplos 3 e 5.* Chame `GET /conta/extrato?saldo=500` com o cabeçalho `Authorization: Bearer abc.123.xyz` e valide status `200` e `resultado` igual a `490.0`.
 <!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
 
 Crie um **segundo teste**, sem o cabeçalho, e verifique que o status retornado é `401`.
