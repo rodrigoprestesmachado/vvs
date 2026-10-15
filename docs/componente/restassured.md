@@ -306,142 +306,142 @@ Os **matchers** são as expressões que aparecem dentro de `body(...)`, `cookie(
 
 ## Exercícios de fixação 📝
 
-Agora que você já viu os nove exemplos acima, chegou a hora de praticar. Para manter o mesmo fio condutor usado em outras partes do curso (veja o modelo de `Book` em [Teste Unitário](../unitario/junit.html)), os exercícios a seguir giram em torno do sistema de uma **biblioteca**, que expõe uma API REST em `http://localhost:8080` para gerenciar o acervo de livros (CRUD completo).
+Agora que você já viu os nove exemplos acima, chegou a hora de praticar. Para manter o foco apenas no Rest Assured (sem se preocupar com banco de dados ou regras de negócio complexas), os exercícios a seguir usam uma classe Java bem simples: uma regra bancária exposta como API REST, com alguns endpoints que fazem contas básicas de depósito, saque e juros.
 
-Cada exercício abaixo revisita, na prática, um conceito já apresentado em um dos exemplos anteriores. Implemente os testes usando Rest Assured e JUnit.
+Cada exercício abaixo revisita, na prática, um conceito já apresentado em um dos exemplos anteriores. Implemente a classe abaixo em um projeto Quarkus (ou outro framework de sua preferência) e escreva os testes usando Rest Assured e JUnit.
 
-**Endpoints disponíveis:**
+**A classe `ContaBancariaResource`:**
 
-| Método | Endpoint        | Descrição                          |
-|--------|------------------|--------------------------------------|
-| GET    | `/books`        | Lista todos os livros              |
-| GET    | `/books/{id}`   | Busca um livro pelo ID             |
-| POST   | `/books`        | Cadastra um novo livro             |
-| PUT    | `/books/{id}`   | Atualiza um livro existente        |
-| DELETE | `/books/{id}`   | Remove um livro do acervo          |
-| POST   | `/login`        | Autentica o bibliotecário          |
-| GET    | `/loans`        | Lista os empréstimos (autenticado) |
+```java
+@Path("/conta")
+public class ContaBancariaResource {
 
-**Modelo do recurso `Book` (em JSON):**
+    @GET
+    @Path("/deposito")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deposito(@QueryParam("saldo") double saldo, @QueryParam("valor") double valor) {
+        return Response.ok(new Resultado(saldo + valor)).build();
+    }
 
-```json
-{
-  "id": 1,
-  "title": "Dom Casmurro",
-  "author": "Machado de Assis",
-  "year": 1899,
-  "available": true
+    @GET
+    @Path("/saque")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saque(@QueryParam("saldo") double saldo, @QueryParam("valor") double valor) {
+        if (valor > saldo) {
+            return Response.status(400)
+                    .entity(new Erro("Saldo insuficiente"))
+                    .build();
+        }
+        return Response.ok(new Resultado(saldo - valor)).build();
+    }
+
+    @POST
+    @Path("/fatura")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response fatura(List<Double> compras) {
+        if (compras == null || compras.isEmpty()) {
+            return Response.status(400)
+                    .entity(new Erro("A lista de compras não pode ser vazia"))
+                    .build();
+        }
+        double total = compras.stream().mapToDouble(Double::doubleValue).sum();
+        return Response.ok(new Resultado(total)).build();
+    }
+
+    @GET
+    @Path("/rendimento/{meses}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rendimento(@PathParam("meses") int meses) {
+        double valorInicial = 1000;
+        double taxaMensal = 0.01;
+        double montante = valorInicial + (valorInicial * taxaMensal * meses);
+        return Response.ok(new Resultado(montante)).build();
+    }
+
+    @GET
+    @Path("/extrato")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response extrato(
+            @QueryParam("saldo") double saldo,
+            @HeaderParam("Authorization") String token) {
+        if (token == null || token.isBlank()) {
+            return Response.status(401)
+                    .entity(new Erro("Autenticação obrigatória"))
+                    .build();
+        }
+        double taxaManutencao = saldo * 0.02;
+        return Response.ok(new Resultado(saldo - taxaManutencao)).build();
+    }
 }
 ```
 
-### Exercício 1: Status code
+Os registros auxiliares usados nas respostas:
 
-*Revisa o exemplo 1.* Escreva um teste que verifique se o endpoint `GET /books` retorna o status HTTP `200`.
+```java
+public record Resultado(double resultado) { }
 
-### Exercício 2: Validação de campo simples
-
-*Revisa o exemplo 2.* A API responde a `GET /books/1` com:
-
-```json
-{
-  "id": 1,
-  "title": "Dom Casmurro",
-  "author": "Machado de Assis",
-  "year": 1899,
-  "available": true
-}
+public record Erro(String mensagem) { }
 ```
 
-Escreva um teste que valide:
+> 💡 Não se preocupe em copiar o projeto inteiro. O importante aqui é só ter esses endpoints no ar (em `http://localhost:8080`) para você treinar os testes com Rest Assured.
+
+### Exercício 1: Status code e query params
+
+*Revisa os exemplos 1 e 6.* Escreva um teste que chame `GET /conta/deposito?saldo=100&valor=50` e valide:
 
 * O status `200`.
-* O campo `title` é igual a `"Dom Casmurro"`.
-* O campo `author` é igual a `"Machado de Assis"`.
-* O campo `year` é menor que `1900`.
-* O campo `available` é igual a `true`.
+* O campo `resultado` é igual a `150.0`.
 
-### Exercício 3: Query params
+### Exercício 2: Validando erro de negócio
 
-*Revisa o exemplo 6.* Escreva um teste para `GET /books?author=Machado+de+Assis&available=true` que verifique:
+*Revisa o exemplo 8.* Escreva um teste que chame `GET /conta/saque?saldo=100&valor=150` e valide:
 
-* O status `200`.
-* A resposta contém pelo menos um livro (`size()` maior que 0).
-* Todos os livros retornados têm `available` igual a `true`.
+* O status `400`.
+* O campo `mensagem` é igual a `"Saldo insuficiente"`.
 
-> 💡 **Dica:** para validar uma propriedade em todos os itens da lista, use `body("available", everyItem(equalTo(true)))`.
+Em seguida, escreva um segundo teste para `GET /conta/saque?saldo=100&valor=40` e valide que o status é `200` e o campo `resultado` é igual a `60.0`.
 
-### Exercício 4: Criação de livro (POST)
+### Exercício 3: Enviando JSON no corpo (POST)
 
-*Revisa o exemplo 9.* Envie uma requisição `POST /books` com o corpo:
+*Revisa o exemplo 9.* Envie uma requisição `POST /conta/fatura` com o corpo:
 
 ```json
-{
-  "title": "1984",
-  "author": "George Orwell",
-  "year": 1949,
-  "available": true
-}
-```
-
-Valide que:
-
-* O status é `201`.
-* O campo `title` retornado é `"1984"`.
-* O campo `id` não é nulo (use `notNullValue()`).
-
-### Exercício 5: Atualização de livro (PUT)
-
-Suponha que o livro com `id = 1` já existe. Envie `PUT /books/1` com o corpo:
-
-```json
-{
-  "title": "Dom Casmurro",
-  "author": "Machado de Assis",
-  "year": 1899,
-  "available": false
-}
+[20.0, 35.5, 10.0]
 ```
 
 Valide que:
 
 * O status é `200`.
-* O campo `available` agora é `false` (o livro foi emprestado).
+* O campo `resultado` é maior que `60` (use `greaterThan(60.0)`).
 
-### Exercício 6: Remoção de livro (DELETE)
+Depois, envie uma lista vazia (`[]`) e valide que o status retornado é `400`.
 
-Crie um teste que envie `DELETE /books/1` e valide:
+### Exercício 4: Parâmetro na URL (path param)
 
-* O status retornado é `204 No Content`.
+*Revisa o exemplo 2.* Escreva um teste para `GET /conta/rendimento/5` e valide:
 
-Em seguida, faça um `GET /books/1` no mesmo teste e verifique que agora a resposta é `404` (*revisa o exemplo 8*).
+* O status `200`.
+* O campo `resultado` é igual a `1050.0` (juros simples de 1% ao mês sobre `1000`, por 5 meses).
 
-### Exercício 7: Autenticação obrigatória
+### Exercício 5: Autenticação obrigatória
 
-*Revisa os exemplos 3 e 5.* Crie um teste para `GET /loans` que:
+*Revisa os exemplos 3 e 5.* Crie um teste para `GET /conta/extrato?saldo=500` que:
 
 * Envie o cabeçalho `Authorization: Bearer abc.123.xyz`.
-* Espere o status `200`.
+* Espere o status `200` e o campo `resultado` igual a `490.0` (saldo com a taxa de manutenção de 2% já descontada).
 
-Em seguida, crie um segundo teste, **sem** o cabeçalho, e verifique que o status retornado é `401` (não autorizado).
+Em seguida, crie um segundo teste, **sem** o cabeçalho, e verifique que o status retornado é `401`.
 
-### Exercício 8: Erro 404
+### Exercício 6: Desafio 🚀
 
-*Revisa o exemplo 8.* Escreva um teste para `GET /books/99999` que verifique:
+Combine dois endpoints em um único fluxo de teste:
 
-* O status `404`.
-* O corpo contém o campo `error` com a mensagem `"Book not found"`.
+1. Chame `GET /conta/deposito?saldo=100&valor=400` e **capture o campo `resultado`** da resposta (deve ser `500.0`).
+2. Use esse valor como `saldo` em uma nova chamada a `GET /conta/extrato`, enviando o cabeçalho de autenticação.
+3. Valide que o resultado final é `490.0`.
 
-### Exercício 9: Desafio 🚀
-
-Combine vários conceitos em um único fluxo de teste que represente o trabalho real de um bibliotecário:
-
-1. Faça `POST /login` enviando JSON com `username` e `password`, e **capture o token JWT** retornado.
-2. Use esse token para fazer `POST /books` e cadastrar um novo livro. Capture o `id` retornado.
-3. Faça `GET /books/{id}` para confirmar que o livro foi criado corretamente.
-4. Faça `DELETE /books/{id}` para remover o livro.
-5. Valide que cada etapa retornou o status esperado.
-
-> 💡 **Dica:** use `.extract().path("token")` para capturar o token e `.extract().path("id")` para capturar o ID do livro recém criado.
+> 💡 **Dica:** use `.extract().path("resultado")` para capturar o valor retornado pelo primeiro endpoint.
 
 ---
 

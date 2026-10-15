@@ -388,139 +388,104 @@ public void criaNovoUsuario() {
 # Exercícios de fixação 📝
 <!-- .element: style="margin-bottom:30px; font-size: 45px; font-family: Marker Felt;" -->
 
-Para manter o mesmo fio condutor usado em outras partes do curso, os exercícios giram em torno do sistema de uma biblioteca, com API REST em `http://localhost:8080`. Implemente os testes com Rest Assured + JUnit.
+Para focar só no Rest Assured, os exercícios usam uma classe Java bem simples: uma regra bancária exposta como API REST em `http://localhost:8080`.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
-**Endpoints:** `GET/POST /books`, `GET/PUT/DELETE /books/{id}`, `POST /login`, `GET /loans`.
+**Endpoints:** `GET /conta/deposito`, `GET /conta/saque`, `POST /conta/fatura`, `GET /conta/rendimento/{meses}`, `GET /conta/extrato`.
+<!-- .element: style="margin-bottom:30px; font-size: 16px; font-family: arial;" -->
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
+## A classe ContaBancariaResource
+<!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
+
+```java
+@GET
+@Path("/deposito")
+public Response deposito(@QueryParam("saldo") double saldo,
+                          @QueryParam("valor") double valor) {
+    return Response.ok(new Resultado(saldo + valor)).build();
+}
+```
+<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 16px; font-family: arial; color:black"  -->
+
+Cada endpoint recebe valores (por query param, corpo JSON ou path) e devolve `{ "resultado": valor }` ou `{ "mensagem": erro }`.
 <!-- .element: style="margin-bottom:30px; font-size: 18px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 1: Status code
+## Exercício 1: Status code e query params
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 1.* Escreva um teste que verifique se o endpoint `GET /books` retorna o status HTTP `200`.
+*Revisa os exemplos 1 e 6.* Chame `GET /conta/deposito?saldo=100&valor=50` e valide:
+* O status `200`.
+* O campo `resultado` é igual a `150.0`.
 <!-- .element: style="margin-bottom:30px; font-size: 24px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 2: Validação de campos
+## Exercício 2: Validando erro de negócio
 <!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 2.* A API responde a `GET /books/1` com:
+*Revisa o exemplo 8.* Chame `GET /conta/saque?saldo=100&valor=150` e valide:
+* O status `400`.
+* O campo `mensagem` é igual a `"Saldo insuficiente"`.
+<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
+
+Depois, chame com `valor=40` e valide status `200` e `resultado` igual a `60.0`.
+<!-- .element: style="margin-bottom:30px; font-size: 20px; font-family: arial;" -->
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
+## Exercício 3: JSON no corpo (POST)
+<!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
+
+*Revisa o exemplo 9.* Envie `POST /conta/fatura` com o corpo:
 <!-- .element: style="margin-bottom:10px; font-size: 22px; font-family: arial;" -->
 
 ```json
-{ "id": 1, "title": "Dom Casmurro", "author": "Machado de Assis", "year": 1899, "available": true }
+[20.0, 35.5, 10.0]
 ```
-<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 15px; font-family: arial; color:black"  -->
+<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 18px; font-family: arial; color:black"  -->
 
-Valide:
+Valide status `200` e `resultado` maior que `60`. Depois, envie `[]` e valide status `400`.
+<!-- .element: style="margin-bottom:30px; font-size: 20px; font-family: arial;" -->
+
+
+<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
+## Exercício 4: Parâmetro na URL
+<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
+
+*Revisa o exemplo 2.* Chame `GET /conta/rendimento/5` e valide:
 * O status `200`.
-* O campo `title` é igual a `"Dom Casmurro"`.
-* O campo `year` é menor que `1900`.
+* O campo `resultado` é igual a `1050.0` (juros simples de 1% ao mês, por 5 meses).
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 3: Query params
+## Exercício 5: Autenticação
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 6.* Escreva um teste para
-`GET /books?author=Machado+de+Assis&available=true`
-que verifique:
-<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
-
-* O status `200`.
-* A resposta contém pelo menos um livro (`size()` maior que 0).
-* Todos os livros retornados têm `available` igual a `true`.
-<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 4: Criação (POST)
-<!-- .element: style="margin-bottom:20px; font-size: 38px; font-family: Marker Felt;" -->
-
-*Revisa o exemplo 9.* Envie `POST /books` com o corpo:
-<!-- .element: style="margin-bottom:10px; font-size: 22px; font-family: arial;" -->
-
-```json
-{ "title": "1984", "author": "George Orwell", "year": 1949, "available": true }
-```
-<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 16px; font-family: arial; color:black"  -->
-
-Valide:
-* O status é `201`.
-* O campo `title` retornado é `"1984"`.
-* O campo `id` não é nulo (`notNullValue()`).
-<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 5: Atualização (PUT)
-<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
-
-Suponha que o livro com `id = 1` já existe. Envie `PUT /books/1` marcando `available` como `false` (livro emprestado).
-<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
-
-Valide que:
-* O status é `200`.
-* O campo `available` agora é `false`.
-<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 6: Remoção (DELETE)
-<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
-
-Crie um teste que envie `DELETE /books/1` e valide:
-* O status retornado é `204 No Content`.
-<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
-
-Em seguida, faça `GET /books/1` no mesmo teste e verifique que agora a resposta é `404` (*revisa o exemplo 8*).
-<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 7: Autenticação
-<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
-
-*Revisa os exemplos 3 e 5.* Crie um teste para `GET /loans` que:
-* Envie o cabeçalho `Authorization: Bearer abc.123.xyz`.
-* Espere o status `200`.
-<!-- .element: style="margin-bottom:25px; font-size: 22px; font-family: arial;" -->
+*Revisa os exemplos 3 e 5.* Chame `GET /conta/extrato?saldo=500` com o cabeçalho `Authorization: Bearer abc.123.xyz` e valide status `200` e `resultado` igual a `490.0`.
+<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
 
 Crie um **segundo teste**, sem o cabeçalho, e verifique que o status retornado é `401`.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 8: Erro 404
+## Exercício 6: Desafio 🚀
 <!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
 
-*Revisa o exemplo 8.* Escreva um teste para `GET /books/99999` que verifique:
+Combine dois endpoints em um único fluxo:
 <!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
 
-* O status `404`.
-* O corpo contém o campo `error` com a mensagem `"Book not found"`.
-<!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 9: Desafio 🚀
-<!-- .element: style="margin-bottom:30px; font-size: 38px; font-family: Marker Felt;" -->
-
-Combine vários conceitos no fluxo de um bibliotecário real:
-<!-- .element: style="margin-bottom:20px; font-size: 22px; font-family: arial;" -->
-
-1. `POST /login` com `username` e `password`, **capturando o token JWT**.
-2. Use o token para `POST /books` e cadastrar um livro. Capture o `id`.
-3. `GET /books/{id}` para confirmar a criação.
-4. `DELETE /books/{id}` para remover o livro.
-5. Valide o status esperado em cada etapa.
+1. Chame `GET /conta/deposito?saldo=100&valor=400` e **capture** o `resultado` (`500.0`).
+2. Use esse valor como `saldo` em `GET /conta/extrato`, com o cabeçalho de autenticação.
+3. Valide que o resultado final é `490.0`.
 <!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
 
-💡 Dica: use `.extract().path("token")` e `.extract().path("id")` para capturar os valores.
+💡 Dica: use `.extract().path("resultado")` para capturar o valor do primeiro endpoint.
 <!-- .element: style="margin-bottom:30px; font-size: 18px; font-family: arial;" -->
 
 
