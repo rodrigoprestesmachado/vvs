@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/quizdown@latest/public/build/quizdown.js"></script>
+    <script>quizdown.init();</script>
+    <title>Questões teóricas: Playwright</title>
+</head>
+<body>
+    <div class="quizdown">
+### O que o Playwright testa nesta aula?
+
+> Dica: revise a seção O assistente no navegador e o slide O que é o Playwright?
+
+- [ ] Somente o JSON de uma API, sem abrir o navegador
+- [x] O sistema de ponta a ponta, dirigindo o navegador como um usuário
+- [ ] Apenas a cobertura de linhas e ramos do código Java
+- [ ] Somente o desempenho da aplicação em produção
+
+### Na analogia da aula, o que o Playwright representa?
+
+> Dica: revise o slide O assistente no navegador
+
+- [ ] A cozinha que prepara o JSON da API
+- [ ] O banco MySQL que guarda os livros
+- [x] Um assistente que clica, digita e confere no lugar do usuário
+- [ ] O plugin Maven que gera o relatório XML
+
+### O que a espera automática evita na maior parte dos testes?
+
+> Dica: revise a seção Espera automática e o slide de mesmo nome
+
+- [ ] O uso de `getByRole` para achar botões
+- [ ] A anotação `@QuarkusTest`
+- [x] Chamadas a `Thread.sleep` para adivinhar um tempo de espera
+- [ ] A gravação de vídeo do contexto
+
+### Para que serve o Codegen?
+
+> Dica: revise a seção O escriba e o slide O escriba: Codegen
+
+- [ ] Subir o Quarkus e o MySQL sozinho
+- [x] Observar o que você faz na tela e gerar o código Java
+- [ ] Medir cobertura de ramos no relatório HTML
+- [ ] Trocar Chromium por Firefox no `pom.xml`
+
+### Qual seletor deve ser a primeira escolha, segundo a aula?
+
+> Dica: revise a seção Seletores que falam a língua da tela
+
+- [ ] `page.locator("#isbn")` com CSS
+- [ ] `page.locator(".btn-primary")` com classe do layout
+- [x] `page.getByRole(...)`, porque fala a língua da tela
+- [ ] `Thread.sleep` antes de cada clique
+
+### O que a anotação `@QuarkusTest` faz neste projeto?
+
+> Dica: revise a seção Do main para o JUnit e o slide Quem faz o quê
+
+- [x] Sobe o Quarkus e o MySQL Dev Services em `http://localhost:8080`
+- [ ] Injeta um `Page` novo a cada método `@Test`
+- [ ] Gera o Java a partir do Inspector
+- [ ] Grava o arquivo `.webm` no disco
+
+### O que a anotação `@UsePlaywright` faz?
+
+> Dica: revise o slide Quem faz o quê
+
+- [ ] Apaga o ISBN de teste pela API REST
+- [ ] Compila o frontend Vue
+- [x] Liga o assistente, abre o navegador e entrega um `Page` com a gaveta limpa
+- [ ] Troca o Surefire pelo Failsafe
+
+### Por que o método `@Test` recebe `Page page` como parâmetro?
+
+> Dica: revise a seção Do main para o JUnit
+
+- [ ] Porque o JUnit 5 exige um parâmetro em todo teste
+- [x] Porque `@UsePlaywright` injeta a aba vinda do contexto isolado
+- [ ] Porque o Codegen não sabe gerar um `main()`
+- [ ] Porque `Page` substitui o `@QuarkusTest`
+
+### Por que `page.onDialog(...)` precisa ser registrado antes do clique em Excluir?
+
+> Dica: revise a seção Excluir um livro e o slide Excluir: o diálogo vem primeiro
+
+- [ ] Porque o Maven só aceita essa ordem no `pom.xml`
+- [ ] Porque `getByRole` não encontra o botão Excluir
+- [x] Porque o assistente precisa estar escutando quando o `confirm` aparece
+- [ ] Porque o diálogo só existe no Firefox
+
+### Por que cada invocação do teste parametrizado cria o seu próprio `Playwright`?
+
+> Dica: revise a seção Vários navegadores e o slide Um Playwright por invocação
+
+- [ ] Porque o Codegen não gera `@ParameterizedTest`
+- [x] Porque `Playwright` não pode ser compartilhado entre threads
+- [ ] Porque o MySQL recusa mais de uma conexão
+- [ ] Porque `@QuarkusTest` proíbe o Chromium
+
+### Por que Chromium, Firefox e WebKit usam ISBNs diferentes no teste paralelo?
+
+> Dica: revise o slide ISBN distinto por navegador
+
+- [ ] Porque cada navegador exige um formato de ISBN próprio
+- [ ] Porque o Playwright não preenche o mesmo campo duas vezes
+- [x] Porque o banco MySQL é compartilhado e o mesmo ISBN geraria conflito de chave
+- [ ] Porque o Codegen recusa ISBN repetido no Inspector
+
+### Quando o arquivo `.webm` do vídeo aparece no disco?
+
+> Dica: revise a seção Gravação de vídeo e o slide Quando o filme aparece
+
+- [ ] Assim que `page.navigate` é chamado
+- [ ] No momento do primeiro `click()`
+- [ ] Quando o Maven começa o `./mvnw test`
+- [x] Depois que o `BrowserContext` fecha, ao terminar o `@Test`
+    </div>
+</body>
+</html>

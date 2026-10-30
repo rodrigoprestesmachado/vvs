@@ -6,90 +6,51 @@ grand_parent: Teste de desenvolvimento
 nav_order: 19
 ---
 
-## 1. Visão geral
+# Playwright
 
-O [Playwright](https://playwright.dev) é uma ferramenta de teste de sistema
-desenvolvida pela Microsoft que permite construir testes end to end com
-interface Web. Assim como o [Selenium](https://www.selenium.dev), ele simula a
-interação de um usuário com a aplicação no navegador.
+<center>
+<iframe src="https://vvs.rpmhub.dev/playwirght/slides/index.html#/"
+    title="Playwright" width="90%" height="500" style="border:none;"></iframe>
+</center>
 
-Esta documentação usa como exemplo o frontend do projeto hexagonal de cadastro
-de livros, disponível em `exemplos/hexagonal/frontend`. A aplicação é uma SPA
-Vue 3 servida pelo backend Quarkus em `http://localhost:8080` e oferece as
-operações de cadastro, edição, exclusão e listagem de livros.
+## O assistente no navegador
 
-### 1.1. Por que usar o Playwright?
+Imagine um assistente sentado no seu lugar, na frente do navegador. Ele abre a página, clica no botão, preenche o formulário e lê o que apareceu na tela. Ele não se cansa. Amanhã ele repete o mesmo roteiro. Se o botão sumiu ou o texto mudou, ele avisa: o teste falhou.
+{: .fs-3 }
 
-| Característica | Descrição |
-|---|---|
-| Multi navegador | Suporta Chromium (Chrome/Edge), Firefox e WebKit (Safari) com a mesma API |
-| Multi linguagem | JavaScript, TypeScript, Python, Java e .NET |
-| Auto wait | Aguarda automaticamente que elementos estejam prontos antes de agir |
-| Execução paralela | Roda múltiplos testes simultaneamente |
-| Recursos de depuração | Trace viewer, modo UI, screenshots e gravação de vídeo |
-| Codegen | Gera código automaticamente a partir da interação com a página |
+O [Playwright](https://playwright.dev) é esse assistente. É uma ferramenta da Microsoft para **teste de sistema**: ela dirige o navegador de verdade e percorre a interface como um usuário, de ponta a ponta. Assim como o [Selenium](https://www.selenium.dev), o objetivo é conferir o que a pessoa vê, não só o JSON da API.
+{: .fs-3 }
 
-### 1.2. Pré-requisitos
+Em outras palavras: o Rest Assured pede o prato na cozinha. O Playwright senta na mesa e come com os olhos. Os dois se complementam. Um confere a API. O outro confere o botão, o campo e a mensagem de sucesso.
+{: .fs-3 }
 
-- [Java 25](https://openjdk.org) (versão fixada em `maven.compiler.release` no
-  `pom.xml` do projeto hexagonal)
-- [Maven 3.9](https://maven.apache.org) ou superior (o módulo inclui `./mvnw`,
-  não é necessário instalar Maven globalmente)
-- [Docker](https://www.docker.com/) em execução — a anotação `@QuarkusTest`
-  sobe o Quarkus e o MySQL Dev Services automaticamente ao rodar os testes,
-  então **não é preciso** iniciar `./mvnw quarkus:dev` antes
+Esta aula usa o cadastro de livros do projeto hexagonal, em `exemplos/hexagonal/frontend`. A interface é uma aplicação Vue servida pelo Quarkus em `http://localhost:8080`. Por ela você cadastra, edita, exclui e lista livros. Os testes Java moram ao lado dos demais testes do módulo, em `src/test/java/dev/ifrs/hexagonal/`.
+{: .fs-3 }
 
----
+> Resumo rápido: se você consegue descrever o teste em voz alta como "abra a home, clique em Novo livro, preencha, salve, então a linha deve aparecer", você já entendeu o Playwright.
+{: .fs-3 }
 
-## 2. Configuração do projeto Maven
+## Por que usar o Playwright?
 
-Este tutorial usa o projeto `exemplos/hexagonal`. O `pom.xml` desse módulo já
-traz tudo o que é necessário para gravar testes com o Codegen e executá-los
-com JUnit 5 — você não precisa adicionar nada para começar.
+* **Vários navegadores, uma API.** Chromium (Chrome e Edge), Firefox e WebKit (Safari) entendem as mesmas chamadas.
+* **Espera automática.** O assistente só clica quando o botão já está visível e habilitado. Você quase nunca precisa de `Thread.sleep`.
+* **Codegen.** Um escriba observa o que você faz na tela e gera o Java.
+* **Vídeo e rastreio.** Quando o teste falha, você assiste o filme da falha.
+* **Java com JUnit.** Roda no mesmo `./mvnw test` dos outros testes do módulo.
+{: .fs-3 }
 
-### 2.1. Estrutura de arquivos de teste
+## O que você precisa ter pronto
 
-Os testes E2E em Java vivem ao lado dos demais testes do módulo hexagonal:
+* [Java 25](https://openjdk.org), já fixado em `maven.compiler.release` no `pom.xml` do hexagonal.
+* [Maven](https://maven.apache.org) 3.9 ou superior. O módulo traz `./mvnw`, então não é obrigatório instalar o Maven na máquina.
+* [Docker](https://www.docker.com/) em execução. A anotação `@QuarkusTest` sobe o Quarkus e o MySQL Dev Services sozinha. Para **rodar** os testes, você não precisa iniciar `./mvnw quarkus:dev`. Esse comando só entra na cena quando formos **gravar** com o Codegen.
+{: .fs-3 }
 
-```
-exemplos/hexagonal/
-├── src/test/java/dev/ifrs/hexagonal/
-│   ├── BooksE2ETest.java
-│   ├── BooksMultiBrowserTest.java
-│   └── PlayrightTest.java
-├── src/test/resources/
-│   └── junit-platform.properties
-└── pom.xml
-```
+O `pom.xml` do módulo já traz Playwright Java, Quarkus JUnit, Rest Assured e o plugin que chama o CLI. Você não adiciona dependência nenhuma para começar.
+{: .fs-3 }
 
-### 2.2. O que já está pronto no projeto
-
-O arquivo completo está em [`exemplos/hexagonal/pom.xml`](https://github.com/rodrigoprestesmachado/vvs/blob/dev/exemplos/hexagonal/pom.xml).
-Tudo o que o tutorial precisa já está configurado:
-
-| Item | Onde está |
-|---|---|
-| Dependência Playwright Java (`1.52.0`) | bloco `<dependencies>` do `pom.xml` |
-| Dependência `quarkus-junit` (traz JUnit Jupiter via BOM Quarkus 3.34.1) | bloco `<dependencies>` do `pom.xml` |
-| Dependência `rest-assured` (para pré-condições REST nos testes E2E) | bloco `<dependencies>` do `pom.xml` |
-| Plugin `maven-surefire-plugin` (gera relatórios JUnit XML) | bloco `<build><plugins>` do `pom.xml` |
-| Plugin `exec-maven-plugin` (permite chamar o CLI do Playwright) | bloco `<build><plugins>` do `pom.xml` |
-| Perfil `e2e` | bloco `<profiles>` do `pom.xml` (executa testes Playwright em **JavaScript** no frontend) |
-| `quarkus.http.test-port=8080` | `src/main/resources/application.properties` |
-
-> Não fixe uma versão de `junit-jupiter` no `pom.xml`: o `quarkus-junit` já a
-> resolve via BOM Quarkus, e declarar manualmente costuma criar conflito de
-> classes.
-
-> A propriedade `quarkus.http.test-port=8080` é o que faz o `@QuarkusTest`
-> subir a aplicação na porta `8080` durante os testes (o padrão do Quarkus em
-> teste é `8081`). Sem ela, as URLs `http://localhost:8080` deste tutorial não
-> funcionariam.
-
-### 2.3. Instalação dos navegadores
-
-Na raiz do módulo hexagonal, baixe os binários dos navegadores. Esse passo é
-necessário somente uma vez por máquina:
+Na primeira vez em cada máquina, baixe os binários dos navegadores, na raiz do módulo hexagonal:
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
@@ -98,28 +59,50 @@ cd exemplos/hexagonal
   -D exec.args="install"
 ```
 
----
+## A gaveta limpa: anatomia
 
-## 3. Gravando o primeiro teste
+O assistente é montado em quatro peças, sempre nesta ordem. Vale gravar essa lista de cor.
+{: .fs-3 }
 
-A forma mais rápida de começar é **gravar a interação** com a interface, sem
-escrever código. O **Codegen** abre o navegador, observa o que você faz e gera
-o Java automaticamente. Só depois de gravar é que vamos entender o código na
-seção 4.
+| Peça | Analogia | O que faz |
+|---|---|---|
+| `Playwright` | o motor | Liga o processo interno da ferramenta |
+| `Browser` | o navegador | Chromium, Firefox ou WebKit |
+| `BrowserContext` | a gaveta limpa | Cookies, armazenamento e sessão só daquele teste |
+| `Page` | a aba | Onde o assistente clica, digita e lê |
+{: .fs-3 }
 
-### 3.1. Preparando o ambiente
+A gaveta limpa é a ideia que mais evita surpresa. Cada teste ganha um `BrowserContext` novo. O login, o cookie e o armazenamento do teste anterior não vazam para o próximo. É como esvaziar a gaveta antes de guardar outra coisa.
+{: .fs-3 }
 
-O Codegen precisa de uma aplicação rodando para gravar a interação. Como o
-`@QuarkusTest` só sobe o backend durante a execução dos testes, para esta
-sessão de gravação inicial vamos subir o Quarkus manualmente:
+Tem um detalhe importante: a gaveta da **sessão** é limpa. O **banco MySQL** não é. Os testes de uma mesma classe compartilham o banco. Por isso, mais adiante, vamos apagar o ISBN de teste pela API antes de cada caso.
+{: .fs-3 }
+
+### Espera automática
+
+O assistente não aperta o botão enquanto o botão não está pronto. `click()` espera o elemento visível e habilitado. `assertThat(...).isVisible()` espera o texto aparecer. Essa espera é o oposto de `Thread.sleep`: em vez de adivinhar um tempo, o Playwright observa a tela.
+{: .fs-3 }
+
+> Resumo rápido: se o teste "às vezes passa, às vezes falha", desconfie de `Thread.sleep`. A espera automática costuma ser a resposta.
+{: .fs-3 }
+
+## O escriba: gravando o primeiro teste
+
+A forma mais rápida de começar é **gravar** a interação, sem escrever código. O **Codegen** abre o navegador, observa o que você faz e gera o Java. Só depois de gravar é que vamos ler o código com calma.
+{: .fs-3 }
+
+### Preparando a gravação
+
+O Codegen precisa de uma aplicação no ar. O `@QuarkusTest` só sobe o backend durante os testes. Para esta sessão de gravação, suba o Quarkus na mão:
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
 ./mvnw quarkus:dev
 ```
 
-Com a aplicação em `http://localhost:8080`, abra o Codegen com saída em Java
-(em outro terminal, na raiz do módulo hexagonal):
+Com a aplicação em `http://localhost:8080`, abra o Codegen com saída em Java. Use outro terminal, na raiz do módulo hexagonal:
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
@@ -129,19 +112,21 @@ cd exemplos/hexagonal
 ```
 
 Duas janelas aparecem lado a lado:
+{: .fs-3 }
 
-1. **Navegador**, onde você interage normalmente (clica, digita, navega).
-2. **Playwright Inspector**, painel que exibe o código Java em tempo real.
+1. O **navegador**, onde você interage normalmente (clica, digita, navega).
+2. O **Playwright Inspector**, o painel do escriba, que exibe o código Java em tempo real.
+{: .fs-3 }
 
 <center>
   <img src="img/codegen.png" alt="Playwright Codegen" width="80%" height="80%" border=0 style="border:0; text-decoration:none; outline:none" /><br/>
-  Figura 1 — Codegen: navegador (esquerda) e Inspector (direita)
+  Figura 1. Codegen: navegador (esquerda) e Inspector (direita)
 </center>
 
-### 3.2. O que gravar
+### O que gravar
 
-Vamos registrar o cadastro de um livro. No navegador, siga estes passos enquanto
-o Inspector gera o código:
+Vamos registrar o cadastro de um livro. No navegador, siga estes passos enquanto o Inspector gera o código:
+{: .fs-3 }
 
 1. Clique em **Novo livro**.
 2. Preencha o ISBN com `156881111X`.
@@ -149,49 +134,52 @@ o Inspector gera o código:
 4. Preencha o autor com `Fan Chung, Ronald L. Graham`.
 5. Preencha o ano com `1999`.
 6. Clique em **Salvar**.
-7. Verifique que a linha com o ISBN aparece na tabela (use o botão de assertiva
-   do Inspector, descrito na seção 3.4).
+7. Verifique que a linha com o ISBN aparece na tabela. Use o botão de assertiva do Inspector, descrito logo abaixo.
+{: .fs-3 }
 
-Cada clique e cada texto digitado vira uma linha de código Java no Inspector.
+Cada clique e cada texto digitado vira uma linha de Java no Inspector.
+{: .fs-3 }
 
-### 3.3. Fluxo de gravação passo a passo
+### O fluxo da gravação
 
-1. **Inicie a gravação.** Assim que o Codegen abre, ele já está gravando
-   (ícone vermelho ativo no Inspector).
-2. **Interaja com a página.** Clique em botões, preencha formulários e navegue
-   normalmente. Cada ação vira uma linha de código Java.
-3. **Adicione assertivas.** Use os botões da barra do Inspector (seção 3.4).
-4. **Pause se necessário.** Clique no botão vermelho para pausar ou retomar.
-5. **Copie o código.** Clique em **Copy** no Inspector. Guarde o resultado;
-   vamos analisar o conteúdo na seção 4.
+1. **Inicie.** Assim que o Codegen abre, ele já está gravando (ícone vermelho ativo no Inspector).
+2. **Interaja.** Clique em botões, preencha formulários e navegue. Cada ação vira uma linha.
+3. **Adicione assertivas.** Use os botões da barra do Inspector.
+4. **Pause se precisar.** Clique no botão vermelho para pausar ou retomar.
+5. **Copie.** Clique em **Copy** no Inspector. Guarde o resultado. Vamos ler o código na próxima seção.
+{: .fs-3 }
 
-### 3.4. Criando assertivas durante a gravação
+### Assertivas durante a gravação
 
-O Inspector possui três botões para criar assertivas sem escrever código:
+O Inspector tem três botões para criar assertivas sem escrever código:
+{: .fs-3 }
 
 | Botão | Método gerado | O que verifica |
 |---|---|---|
 | Assert visibility | `assertThat(locator).isVisible()` | O elemento está visível na tela |
 | Assert text | `assertThat(locator).hasText(...)` | O elemento contém o texto esperado |
 | Assert value | `assertThat(locator).hasValue(...)` | Um campo de formulário tem o valor esperado |
+{: .fs-3 }
 
-**Como usar:** clique no botão da assertiva desejada e, em seguida, clique
-sobre o elemento na página. A linha é adicionada automaticamente ao código.
+Como usar: clique no botão da assertiva desejada e, em seguida, clique sobre o elemento na página. A linha entra sozinha no código.
+{: .fs-3 }
 
-Para o cadastro de livros, use **Assert visibility** sobre a linha da tabela
-que contém o ISBN `156881111X`.
+Para o cadastro de livros, use **Assert visibility** sobre a linha da tabela que contém o ISBN `156881111X`.
+{: .fs-3 }
 
-### 3.5. Opções úteis da linha de comando
+### Opções úteis da linha de comando
 
 | Opção | Exemplo | Descrição |
 |---|---|---|
 | `--browser` | `--browser firefox` | Navegador alvo (chromium, firefox, webkit) |
 | `--output` | `--output src/test/java/CadastroLivroGravado.java` | Salva direto em arquivo |
 | `--target` | `--target java` | Linguagem de saída |
-| `--device` | `--device "iPhone 13"` | Emula um dispositivo móvel |
+| `--device` | `--device "iPhone 13"` | Emula um aparelho móvel |
 | `--lang` | `--lang "pt-BR"` | Idioma do navegador |
+{: .fs-3 }
 
 Para salvar a gravação direto no projeto:
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
@@ -200,17 +188,13 @@ cd exemplos/hexagonal
   -D exec.args="codegen --target java --output src/test/java/dev/ifrs/hexagonal/CadastroLivroGravado.java http://localhost:8080"
 ```
 
----
+## Entendendo o código gerado
 
-## 4. Entendendo o código gerado
+Depois de gravar, o Inspector exibe um arquivo Java completo. Antes de evoluir para testes mais complexos, vale entender o que cada parte faz.
+{: .fs-3 }
 
-Depois de gravar, o Inspector exibe um arquivo Java completo. Antes de evoluir
-para testes mais complexos, vale entender o que cada parte faz.
-
-### 4.1. Código completo gerado pelo Codegen
-
-O trecho abaixo corresponde ao fluxo gravado na seção 3 (cadastro de um livro
-e verificação na tabela):
+O trecho abaixo corresponde ao fluxo gravado: cadastro de um livro e verificação na tabela.
+{: .fs-3 }
 
 ```java
 import com.microsoft.playwright.*;
@@ -250,52 +234,57 @@ public class CadastroLivroGravado {
 }
 ```
 
-### 4.2. Anatomia do código
+Leia como uma frase: *"Abra a home, clique em Novo livro, preencha ISBN, título, autor e ano, clique em Salvar, então a linha com esse ISBN deve estar visível."*
+{: .fs-3 }
 
 | Trecho | O que faz |
 |---|---|
-| `Playwright.create()` | Inicia o processo interno do Playwright |
-| `playwright.chromium().launch(...)` | Abre o navegador Chromium (visível com `setHeadless(false)`) |
-| `browser.newContext()` | Cria um perfil isolado: cookies, storage e estado próprios |
-| `context.newPage()` | Abre uma aba dentro do contexto |
-| `page.navigate(url)` | Navega para a URL informada |
-| `page.getByRole(...).click()` | Localiza um elemento pelo papel ARIA e clica |
-| `page.getByRole(...).fill(...)` | Localiza um campo e preenche com texto |
-| `assertThat(...).isVisible()` | Assertiva com auto wait: aguarda o elemento aparecer |
-| `try (Playwright playwright = ...)` | Garante que todos os recursos sejam fechados ao final |
+| `Playwright.create()` | Liga o motor |
+| `playwright.chromium().launch(...)` | Abre o Chromium (visível com `setHeadless(false)`) |
+| `browser.newContext()` | Abre a gaveta limpa |
+| `context.newPage()` | Abre a aba |
+| `page.navigate(url)` | Vai até a URL |
+| `page.getByRole(...).click()` | Acha o elemento pelo papel ARIA e clica |
+| `page.getByRole(...).fill(...)` | Acha o campo e preenche |
+| `assertThat(...).isVisible()` | Confere visibilidade, com espera automática |
+| `try (Playwright playwright = ...)` | Garante que tudo seja fechado no fim |
+{: .fs-3 }
 
-### 4.3. Seletores usados na gravação
+O `try` with resources é o que desliga o motor no final. Sem ele, o processo do Playwright pode ficar órfão na máquina.
+{: .fs-3 }
 
-O Codegen prioriza seletores **semânticos**, baseados em como o usuário enxerga
-a interface. Isso torna os testes mais robustos a mudanças de layout:
+## Seletores que falam a língua da tela
 
-| Prioridade | Método | Exemplo em Java |
+O Codegen prioriza seletores **semânticos**: o que o usuário enxerga, não o CSS escondido no HTML. Isso deixa o teste mais firme quando o layout muda de cor ou de classe, mas o botão continua se chamando **Salvar**.
+{: .fs-3 }
+
+| Ordem | Método | Exemplo em Java |
 |---|---|---|
 | 1ª | `getByRole()` | `page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Salvar"))` |
 | 2ª | `getByText()` | `page.getByText("Nenhum livro cadastrado")` |
 | 3ª | `getByLabel()` | `page.getByLabel("Título")` |
 | 4ª | `getByPlaceholder()` | `page.getByPlaceholder("Ex.: 1-56881-111-X")` |
 | 5ª | `getByTestId()` | `page.getByTestId("btn-salvar")` |
-| Fallback | `locator()` (CSS) | `page.locator("#isbn")` |
+| Último recurso | `locator()` (CSS) | `page.locator("#isbn")` |
+{: .fs-3 }
 
-No cadastro de livros, o Codegen escolheu `getByRole` para botões, campos de
-texto e linhas da tabela porque a interface Vue expõe papéis ARIA nos elementos.
+No cadastro de livros, o Codegen escolheu `getByRole` para botões, campos de texto e linhas da tabela porque a interface Vue expõe papéis ARIA nesses elementos. Comece sempre por `getByRole`. Só desça até o CSS se o resto não alcançar o elemento.
+{: .fs-3 }
 
-### 4.4. Adaptando a gravação para `@QuarkusTest` + `@UsePlaywright`
+> Resumo rápido: se o teste quebra porque alguém mudou uma classe CSS, o seletor era frágil. Se quebra porque o botão **Salvar** mudou de nome, o seletor estava falando a língua da tela, e a mudança era real.
+{: .fs-3 }
 
-O Codegen gera um `main()` executável. Para integrar ao Maven, gerar relatório
-JUnit XML e subir o Quarkus automaticamente, o projeto hexagonal usa duas
-anotações que substituem todo o ciclo `@BeforeAll`/`@BeforeEach`/`@AfterAll`:
+## Do main para o JUnit
 
-- **`@QuarkusTest`** (de `io.quarkus.test.junit`) — sobe o Quarkus e o MySQL
-  Dev Services antes de qualquer teste, na porta configurada por
-  `quarkus.http.test-port=8080`.
-- **`@UsePlaywright`** (de `com.microsoft.playwright.junit`) — gerencia
-  `Playwright`, `Browser` e `BrowserContext`, e injeta um `Page` novo a cada
-  método `@Test` (cada teste recebe um contexto isolado, com cookies e
-  storage limpos).
+O Codegen gera um `main()` executável. Para a disciplina, queremos o teste dentro do Maven, com relatório JUnit XML, e com o Quarkus subindo sozinho. Duas anotações substituem a abertura e o fechamento manuais:
+{: .fs-3 }
+
+* **`@QuarkusTest`** (de `io.quarkus.test.junit`) sobe o Quarkus e o MySQL Dev Services antes de qualquer teste, na porta configurada por `quarkus.http.test-port=8080`.
+* **`@UsePlaywright`** (de `com.microsoft.playwright.junit`) gerencia `Playwright`, `Browser` e `BrowserContext`, e injeta um `Page` novo a cada método `@Test`. Cada teste recebe a gaveta limpa.
+{: .fs-3 }
 
 A classe de teste fica reduzida ao essencial:
+{: .fs-3 }
 
 ```java
 package dev.ifrs.hexagonal;
@@ -342,13 +331,14 @@ public class BooksE2ETest {
 
 | Elemento | Função |
 |---|---|
-| `@QuarkusTest` | Sobe o Quarkus + MySQL Dev Services em `http://localhost:8080` antes dos testes |
-| `@UsePlaywright` | Inicia o Playwright, abre o navegador (Chromium em modo headless) e cria um `BrowserContext` por método de teste |
-| `Page page` no parâmetro do `@Test` | O Playwright injeta automaticamente a página vinda do contexto isolado |
-| `@Test` | Marca o método como caso de teste JUnit 5 |
+| `@QuarkusTest` | Sobe o Quarkus e o MySQL em `http://localhost:8080` |
+| `@UsePlaywright` | Liga o assistente, abre o Chromium (invisível) e cria a gaveta por método |
+| `Page page` no `@Test` | A aba chega injetada. Você só usa. |
+| `@Test` | O JUnit 5 reconhece o método como caso de teste |
+{: .fs-3 }
 
-Se quiser **acompanhar visualmente** (modo headed, útil para depuração local),
-forneça uma `OptionsFactory` em `@UsePlaywright`:
+Se quiser **acompanhar com os olhos** (modo visível, útil para depurar na sua máquina), forneça uma `OptionsFactory` em `@UsePlaywright`:
+{: .fs-3 }
 
 ```java
 import com.microsoft.playwright.junit.Options;
@@ -369,21 +359,16 @@ public class BooksE2ETest {
 }
 ```
 
-Execute com `./mvnw test` na raiz do módulo hexagonal. O relatório XML será
-gerado em `target/surefire-reports/` (conforme a seção 6).
+`setHeadless(false)` deixa a janela visível. O padrão, sem essa fábrica, é o modo invisível, mais rápido e adequado à integração contínua.
+{: .fs-3 }
 
----
+Execute com `./mvnw test` na raiz do módulo hexagonal. O relatório XML aparece em `target/surefire-reports/`.
+{: .fs-3 }
 
-## 5. Exemplos completos: CRUD de livros
+## Cadastro, edição e exclusão
 
-Com a estrutura `@QuarkusTest` + `@UsePlaywright` em mãos, esta seção mostra
-testes para as demais operações do cadastro de livros.
-
-Cada `@Test` recebe um `Page` novo (em um `BrowserContext` isolado), mas
-**todos compartilham o mesmo banco MySQL** durante a execução de uma mesma
-classe. Para que os testes sejam independentes da ordem de execução,
-declaramos um `@BeforeEach` que apaga o ISBN de teste via REST antes de cada
-caso (404 é ignorado):
+Com `@QuarkusTest` e `@UsePlaywright` em mãos, vamos percorrer as três operações da tela. Cada `@Test` recebe um `Page` novo. Todos compartilham o mesmo banco. Para os testes não dependerem da ordem, apague o ISBN de teste pela API antes de cada caso (404 é ignorado):
+{: .fs-3 }
 
 ```java
 import io.restassured.http.ContentType;
@@ -396,15 +381,16 @@ void limparLivroDeTeste() {
 }
 ```
 
-Para os cenários que dependem de um livro já existente (`editaLivro` e
-`excluiLivro`), o próprio teste cadastra a pré-condição via `POST /books` —
-mais rápido e mais robusto do que cadastrar pela UI a cada execução.
+Para os cenários que precisam de um livro já existente (editar e excluir), o próprio teste cadastra a condição prévia com `POST /books`. É mais rápido e mais firme do que cadastrar pela tela a cada execução.
+{: .fs-3 }
 
-### 5.1. Cadastrar um livro
+### Cadastrar um livro
 
-Os passos abaixo replicam exatamente a gravação da seção 3, com uma verificação
-extra: a mensagem de sucesso exibida após salvar (o elemento de `role="status"`
-no `App.vue`):
+Os passos abaixo repetem a gravação, com uma verificação extra: a mensagem de sucesso (`role="status"` no `App.vue`).
+{: .fs-3 }
+
+Leia em voz alta: *"Dada a home, quando eu criar o livro, então a linha e a mensagem de sucesso aparecem."*
+{: .fs-3 }
 
 ```java
 @Test
@@ -439,17 +425,14 @@ void cadastraLivroComMensagemDeSucesso(Page page) {
 }
 ```
 
-### 5.2. Editar um livro
+### Editar um livro
 
-O campo ISBN fica desabilitado na edição (`disabled` no `<input>` do
-`App.vue`); somente os demais campos podem ser alterados. O teste cria a
-pré-condição via REST antes de abrir a UI e verifica que o título atualizado
-aparece na tabela após salvar:
+O campo ISBN fica desabilitado na edição (`disabled` no `<input>` do `App.vue`). Somente os demais campos podem ser alterados. O teste cria a condição prévia via REST, abre a tela, troca o título e confere a linha nova:
+{: .fs-3 }
 
 ```java
 @Test
 void editaLivro(Page page) {
-    // Pré-condição via REST: garante o livro no banco antes de abrir a UI
     given()
         .contentType(ContentType.JSON)
         .body("""
@@ -488,18 +471,14 @@ void editaLivro(Page page) {
 }
 ```
 
-### 5.3. Excluir um livro
+### Excluir um livro: o diálogo vem primeiro
 
-A exclusão exibe um diálogo de confirmação nativo do navegador
-(`window.confirm` em `App.vue`). O Playwright permite aceitar ou rejeitar
-esse diálogo antes de clicar no botão. Repare que o handler de diálogo é
-registrado **antes** do clique para garantir que esteja ativo no momento em
-que o `confirm` aparece:
+A exclusão exibe um diálogo nativo do navegador (`window.confirm` em `App.vue`). O Playwright aceita ou recusa esse diálogo. O ponto que mais pega aluno de primeira viagem: o handler precisa ser registrado **antes** do clique. Se você clicar primeiro, o `confirm` aparece sem ninguém escutando, e o teste trava.
+{: .fs-3 }
 
 ```java
 @Test
 void excluiLivro(Page page) {
-    // Pré-condição via REST
     given()
         .contentType(ContentType.JSON)
         .body("""
@@ -516,7 +495,6 @@ void excluiLivro(Page page) {
 
     page.navigate("http://localhost:8080/");
 
-    // Aceita o diálogo de confirmação automaticamente
     page.onDialog(dialog -> dialog.accept());
 
     page.getByRole(AriaRole.ROW)
@@ -525,7 +503,6 @@ void excluiLivro(Page page) {
             new Locator.GetByRoleOptions().setName("Excluir"))
         .click();
 
-    // Verifica que a linha sumiu da tabela
     assertThat(
         page.getByRole(AriaRole.ROW)
             .filter(new Locator.FilterOptions().setHasText("156881111X"))
@@ -537,38 +514,33 @@ void excluiLivro(Page page) {
 }
 ```
 
----
+`dialog.accept()` confirma. `dialog.dismiss()` recusa, e o livro permanece. Os exercícios 5 e 6 pedem os dois caminhos.
+{: .fs-3 }
 
-## 6. Integração com Maven e exportação JUnit
+## Integração com Maven
 
-O Maven Surefire gera automaticamente relatórios no formato XML do JUnit após
-cada execução de `mvn test`. Esses arquivos são o padrão aceito por ferramentas
-de integração contínua (Jenkins, GitHub Actions, GitLab CI, etc.).
+O Maven Surefire gera relatórios no formato XML do JUnit depois de `mvn test`. Esses arquivos são o padrão que Jenkins, GitHub Actions e GitLab CI sabem importar.
+{: .fs-3 }
 
-### 6.1. Executar os testes via Maven
-
-A classe `BooksE2ETest` roda no ciclo `test` padrão (a anotação `@QuarkusTest`
-sobe o Quarkus + MySQL Dev Services automaticamente). Na raiz do módulo
-hexagonal:
+A classe `BooksE2ETest` entra no ciclo `test` padrão. O `@QuarkusTest` sobe o Quarkus e o MySQL sozinho:
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
 ./mvnw test -Dtest=BooksE2ETest
 ```
 
-O Surefire executa os métodos anotados com `@Test` e grava os relatórios em
-`target/surefire-reports/`. Cada classe de teste gera dois arquivos:
+Cada classe gera dois arquivos em `target/surefire-reports/`:
+{: .fs-3 }
 
 ```
 target/surefire-reports/
-├── BooksE2ETest.txt          ← saída em texto puro
-└── TEST-BooksE2ETest.xml     ← relatório no formato JUnit XML
+├── BooksE2ETest.txt
+└── TEST-BooksE2ETest.xml
 ```
 
-### 6.2. Formato do relatório XML
-
-O arquivo `TEST-BooksE2ETest.xml` segue o esquema padrão do JUnit e pode ser
-importado diretamente por qualquer ferramenta de CI:
+O XML segue o esquema do JUnit:
+{: .fs-3 }
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -579,59 +551,40 @@ importado diretamente por qualquer ferramenta de CI:
 </testsuite>
 ```
 
-### 6.3. Integração com o ciclo de vida do Maven
-
-O projeto hexagonal já possui um perfil `e2e` no `pom.xml`, mas atenção:
-esse perfil executa os testes Playwright em **JavaScript** que vivem em
-`frontend/e2e/books.spec.js` (via `frontend-maven-plugin` + npm). Ele **não**
-roda os testes Java deste tutorial.
-
-Os testes E2E em Java (`BooksE2ETest`, `BooksMultiBrowserTest`, `PlayrightTest`)
-entram no mesmo ciclo `test` que os testes de API (`BookResourceTest`):
+O projeto hexagonal também tem um perfil `e2e` no `pom.xml`. Atenção: esse perfil executa os testes Playwright em **JavaScript** que vivem em `frontend/e2e/books.spec.js`. Ele **não** roda os testes Java desta aula.
+{: .fs-3 }
 
 ```sh
 cd exemplos/hexagonal
 ./mvnw test          # roda TODOS os testes Java
-./mvnw verify -Pe2e  # roda testes Java + Playwright em JavaScript do frontend
+./mvnw verify -Pe2e  # testes Java e Playwright em JavaScript do frontend
 ```
 
-Para executar somente os testes E2E em Java (útil em uma pipeline dedicada):
+Para executar só os testes de ponta a ponta em Java:
+{: .fs-3 }
 
 ```sh
 ./mvnw test -Dtest='Books*E2ETest,BooksMultiBrowserTest,PlayrightTest'
 ```
 
----
+## Vários navegadores ao mesmo tempo
 
-## 7. Execução paralela em múltiplos navegadores
+O Playwright Java fala com Chromium, Firefox e WebKit com a mesma API. Usando `@ParameterizedTest` do JUnit 5, o mesmo cenário roda nos três. Com `@Execution(ExecutionMode.CONCURRENT)`, os três andam juntos e o tempo total cai.
+{: .fs-3 }
 
-O Playwright Java suporta Chromium, Firefox e WebKit com a mesma API. Usando
-`@ParameterizedTest` do JUnit 5 é possível rodar o mesmo teste nos três
-navegadores **ao mesmo tempo**, reduzindo o tempo total de execução.
+### Por que cada invocação cria o seu Playwright
 
-### 7.1. Por que `Playwright` não pode ser compartilhado entre threads
+A classe `Playwright` **não pode ser compartilhada entre threads**. Ela guarda processo e estado internos que falham quando duas threads chamam ao mesmo tempo. A abordagem antiga (um `Playwright` estático em `@BeforeAll`) impede o uso de `CONCURRENT`.
+{: .fs-3 }
 
-A classe `Playwright` **não é thread-safe**: ela mantém processo e estado
-internos que falham quando chamados simultaneamente de threads diferentes. A
-abordagem antiga — criar um único `Playwright` estático em `@BeforeAll` e
-reutilizá-lo no `@ParameterizedTest` — impede o uso de
-`@Execution(ExecutionMode.CONCURRENT)`.
+A solução é simples: **cada invocação do teste parametrizado cria e fecha o seu próprio `Playwright`** num `try` with resources. Como cada invocação roda na sua thread, não há estado compartilhado, e o paralelismo funciona com `@QuarkusTest`.
+{: .fs-3 }
 
-A solução é simples: **cada invocação do teste parametrizado cria e fecha seu
-próprio `Playwright`** dentro de um `try-with-resources`. Como cada invocação
-roda em sua própria thread (quando `CONCURRENT` está ativo), não há
-compartilhamento de estado e o paralelismo funciona com `@QuarkusTest`.
+ISBNs diferentes por navegador evitam briga no banco compartilhado. Chromium, Firefox e WebKit gravam livros distintos.
+{: .fs-3 }
 
-### 7.2. Classe `PlayrightTest` — teste simples + parametrizado paralelo
-
-A classe `PlayrightTest` combina dois estilos em um único arquivo:
-
-- O método `test` usa a `Page` **injetada por `@UsePlaywright`** (Chromium
-  configurado com `slowMo` e gravação de vídeo via `WithVideo`).
-- O método `cadastraLivroEmCadaNavegador` cria seu **próprio `Playwright`
-  por invocação** e roda em paralelo nos três navegadores.
-
-ISBNs diferentes por navegador evitam conflitos no banco compartilhado:
+A classe `PlayrightTest` combina dois estilos. O método `test` usa a `Page` injetada por `@UsePlaywright` (Chromium com `slowMo` e vídeo). O método `cadastraLivroEmCadaNavegador` cria o próprio `Playwright` por invocação e roda em paralelo:
+{: .fs-3 }
 
 ```java
 package dev.ifrs.hexagonal;
@@ -726,7 +679,6 @@ public class PlayrightTest {
         }
     }
 
-    /** Configura gravação de vídeo e slowMo para o teste {@code test}. */
     public static class WithVideo implements OptionsFactory {
         @Override
         public Options getOptions() {
@@ -739,20 +691,17 @@ public class PlayrightTest {
 }
 ```
 
-### 7.3. Pontos-chave da implementação
-
 | Elemento | Por que é assim |
 |---|---|
-| `try (Playwright pw = Playwright.create())` dentro do método | `Playwright` não é thread-safe; criar por invocação elimina conflito entre threads |
-| `@Execution(ExecutionMode.CONCURRENT)` | Instrui o JUnit 5 a rodar as três invocações do `@ParameterizedTest` em paralelo |
-| ISBN diferente por navegador | O banco MySQL é compartilhado; ISBNs distintos evitam conflito de chave primária |
-| `setSlowMo(300)` no `LaunchOptions` | Desacelera cada ação em 300 ms para que o vídeo gravado seja legível |
-| `setRecordVideoDir("target/videos/" + nomeNavegador)` | Cada navegador grava em seu próprio subdiretório |
+| `try (Playwright pw = Playwright.create())` dentro do método | `Playwright` não pode ser compartilhado entre threads |
+| `@Execution(ExecutionMode.CONCURRENT)` | O JUnit 5 roda as três invocações em paralelo |
+| ISBN diferente por navegador | O banco é compartilhado. ISBNs distintos evitam conflito de chave |
+| `setSlowMo(300)` | Desacelera cada ação em 300 ms para o vídeo ficar legível |
+| `setRecordVideoDir("target/videos/" + nomeNavegador)` | Cada navegador grava no seu subdiretório |
+{: .fs-3 }
 
-### 7.4. Configuração de paralelismo no JUnit Platform
-
-O arquivo `src/test/resources/junit-platform.properties` habilita o motor
-paralelo e define o número de threads:
+O arquivo `src/test/resources/junit-platform.properties` liga o motor paralelo:
+{: .fs-3 }
 
 ```properties
 junit.jupiter.execution.parallel.enabled=true
@@ -763,131 +712,185 @@ junit.jupiter.execution.parallel.config.fixed.parallelism=3
 
 | Propriedade | Valor | Efeito |
 |---|---|---|
-| `parallel.enabled` | `true` | Ativa o motor de execução paralela do JUnit |
-| `mode.default` | `same_thread` | Testes não anotados rodam na thread corrente (seguro para `@QuarkusTest`) |
-| `config.strategy` | `fixed` | Número fixo de threads paralelas |
-| `config.fixed.parallelism` | `3` | Uma thread por navegador para o `@ParameterizedTest` |
+| `parallel.enabled` | `true` | Liga o motor paralelo do JUnit |
+| `mode.default` | `same_thread` | Testes sem anotação ficam na thread corrente (seguro para `@QuarkusTest`) |
+| `config.strategy` | `fixed` | Número fixo de threads |
+| `config.fixed.parallelism` | `3` | Uma thread por navegador no teste parametrizado |
+{: .fs-3 }
 
-> Antes da primeira execução, instale Firefox e WebKit caso ainda não tenha
-> feito:
-> `./mvnw exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install firefox webkit"`.
+Antes da primeira execução, instale Firefox e WebKit se ainda não tiver feito: `./mvnw exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install firefox webkit"`.
+{: .fs-3 }
 
-Executando `./mvnw test -Dtest=PlayrightTest` o resultado aparece no
-relatório XML com os quatro casos de teste (um simples + três parametrizados):
+## Gravação de vídeo
 
-```
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
-[INFO]
-[INFO]   PlayrightTest > test PASSED
-[INFO]   PlayrightTest > cadastraLivro [chromium] PASSED
-[INFO]   PlayrightTest > cadastraLivro [firefox]  PASSED
-[INFO]   PlayrightTest > cadastraLivro [webkit]   PASSED
-```
+A gravação de vídeo ajuda a investigar falhas que não se reproduzem com facilidade na mão. O Playwright salva um arquivo `.webm` por contexto, no diretório informado.
+{: .fs-3 }
 
----
-
-## 8. Gravação de vídeo
-
-A gravação de vídeo é útil para investigar falhas que não se reproduzem
-facilmente de forma manual. O Playwright salva um arquivo `.webm` por contexto
-dentro do diretório informado.
-
-### 8.1. Com `@UsePlaywright` — classe `WithVideo`
-
-Quando o `BrowserContext` é gerenciado pela integração JUnit (`@UsePlaywright`),
-a configuração de vídeo vai em uma `OptionsFactory` interna à classe de teste.
-A classe `WithVideo` do `PlayrightTest` também define `slowMo` via
-`setLaunchOptions`, tornando o vídeo mais legível:
+Quando o `BrowserContext` é gerenciado por `@UsePlaywright`, a configuração de vídeo vai numa `OptionsFactory`. A classe `WithVideo` também define `slowMo`, para o filme ficar assistível:
+{: .fs-3 }
 
 ```java
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.junit.Options;
-import com.microsoft.playwright.junit.OptionsFactory;
-import com.microsoft.playwright.junit.UsePlaywright;
-import java.nio.file.Paths;
-
-@QuarkusTest
-@UsePlaywright(PlayrightTest.WithVideo.class)
-public class PlayrightTest {
-
-    /** Configura gravação de vídeo e slowMo para o teste {@code test}. */
-    public static class WithVideo implements OptionsFactory {
-        @Override
-        public Options getOptions() {
-            return new Options()
-                    .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
-                    .setContextOptions(new Browser.NewContextOptions()
-                            .setRecordVideoDir(Paths.get("target/videos/chromium")));
-        }
+public static class WithVideo implements OptionsFactory {
+    @Override
+    public Options getOptions() {
+        return new Options()
+                .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
+                .setContextOptions(new Browser.NewContextOptions()
+                        .setRecordVideoDir(Paths.get("target/videos/chromium")));
     }
-
-    // ... métodos @Test ...
 }
 ```
 
 | Opção | Método | Efeito |
 |---|---|---|
-| `slowMo(300)` | `setLaunchOptions` | Adiciona 300 ms entre cada ação (torna o vídeo legível) |
+| `slowMo(300)` | `setLaunchOptions` | Coloca 300 ms entre cada ação |
 | `setRecordVideoDir(...)` | `setContextOptions` | Diretório onde o `.webm` será gravado |
+{: .fs-3 }
 
-O arquivo `.webm` é escrito em disco somente após o contexto ser fechado — o
-que a integração JUnit faz automaticamente ao terminar cada `@Test`.
+O ponto que mais pega: o arquivo `.webm` só é escrito **depois** que o contexto fecha. A integração JUnit faz isso ao terminar cada `@Test`. Se você abrir a pasta no meio do teste, o filme ainda não está lá.
+{: .fs-3 }
 
-### 8.2. Com controle manual — teste parametrizado por navegador
+No teste parametrizado, `Browser` e `BrowserContext` são criados na mão, num `try` with resources aninhado. Cada navegador grava no seu subdiretório. O contexto precisa fechar **antes** do browser para o arquivo terminar certo no disco.
+{: .fs-3 }
 
-No método `cadastraLivroEmCadaNavegador` (seção 7), `Browser` e
-`BrowserContext` são criados manualmente dentro de um `try-with-resources`
-aninhado. A gravação de vídeo é ativada no `newContext` e cada navegador
-grava em seu próprio subdiretório:
-
-```java
-try (Browser browser = tipo.launch(
-            new BrowserType.LaunchOptions().setSlowMo(300));
-     BrowserContext context = browser.newContext(
-            new Browser.NewContextOptions()
-                    .setRecordVideoDir(
-                            Paths.get("target/videos/" + nomeNavegador)))) {
-
-    Page page = context.newPage();
-    // ... interações do teste ...
-
-} // BrowserContext é fechado aqui → vídeo é gravado no disco
-```
-
-O `try-with-resources` duplo (primeiro `Browser`, depois `BrowserContext`)
-garante que o contexto seja fechado antes do browser, condição necessária para
-que o arquivo `.webm` seja finalizado corretamente no disco.
-
-### 8.3. Estrutura de saída dos vídeos
-
-Após a execução de `PlayrightTest`, os vídeos ficam organizados por navegador:
+Depois de `PlayrightTest`, a pasta fica assim:
+{: .fs-3 }
 
 ```
 target/videos/
 ├── chromium/
-│   ├── a3f9b2c1d4e5f6a7.webm   ← gravado pelo @Test test(Page page)
-│   └── b1c2d3e4f5a6b7c8.webm   ← gravado pela invocação chromium do @ParameterizedTest
+│   ├── a3f9b2c1d4e5f6a7.webm
+│   └── b1c2d3e4f5a6b7c8.webm
 ├── firefox/
 │   └── c4d5e6f7a8b9c0d1.webm
 └── webkit/
     └── d7e8f9a0b1c2d3e4.webm
 ```
 
-> O nome do arquivo é gerado automaticamente pelo Playwright. Para associar
-> um vídeo a um teste específico, use `page.video().path()` logo antes de
-> fechar o contexto.
+O nome do arquivo é gerado pela ferramenta. Para associar um vídeo a um teste específico, use `page.video().path()` logo antes de fechar o contexto.
+{: .fs-3 }
 
----
+## Exercícios de fixação
 
-## 9. Referências
+Agora é a sua vez. O objetivo desta seção é ganhar confiança: os dois primeiros exercícios são curtos de propósito. Você escreve os testes. O enunciado não entrega a solução pronta.
+{: .fs-3 }
 
-- [Playwright Java — documentação oficial](https://playwright.dev/java/docs/intro)
-- [Codegen Java — guia de gravação](https://playwright.dev/java/docs/codegen)
-- [Locators Java — guia de seletores](https://playwright.dev/java/docs/locators)
-- [Assertions Java — referência completa](https://playwright.dev/java/docs/test-assertions)
-- [Parallel execution — JUnit Platform](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution)
-- [Maven Surefire Plugin](https://maven.apache.org/surefire/maven-surefire-plugin/)
+Trabalhe no módulo `exemplos/hexagonal`. Crie uma classe nova chamada `LivrosFixacaoTest` em `src/test/java/dev/ifrs/hexagonal/`. Não copie `BooksE2ETest`. A ideia é montar a classe com as próprias mãos.
+{: .fs-3 }
+
+### Preparação
+
+Na classe:
+
+* Anote com `@QuarkusTest` e `@UsePlaywright`.
+* Use o ISBN `0134685991` em todos os cenários desta seção (é um ISBN válido e diferente do exemplo da aula).
+* No `@BeforeEach`, apague esse ISBN com `given().delete("/books/{isbn}", "0134685991");` para os testes não dependerem da ordem.
+{: .fs-3 }
+
+Rode só a sua classe:
+{: .fs-3 }
+
+```sh
+cd exemplos/hexagonal
+./mvnw test -Dtest=LivrosFixacaoTest
+```
+
+Dicas que valem para todos os exercícios:
+{: .fs-3 }
+
+* O `Page` chega como parâmetro do `@Test`.
+* Prefira `getByRole` para achar botão, campo e linha.
+* `assertThat(locator).isVisible()` espera o elemento aparecer.
+* Para diálogo, registre `page.onDialog(...)` **antes** do clique.
+{: .fs-3 }
+
+### Exercício 1: o botão está lá
+
+*Revise a anatomia e a espera automática.* Escreva um teste que:
+{: .fs-3 }
+
+* Navegue até `http://localhost:8080/`.
+* Confira que o botão **Novo livro** está visível.
+{: .fs-3 }
+
+Se esse teste passar, o assistente já está ligado, a aplicação subiu e você achou o primeiro elemento pela língua da tela.
+{: .fs-3 }
+
+### Exercício 2: o formulário abre
+
+*Revise `getByRole` e `click`.* A partir da home:
+{: .fs-3 }
+
+* Clique em **Novo livro**.
+* Confira que os campos **ISBN**, **Título**, **Autor** e **Ano de publicação** estão visíveis.
+{: .fs-3 }
+
+O rótulo do ISBN na tela é `ISBN-10`. O Codegen costuma achar esse campo com `getByRole` e o nome começando em `ISBN-`.
+{: .fs-3 }
+
+### Exercício 3: o fluxo feliz
+
+*Revise o cadastro e `assertThat`.* Cadastre um livro com o ISBN `0134685991` (escolha título, autor e ano). Depois de **Salvar**, valide:
+{: .fs-3 }
+
+* A linha da tabela que contém esse ISBN está visível.
+* O elemento com `role=status` tem o texto `Livro criado com sucesso.`
+{: .fs-3 }
+
+### Exercício 4: ISBN travado
+
+*Revise a edição e a condição prévia via REST.* Crie o livro com `POST /books` (status `201`). Abra a home, clique em **Editar** na linha desse ISBN e confira que o campo ISBN está desabilitado.
+{: .fs-3 }
+
+Dica: `assertThat(locator).isDisabled()` espera o campo ficar travado. O ISBN não pode mudar depois do cadastro. É exatamente isso que a tela promete no texto de ajuda do formulário.
+{: .fs-3 }
+
+### Exercício 5: recusar a exclusão
+
+*Revise `onDialog`.* Com o livro já existente (condição prévia via REST):
+{: .fs-3 }
+
+* Registre `page.onDialog(dialog -> dialog.dismiss());` **antes** de clicar.
+* Clique em **Excluir** na linha do ISBN.
+* Confira que a linha **permanece** visível.
+{: .fs-3 }
+
+Recusar o diálogo é o caminho que a aula mostrou menos. Se este teste passar, você entendeu a ordem: escutar primeiro, clicar depois.
+{: .fs-3 }
+
+### Exercício 6: desafio
+
+*Revise exclusão, mensagem de sucesso e `not().isVisible()`.* Com o livro já existente:
+{: .fs-3 }
+
+1. Aceite o diálogo com `dialog.accept()`.
+2. Confira que a linha do ISBN **não** está mais visível.
+3. Confira que o `role=status` diz `Livro removido com sucesso.`
+{: .fs-3 }
+
+Se os seis testes passam, você percorreu a tela de ponta a ponta: abriu, preencheu, editou, recusou e confirmou. Esse é o assistente no navegador, no seu ritmo.
+{: .fs-3 }
+
+## Questões teóricas
+
+Antes de seguir, confira seu entendimento sobre os conceitos. As questões abaixo não exigem código, apenas o domínio da teoria.
+{: .fs-3 }
+
+<center>
+<iframe src="https://vvs.rpmhub.dev/playwirght/questions.html"
+    title="Questões teóricas: Playwright" width="90%" height="500" style="border:none;"></iframe>
+</center>
+{: .fs-3 }
+
+## Referências
+
+* [Playwright Java. Documentação oficial.](https://playwright.dev/java/docs/intro)
+* [Codegen Java. Guia de gravação.](https://playwright.dev/java/docs/codegen)
+* [Locators Java. Guia de seletores.](https://playwright.dev/java/docs/locators)
+* [Assertions Java. Referência.](https://playwright.dev/java/docs/test-assertions)
+* [Parallel execution. JUnit Platform.](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution)
+* [Maven Surefire Plugin.](https://maven.apache.org/surefire/maven-surefire-plugin/)
+{: .fs-3 }
 
 <center>
 <a href="https://rpmhub.dev" target="blanck"><img src="../imgs/logo.png" alt="Rodrigo Prestes Machado" width="3%" height="3%" border=0 style="border:0; text-decoration:none; outline:none"></a><br/>
