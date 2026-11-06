@@ -462,7 +462,7 @@ assertThat(...).not().isVisible();
 * `dialog.dismiss()` → o livro permanece na tabela.
 <!-- .element: style="margin-bottom:30px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
 
-Os exercícios 5 e 6 pedem os dois caminhos. É o mesmo clique, com respostas diferentes.
+`accept` confirma. `dismiss` recusa. É o mesmo clique, com respostas diferentes.
 <!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
 
 
@@ -539,94 +539,6 @@ O arquivo `.webm` só é escrito **depois** que o contexto fecha.
 
 `slowMo(300)` coloca 300 ms entre cada ação. Sem isso, o vídeo passa rápido demais para você acompanhar.
 <!-- .element: style="margin-bottom:50px; font-size: 22px; font-family: arial; color:#F5F5F5" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="zoom"  -->
-# Exercícios de fixação
-<!-- .element: style="margin-bottom:30px; font-size: 45px; font-family: Marker Felt;" -->
-
-Classe nova: `LivrosFixacaoTest`, no módulo `exemplos/hexagonal`.
-<!-- .element: style="margin-bottom:25px; font-size: 22px; font-family: arial;" -->
-
-Os dois primeiros são fáceis de propósito. O objetivo é ganhar confiança antes do diálogo e do desafio.
-<!-- .element: style="margin-bottom:40px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Preparação
-<!-- .element: style="margin-bottom:25px; font-size: 40px; font-family: Marker Felt;" -->
-
-* `@QuarkusTest` e `@UsePlaywright` na classe.
-<!-- .element: style="margin-bottom:18px; font-size: 20px; font-family: arial;" -->
-
-* ISBN próprio: `0134685991`. Limpe no `@BeforeEach` com `DELETE /books/{isbn}`.
-<!-- .element: style="margin-bottom:18px; font-size: 20px; font-family: arial;" -->
-
-* Rode com `./mvnw test -Dtest=LivrosFixacaoTest`.
-<!-- .element: style="margin-bottom:40px; font-size: 20px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 1: o botão está lá
-<!-- .element: style="margin-bottom:30px; font-size: 36px; font-family: Marker Felt;" -->
-
-*Revise a anatomia e a espera automática.*
-<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
-
-Abra `/` e confira que o botão **Novo livro** está visível.
-<!-- .element: style="margin-bottom:40px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 2: o formulário abre
-<!-- .element: style="margin-bottom:25px; font-size: 36px; font-family: Marker Felt;" -->
-
-*Revise `getByRole` e `click`.*
-<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
-
-Clique em **Novo livro**. Confira que ISBN, Título, Autor e Ano de publicação estão visíveis.
-<!-- .element: style="margin-bottom:40px; font-size: 22px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 3: o fluxo feliz
-<!-- .element: style="margin-bottom:25px; font-size: 36px; font-family: Marker Felt;" -->
-
-*Revise o cadastro e `assertThat`.*
-<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
-
-Cadastre o livro com o ISBN `0134685991`. A linha deve aparecer na tabela e o `role=status` deve dizer "Livro criado com sucesso."
-<!-- .element: style="margin-bottom:40px; font-size: 20px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 4: ISBN travado
-<!-- .element: style="margin-bottom:25px; font-size: 36px; font-family: Marker Felt;" -->
-
-*Revise a edição e a condição prévia via REST.*
-<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
-
-Crie o livro com `POST /books`. Clique em **Editar**. Confira que o campo ISBN está desabilitado.
-<!-- .element: style="margin-bottom:40px; font-size: 20px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 5: recusar a exclusão
-<!-- .element: style="margin-bottom:25px; font-size: 36px; font-family: Marker Felt;" -->
-
-*Revise `onDialog`.*
-<!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial;" -->
-
-Registre `dialog.dismiss()` **antes** do clique em **Excluir**. O livro deve **permanecer** na tabela.
-<!-- .element: style="margin-bottom:40px; font-size: 20px; font-family: arial;" -->
-
-
-<!-- .slide: data-background="#C9E66A" data-transition="convex"  -->
-## Exercício 6: desafio
-<!-- .element: style="margin-bottom:25px; font-size: 36px; font-family: Marker Felt;" -->
-
-Aceite a exclusão com `dialog.accept()`. Confira que a linha some e que o `role=status` diz "Livro removido com sucesso."
-<!-- .element: style="margin-bottom:40px; font-size: 20px; font-family: arial;" -->
 
 
 <!-- .slide: data-background="#C9E66A" data-transition="zoom"  -->

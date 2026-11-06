@@ -772,7 +772,7 @@ O nome do arquivo é gerado pela ferramenta. Para associar um vídeo a um teste 
 
 ## Exercícios de fixação
 
-Agora é a sua vez. O objetivo desta seção é ganhar confiança: os dois primeiros exercícios são curtos de propósito. Você escreve os testes. O enunciado não entrega a solução pronta.
+Agora é a sua vez na livraria. O objetivo desta seção é ganhar confiança no cadastro de livros: os dois primeiros exercícios são curtos de propósito. Você escreve os testes. O enunciado não entrega a solução pronta.
 {: .fs-3 }
 
 Trabalhe no módulo `exemplos/hexagonal`. Crie uma classe nova chamada `LivrosFixacaoTest` em `src/test/java/dev/ifrs/hexagonal/`. Não copie `BooksE2ETest`. A ideia é montar a classe com as próprias mãos.
@@ -869,6 +869,52 @@ Recusar o diálogo é o caminho que a aula mostrou menos. Se este teste passar, 
 {: .fs-3 }
 
 Se os seis testes passam, você percorreu a tela de ponta a ponta: abriu, preencheu, editou, recusou e confirmou. Esse é o assistente no navegador, no seu ritmo.
+{: .fs-3 }
+
+## Lista de tarefas
+
+Dois testes numa página pública, fora do cadastro de livros. O alvo é `https://demo.playwright.dev/todomvc`. Não há Quarkus, Docker, ISBN nem API.
+{: .fs-3 }
+
+Crie a classe `ListaTarefasTest` num projeto que já tenha a dependência do Playwright. Anote com `@UsePlaywright` e **não** use `@QuarkusTest`. O `Page` chega como parâmetro do `@Test`. O enunciado não entrega a solução pronta.
+{: .fs-3 }
+
+O primeiro é curto, só para você reconhecer a tela. O segundo vai um passo além do desafio da livraria: lá você confirma um diálogo e confere uma mensagem. Aqui você muda o estado de duas tarefas e confere três visões da mesma lista.
+{: .fs-3 }
+
+* `page.navigate("https://demo.playwright.dev/todomvc")` abre a lista.
+* O campo de nova tarefa tem o placeholder `What needs to be done?`. `getByPlaceholder` acha esse campo.
+* `fill` escreve. `press("Enter")` confirma.
+* A caixa de seleção fica dentro da linha. Filtre a linha pelo texto e só então chame `getByRole` para o checkbox.
+* **All**, **Active** e **Completed** são links. **Clear completed** é um botão, e ele só aparece depois que alguma tarefa está concluída.
+{: .fs-3 }
+
+### Exercício A: a página abriu
+
+*Revise `navigate` e a espera automática.* Escreva um teste que:
+{: .fs-3 }
+
+* Abra `https://demo.playwright.dev/todomvc`.
+* Confira que o campo com o placeholder `What needs to be done?` está visível.
+{: .fs-3 }
+
+Se esse teste passar, o assistente ligou, o navegador abriu e você achou o primeiro elemento pela língua da tela.
+{: .fs-3 }
+
+### Exercício B: concluída, filtro e limpeza
+
+*Revise filtro de linha, `check` e `not().isVisible()`.* Na mesma página, num único teste:
+{: .fs-3 }
+
+1. Cadastre `Comprar café` e `Estudar Playwright`.
+2. Marque só `Comprar café` como concluída.
+3. Abra o filtro **Active**. `Estudar Playwright` continua visível e `Comprar café` não.
+4. Abra o filtro **Completed**. Acontece o contrário.
+5. Volte para **All** e acione **Clear completed**.
+6. Confira que `Comprar café` sumiu e `Estudar Playwright` permanece.
+{: .fs-3 }
+
+Leia em voz alta: "Duas tarefas, uma concluída, cada filtro mostra só o que promete, e limpar as concluídas deixa apenas a que ainda está em aberto."
 {: .fs-3 }
 
 ## Questões teóricas
