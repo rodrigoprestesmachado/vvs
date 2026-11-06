@@ -726,20 +726,34 @@ Antes da primeira execução, instale Firefox e WebKit se ainda não tiver feito
 A gravação de vídeo ajuda a investigar falhas que não se reproduzem com facilidade na mão. O Playwright salva um arquivo `.webm` por contexto, no diretório informado.
 {: .fs-3 }
 
-Quando o `BrowserContext` é gerenciado por `@UsePlaywright`, a configuração de vídeo vai numa `OptionsFactory`. A classe `WithVideo` também define `slowMo`, para o filme ficar assistível:
+Quando o `BrowserContext` é gerenciado por `@UsePlaywright`, a configuração de vídeo vai numa `OptionsFactory`. Criar a classe não basta. Quem liga a fábrica ao teste é o argumento de `@UsePlaywright`: o nome da classe de teste, um ponto, e o nome da fábrica.
 {: .fs-3 }
 
 ```java
-public static class WithVideo implements OptionsFactory {
-    @Override
-    public Options getOptions() {
-        return new Options()
-                .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
-                .setContextOptions(new Browser.NewContextOptions()
-                        .setRecordVideoDir(Paths.get("target/videos/chromium")));
+@QuarkusTest
+@UsePlaywright(VideoLivroTest.ComVideo.class)
+public class VideoLivroTest {
+
+    public static class ComVideo implements OptionsFactory {
+        @Override
+        public Options getOptions() {
+            return new Options()
+                    .setLaunchOptions(new BrowserType.LaunchOptions().setSlowMo(300))
+                    .setContextOptions(new Browser.NewContextOptions()
+                            .setRecordVideoDir(Paths.get("target/videos/chromium")));
+        }
+    }
+
+    @Test
+    void cadastraLivro(Page page) {
+        page.navigate("http://localhost:8080/");
+        // o Page injetado já grava, porque a fábrica foi passada na anotação
     }
 }
 ```
+
+`ComVideo` descreve o filme. `@UsePlaywright(VideoLivroTest.ComVideo.class)` manda o JUnit usar essa descrição em cada `@Test`. Sem o argumento, `@UsePlaywright` sozinho abre o Chromium invisível e não grava nada.
+{: .fs-3 }
 
 | Opção | Método | Efeito |
 |---|---|---|
@@ -868,7 +882,38 @@ Recusar o diálogo é o caminho que a aula mostrou menos. Se este teste passar, 
 3. Confira que o `role=status` diz `Livro removido com sucesso.`
 {: .fs-3 }
 
-Se os seis testes passam, você percorreu a tela de ponta a ponta: abriu, preencheu, editou, recusou e confirmou. Esse é o assistente no navegador, no seu ritmo.
+Se os exercícios 1 a 6 passam, você percorreu a tela de ponta a ponta: abriu, preencheu, editou, recusou e confirmou. Esse é o assistente no navegador, no seu ritmo.
+{: .fs-3 }
+
+### Exercício 7: gravar o filme
+
+*Revise a seção Gravação de vídeo.* O exemplo cria a fábrica e, na linha de cima, passa essa fábrica para `@UsePlaywright`. Faça o mesmo numa classe sua, por exemplo `VideoLivroTest`.
+{: .fs-3 }
+
+* Crie uma `OptionsFactory` que grave em `target/videos/exercicio` e use `setSlowMo(300)`.
+* Anote a classe com `@UsePlaywright(VideoLivroTest.SuaFabrica.class)`, trocando `SuaFabrica` pelo nome que você escolheu.
+* Escreva um `@Test` que cadastre o livro de ISBN `0134685991` pela tela.
+* Rode `./mvnw test -Dtest=VideoLivroTest`.
+* Só depois que o teste terminar, abra o `.webm` dessa pasta e confira que dá para ver o clique em **Novo livro** e o **Salvar**.
+{: .fs-3 }
+
+Se a pasta continuar vazia, a fábrica foi criada e não foi passada na anotação, ou você abriu o diretório antes de o contexto fechar.
+{: .fs-3 }
+
+### Exercício 8: três navegadores ao mesmo tempo
+
+*Revise a seção Vários navegadores ao mesmo tempo.* Crie a classe `LivrosNavegadoresTest`, separada da `LivrosFixacaoTest`. Um único cenário de cadastro deve rodar em Chromium, Firefox e WebKit **ao mesmo tempo**.
+{: .fs-3 }
+
+* Use `@ParameterizedTest` com uma fonte que devolva `"chromium"`, `"firefox"` e `"webkit"`.
+* Marque o método com `@Execution(ExecutionMode.CONCURRENT)`.
+* Dentro do método, crie e feche um `Playwright` próprio, num `try` with resources. Não reutilize o `Page` injetado por `@UsePlaywright`.
+* Cada navegador cadastra um ISBN diferente. Não reuse `0134685991`.
+* Confirme que a linha daquele ISBN aparece na tabela.
+* Confira em `src/test/resources/junit-platform.properties` que o paralelismo está ligado e que há três threads.
+{: .fs-3 }
+
+No relatório, você deve ver três casos passando, um por navegador, e não três execuções uma depois da outra por falta da anotação `CONCURRENT`.
 {: .fs-3 }
 
 ## Lista de tarefas
@@ -879,7 +924,7 @@ Dois testes numa página pública, fora do cadastro de livros. O alvo é `https:
 Crie a classe `ListaTarefasTest` num projeto que já tenha a dependência do Playwright. Anote com `@UsePlaywright` e **não** use `@QuarkusTest`. O `Page` chega como parâmetro do `@Test`. O enunciado não entrega a solução pronta.
 {: .fs-3 }
 
-O primeiro é curto, só para você reconhecer a tela. O segundo vai um passo além do desafio da livraria: lá você confirma um diálogo e confere uma mensagem. Aqui você muda o estado de duas tarefas e confere três visões da mesma lista.
+O exercício 9 é curto, só para você reconhecer a tela. O exercício 10 vai um passo além do exercício 6: lá você confirma um diálogo e confere uma mensagem. Aqui você muda o estado de duas tarefas e confere três visões da mesma lista.
 {: .fs-3 }
 
 * `page.navigate("https://demo.playwright.dev/todomvc")` abre a lista.
@@ -889,7 +934,7 @@ O primeiro é curto, só para você reconhecer a tela. O segundo vai um passo al
 * **All**, **Active** e **Completed** são links. **Clear completed** é um botão, e ele só aparece depois que alguma tarefa está concluída.
 {: .fs-3 }
 
-### Exercício A: a página abriu
+### Exercício 9: a página abriu
 
 *Revise `navigate` e a espera automática.* Escreva um teste que:
 {: .fs-3 }
@@ -901,7 +946,7 @@ O primeiro é curto, só para você reconhecer a tela. O segundo vai um passo al
 Se esse teste passar, o assistente ligou, o navegador abriu e você achou o primeiro elemento pela língua da tela.
 {: .fs-3 }
 
-### Exercício B: concluída, filtro e limpeza
+### Exercício 10: concluída, filtro e limpeza
 
 *Revise filtro de linha, `check` e `not().isVisible()`.* Na mesma página, num único teste:
 {: .fs-3 }

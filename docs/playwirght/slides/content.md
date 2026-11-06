@@ -521,13 +521,21 @@ Chromium, Firefox e WebKit recebem ISBNs diferentes. Cada um grava o seu livro s
 <!-- .element: style="margin-bottom:20px; font-size: 20px; font-family: arial; color:#F5F5F5" -->
 
 ```java
-new Options()
-    .setLaunchOptions(
-        new BrowserType.LaunchOptions().setSlowMo(300))
-    .setContextOptions(new Browser.NewContextOptions()
-        .setRecordVideoDir(Paths.get("target/videos/chromium")));
+@UsePlaywright(VideoLivroTest.ComVideo.class)
+public class VideoLivroTest {
+    public static class ComVideo implements OptionsFactory {
+        public Options getOptions() {
+            return new Options()
+                .setContextOptions(new Browser.NewContextOptions()
+                    .setRecordVideoDir(Paths.get("target/videos")));
+        }
+    }
+}
 ```
-<!-- .element: style="background-color: white; margin-bottom:20px; font-size: 16px; font-family: arial; color:black"  -->
+<!-- .element: style="background-color: white; margin-bottom:15px; font-size: 15px; font-family: arial; color:black"  -->
+
+O nome dentro de `@UsePlaywright(...)` é o uso. Sem ele, a fábrica existe e o teste não grava.
+<!-- .element: style="margin-bottom:30px; font-size: 20px; font-family: arial; color:#F5F5F5" -->
 
 
 <!-- .slide: data-background="#185449" data-transition="convex"  -->
