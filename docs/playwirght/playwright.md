@@ -365,158 +365,6 @@ public class BooksE2ETest {
 Execute com `./mvnw test` na raiz do módulo hexagonal. O relatório XML aparece em `target/surefire-reports/`.
 {: .fs-3 }
 
-## Cadastro, edição e exclusão
-
-Com `@QuarkusTest` e `@UsePlaywright` em mãos, vamos percorrer as três operações da tela. Cada `@Test` recebe um `Page` novo. Todos compartilham o mesmo banco. Para os testes não dependerem da ordem, apague o ISBN de teste pela API antes de cada caso (404 é ignorado):
-{: .fs-3 }
-
-```java
-import io.restassured.http.ContentType;
-import static io.restassured.RestAssured.given;
-import org.junit.jupiter.api.BeforeEach;
-
-@BeforeEach
-void limparLivroDeTeste() {
-    given().delete("/books/156881111X");
-}
-```
-
-Para os cenários que precisam de um livro já existente (editar e excluir), o próprio teste cadastra a condição prévia com `POST /books`. É mais rápido e mais firme do que cadastrar pela tela a cada execução.
-{: .fs-3 }
-
-### Cadastrar um livro
-
-Os passos abaixo repetem a gravação, com uma verificação extra: a mensagem de sucesso (`role="status"` no `App.vue`).
-{: .fs-3 }
-
-Leia em voz alta: *"Dada a home, quando eu criar o livro, então a linha e a mensagem de sucesso aparecem."*
-{: .fs-3 }
-
-```java
-@Test
-void cadastraLivroComMensagemDeSucesso(Page page) {
-    page.navigate("http://localhost:8080/");
-
-    page.getByRole(AriaRole.BUTTON,
-        new Page.GetByRoleOptions().setName("Novo livro")).click();
-
-    page.getByRole(AriaRole.TEXTBOX,
-        new Page.GetByRoleOptions().setName("ISBN-")).fill("156881111X");
-    page.getByRole(AriaRole.TEXTBOX,
-        new Page.GetByRoleOptions().setName("Título")).fill(
-            "Erdős on Graphs: His Legacy of Unsolved Problems");
-    page.getByRole(AriaRole.TEXTBOX,
-        new Page.GetByRoleOptions().setName("Autor")).fill(
-            "Fan Chung, Ronald L. Graham");
-    page.getByRole(AriaRole.SPINBUTTON,
-        new Page.GetByRoleOptions().setName("Ano de publicação")).fill("1999");
-
-    page.getByRole(AriaRole.BUTTON,
-        new Page.GetByRoleOptions().setName("Salvar")).click();
-
-    assertThat(
-        page.getByRole(AriaRole.ROW).filter(
-            new Locator.FilterOptions().setHasText("156881111X"))
-    ).isVisible();
-
-    assertThat(
-        page.getByRole(AriaRole.STATUS)
-    ).hasText("Livro criado com sucesso.");
-}
-```
-
-### Editar um livro
-
-O campo ISBN fica desabilitado na edição (`disabled` no `<input>` do `App.vue`). Somente os demais campos podem ser alterados. O teste cria a condição prévia via REST, abre a tela, troca o título e confere a linha nova:
-{: .fs-3 }
-
-```java
-@Test
-void editaLivro(Page page) {
-    given()
-        .contentType(ContentType.JSON)
-        .body("""
-            {
-              "isbn": "156881111X",
-              "title": "Erdős on Graphs: His Legacy of Unsolved Problems",
-              "author": "Fan Chung, Ronald L. Graham",
-              "publicationYear": 1999,
-              "copiesAvailable": 1
-            }
-            """)
-        .post("/books")
-        .then().statusCode(201);
-
-    page.navigate("http://localhost:8080/");
-
-    page.getByRole(AriaRole.ROW)
-        .filter(new Locator.FilterOptions().setHasText("156881111X"))
-        .getByRole(AriaRole.BUTTON,
-            new Locator.GetByRoleOptions().setName("Editar"))
-        .click();
-
-    Locator campoTitulo = page.getByRole(AriaRole.TEXTBOX,
-        new Page.GetByRoleOptions().setName("Título"));
-    campoTitulo.clear();
-    campoTitulo.fill("Erdős on Graphs (2ª edição)");
-
-    page.getByRole(AriaRole.BUTTON,
-        new Page.GetByRoleOptions().setName("Salvar")).click();
-
-    assertThat(
-        page.getByRole(AriaRole.ROW)
-            .filter(new Locator.FilterOptions()
-                .setHasText("Erdős on Graphs (2ª edição)"))
-    ).isVisible();
-}
-```
-
-### Excluir um livro: o diálogo vem primeiro
-
-A exclusão exibe um diálogo nativo do navegador (`window.confirm` em `App.vue`). O Playwright aceita ou recusa esse diálogo. O ponto que mais pega aluno de primeira viagem: o handler precisa ser registrado **antes** do clique. Se você clicar primeiro, o `confirm` aparece sem ninguém escutando, e o teste trava.
-{: .fs-3 }
-
-```java
-@Test
-void excluiLivro(Page page) {
-    given()
-        .contentType(ContentType.JSON)
-        .body("""
-            {
-              "isbn": "156881111X",
-              "title": "Erdős on Graphs: His Legacy of Unsolved Problems",
-              "author": "Fan Chung, Ronald L. Graham",
-              "publicationYear": 1999,
-              "copiesAvailable": 1
-            }
-            """)
-        .post("/books")
-        .then().statusCode(201);
-
-    page.navigate("http://localhost:8080/");
-
-    page.onDialog(dialog -> dialog.accept());
-
-    page.getByRole(AriaRole.ROW)
-        .filter(new Locator.FilterOptions().setHasText("156881111X"))
-        .getByRole(AriaRole.BUTTON,
-            new Locator.GetByRoleOptions().setName("Excluir"))
-        .click();
-
-    assertThat(
-        page.getByRole(AriaRole.ROW)
-            .filter(new Locator.FilterOptions().setHasText("156881111X"))
-    ).not().isVisible();
-
-    assertThat(
-        page.getByRole(AriaRole.STATUS)
-    ).hasText("Livro removido com sucesso.");
-}
-```
-
-`dialog.accept()` confirma. `dialog.dismiss()` recusa, e o livro permanece. Os exercícios 5 e 6 pedem os dois caminhos.
-{: .fs-3 }
-
 ## Integração com Maven
 
 O Maven Surefire gera relatórios no formato XML do JUnit depois de `mvn test`. Esses arquivos são o padrão que Jenkins, GitHub Actions e GitLab CI sabem importar.
@@ -844,7 +692,7 @@ O rótulo do ISBN na tela é `ISBN-10`. O Codegen costuma achar esse campo com `
 
 ### Exercício 3: o fluxo feliz
 
-*Revise o cadastro e `assertThat`.* Cadastre um livro com o ISBN `0134685991` (escolha título, autor e ano). Depois de **Salvar**, valide:
+*Revise `fill`, `getByRole` e `assertThat`.* Cadastre um livro com o ISBN `0134685991` (escolha título, autor e ano). Depois de **Salvar**, valide:
 {: .fs-3 }
 
 * A linha da tabela que contém esse ISBN está visível.
@@ -853,7 +701,7 @@ O rótulo do ISBN na tela é `ISBN-10`. O Codegen costuma achar esse campo com `
 
 ### Exercício 4: ISBN travado
 
-*Revise a edição e a condição prévia via REST.* Crie o livro com `POST /books` (status `201`). Abra a home, clique em **Editar** na linha desse ISBN e confira que o campo ISBN está desabilitado.
+*Revise `POST /books` e `isDisabled`.* Crie o livro com `POST /books` (status `201`). Abra a home, clique em **Editar** na linha desse ISBN e confira que o campo ISBN está desabilitado.
 {: .fs-3 }
 
 Dica: `assertThat(locator).isDisabled()` espera o campo ficar travado. O ISBN não pode mudar depois do cadastro. É exatamente isso que a tela promete no texto de ajuda do formulário.
